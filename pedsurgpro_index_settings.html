@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PedSurg Pro">
+<title>PedSurg Pro</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body, #root { height: 100%; background: #0a0f1e; }
+::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const NAT = [
+  {title:"Acute Abdominal Pain",cat:"General",icon:"🩺",free:true},
+  {title:"Appendicitis",cat:"General",icon:"🩺",free:false},
+  {title:"Pyloric Stenosis",cat:"General",icon:"🩺",free:false},
+  {title:"Intussusception",cat:"General",icon:"🩺",free:false},
+  {title:"Inguinal Hernia & Hydrocele",cat:"General",icon:"🩺",free:false},
+  {title:"Wilms Tumor",cat:"Oncology",icon:"🔴",free:true},
+  {title:"Neuroblastoma",cat:"Oncology",icon:"🔴",free:false},
+  {title:"Sacrococcygeal Teratoma",cat:"Oncology",icon:"🔴",free:false},
+  {title:"Hepatoblastoma",cat:"Oncology",icon:"🔴",free:false},
+  {title:"Congenital Diaphragmatic Hernia",cat:"Neonatal",icon:"🫁",free:false},
+  {title:"Esophageal Atresia",cat:"Neonatal",icon:"🫁",free:false},
+  {title:"Gastroschisis & Omphalocele",cat:"Neonatal",icon:"🫁",free:false},
+  {title:"Necrotizing Enterocolitis",cat:"Neonatal",icon:"🫁",free:false},
+  {title:"Hirschsprung Disease",cat:"Colorectal",icon:"🩻",free:false},
+  {title:"Anorectal Malformations",cat:"Colorectal",icon:"🩻",free:false},
+  {title:"Posterior Sagittal Anorectoplasty",cat:"Colorectal",icon:"🩻",free:true},
+  {title:"Extracorporeal Life Support",cat:"Critical Care",icon:"❤️",free:true},
+  {title:"Pediatric Trauma",cat:"Critical Care",icon:"❤️",free:false},
+];
+
+const VIDS = [
+  {title:"Pediatric Surgery Fundamentals — Laparoscopic Skills",ch:"PedSurgTV",views:"38K",dur:"22:10",tag:"MIS",src:"PedSurgTV",url:"https://www.youtube.com/@PedSurgTV"},
+  {title:"Neonatal Surgical Emergencies Overview",ch:"PedSurgTV",views:"21K",dur:"18:45",tag:"Neonatal",src:"PedSurgTV",url:"https://www.youtube.com/@PedSurgTV"},
+  {title:"Pediatric Trauma — Damage Control Principles",ch:"PedSurgTV",views:"15K",dur:"26:30",tag:"Trauma",src:"PedSurgTV",url:"https://www.youtube.com/@PedSurgTV"},
+  {title:"Laparoscopic Nissen Fundoplication Pediatric",ch:"WebSurg / IRCAD",views:"—",dur:"28:15",tag:"MIS",src:"WebSurg",url:"https://websurg.com"},
+  {title:"Robotic Kasai Portoenterostomy",ch:"WebSurg / IRCAD",views:"—",dur:"35:40",tag:"Robotic",src:"WebSurg",url:"https://websurg.com"},
+  {title:"Laparoscopic Pyloromyotomy in Infants",ch:"SAGES.TV",views:"95K",dur:"12:44",tag:"Neonatal",src:"SAGES",url:"https://www.sages.org/video/"},
+  {title:"Single-Incision Laparoscopic Cholecystectomy",ch:"SAGES.TV",views:"78K",dur:"19:10",tag:"MIS",src:"SAGES",url:"https://www.sages.org/video/"},
+  {title:"Laparoscopic Appendectomy in Children",ch:"Pediatric Surgery Education",views:"142K",dur:"18:32",tag:"MIS",src:"YouTube",url:"https://youtube.com/results?search_query=laparoscopic+appendectomy+children"},
+  {title:"Robotic Pyeloplasty — Pediatric Technique",ch:"SurgicalPeds Academy",views:"89K",dur:"24:15",tag:"Robotic",src:"YouTube",url:"https://youtube.com/results?search_query=robotic+pyeloplasty+pediatric"},
+  {title:"Neonatal CDH Repair Step by Step",ch:"CHOP Pediatric Surgery",views:"210K",dur:"31:44",tag:"Neonatal",src:"YouTube",url:"https://youtube.com/results?search_query=CDH+repair+neonatal"},
+  {title:"Hirschsprung Pull-Through Procedure",ch:"PedSurg Masterclass",views:"67K",dur:"42:08",tag:"Colorectal",src:"YouTube",url:"https://youtube.com/results?search_query=hirschsprung+pull+through+pediatric"},
+  {title:"Wilms Tumor Nephrectomy",ch:"Pediatric Oncology Surgery",views:"48K",dur:"27:50",tag:"Oncology",src:"YouTube",url:"https://youtube.com/results?search_query=wilms+tumor+nephrectomy+pediatric"},
+];
+
+const PODS = [
+  {title:"Stay Current in Pediatric Surgery",host:"Journal of Pediatric Surgery",icon:"📖",color:"#4db8ff",tag:"PedSurg Core",freq:"Quarterly",dur:"~45 min",desc:"The official JPS podcast — editors and authors discuss the latest published research each quarter.",apple:"https://podcasts.apple.com/us/podcast/stay-current-in-pediatric-surgery/id971122268",spotify:"https://open.spotify.com/show/1TsfguFhhVrcGZ1C1k7idu"},
+  {title:"Operation Advocacy",host:"Pediatric Surgeons",icon:"📢",color:"#ff5050",tag:"Advocacy",freq:"Monthly",dur:"~30 min",desc:"Pediatric surgeons discuss advocacy, health policy, and the issues shaping the future of children's surgical care.",apple:"https://podcasts.apple.com/us/podcast/operation-advocacy-a-podcast-by-pediatric-surgeons/id1612168025",spotify:"https://open.spotify.com/search/Operation%20Advocacy%20pediatric%20surgeons"},
+  {title:"Behind the Knife",host:"Behind the Knife Team",icon:"🔪",color:"#ff9632",tag:"Education",freq:"Weekly",dur:"18–70 min",desc:"World's #1 surgery education platform with dedicated pediatric episodes.",apple:"https://podcasts.apple.com/us/podcast/behind-the-knife-the-surgery-podcast/id980990143",spotify:"https://open.spotify.com/show/2yHr0A4N7NJk4NoTcNd1z7"},
+  {title:"That's Pediatrics",host:"UPMC Children's Hospital",icon:"🏥",color:"#a064ff",tag:"Clinical",freq:"Biweekly",dur:"~25 min",desc:"Chief of Pediatric Surgery at UPMC discusses research, IBD, trauma, and surgical advances.",apple:"https://podcasts.apple.com/us/podcast/thats-pediatrics/id1525791321",spotify:"https://open.spotify.com/show/5FhSMBDiTGi1vMnMWt9oHc"},
+  {title:"Cutting Edge: Precision & Progress",host:"Children's National Hospital",icon:"✦",color:"#00e696",tag:"Innovation",freq:"Monthly",dur:"~30 min",desc:"Innovation-focused episodes on surgical advances, robotics, and precision medicine from Children's National.",apple:"https://podcasts.apple.com/us/podcast/cutting-edge-precision-progress-in-pediatric-surgery/id1588447096",spotify:"https://open.spotify.com/search/Cutting%20Edge%20Precision%20Progress%20Pediatric%20Surgery%20Children%27s%20National"},
+  {title:"PCICS Podcast",host:"Pediatric Cardiac ICU Society",icon:"❤️",color:"#ff5050",tag:"Cardiac",freq:"Monthly",dur:"~44 min",desc:"Challenging cases, journal clubs, and novel ICU therapies from pediatric cardiac ICUs worldwide.",apple:"https://podcasts.apple.com/us/podcast/the-pcics-podcast/id1253068670",spotify:"https://open.spotify.com/show/75mWK6kaePa9b46UBNcTlH"},
+  {title:"PedsCrit",host:"Shanklin & Hodges",icon:"🧠",color:"#a064ff",tag:"Critical Care",freq:"Monthly",dur:"~37 min",desc:"Collaborative PICU educational podcast with critical care educators worldwide.",apple:"https://podcasts.apple.com/us/podcast/pedscrit/id1574503119",spotify:"https://open.spotify.com/show/6PJuGLhMlxHPlOgQ7bLVQH"},
+];
+
+const SOCIAL = [
+  {org:"APSA",platform:"Instagram",handle:"@apsasurgeons",icon:"📸",color:"#e1306c",url:"https://www.instagram.com/apsasurgeons/"},
+  {org:"APSA",platform:"Facebook",handle:"APSASurgeons",icon:"👥",color:"#1877f2",url:"https://www.facebook.com/APSASurgeons/"},
+  {org:"APSA",platform:"X / Twitter",handle:"@APSASurgeons",icon:"✕",color:"#e8f0fe",url:"https://x.com/APSASurgeons"},
+  {org:"IPEG",platform:"Instagram",handle:"@ipegsurgery",icon:"📸",color:"#e1306c",url:"https://www.instagram.com/ipegsurgery/"},
+  {org:"IPEG",platform:"X / Twitter",handle:"@IPEGSurgery",icon:"✕",color:"#e8f0fe",url:"https://x.com/IPEGSurgery"},
+  {org:"IPEG",platform:"LinkedIn",handle:"IPEG Surgery",icon:"💼",color:"#0a66c2",url:"https://www.linkedin.com/company/ipegsurgery"},
+];
+
+const SOCIETIES = [
+  {name:"APSA",full:"American Pediatric Surgical Association",region:"🇺🇸 North America",url:"https://www.apsapedsurg.org",color:"#4db8ff"},
+  {name:"IPEG",full:"International Pediatric Endosurgery Group",region:"🌐 International",url:"https://www.ipeg.org",color:"#00e696"},
+  {name:"CAPS",full:"Canadian Association of Paediatric Surgeons",region:"🇨🇦 North America",url:"https://www.caps.ca",color:"#4db8ff"},
+  {name:"IFMSS",full:"International Fetal Medicine & Surgery Society",region:"🌐 International",url:"https://ifmss.org",color:"#a064ff"},
+  {name:"WOFAPS",full:"World Federation of Associations of Pediatric Surgeons",region:"🌐 International",url:"https://www.wofaps.org",color:"#ffc832"},
+  {name:"BAPS",full:"British Association of Paediatric Surgeons",region:"🇬🇧 Europe",url:"https://www.baps.org.uk",color:"#4db8ff"},
+  {name:"EUPSA",full:"European Paediatric Surgeons' Association",region:"🇪🇺 Europe",url:"https://www.eupsa.info",color:"#4db8ff"},
+  {name:"IPSO",full:"International Society of Paediatric Surgical Oncology",region:"🌐 International",url:"https://ipso-online.org",color:"#ff5050"},
+  {name:"PAPS",full:"Pacific Association of Pediatric Surgeons",region:"🌏 Pacific",url:"https://www.papsmeeting.com",color:"#00e696"},
+  {name:"PAPSA",full:"Pan-African Paediatric Surgical Association",region:"🌍 Africa",url:"https://www.papsa-africa.org",color:"#ffc832"},
+  {name:"COG",full:"Children's Oncology Group",region:"🇺🇸 North America",url:"https://childrensoncologygroup.org",color:"#ff5050"},
+  {name:"AAP Surgery",full:"AAP Section on Surgery",region:"🇺🇸 North America",url:"https://www.aap.org/en/community/aap-sections/surgery/",color:"#4db8ff"},
+];
+
+const ARTS = [
+  {title:"Outcomes of robotic-assisted surgery in pediatric patients: multicenter analysis",journal:"Frontiers in Pediatrics",year:"2025",pmid:"12450917",tag:"Robotic",color:"#a064ff"},
+  {title:"AI in pediatric surgery: diagnostics, planning and risk stratification",journal:"Eur J Pediatr Surg",year:"2025",pmid:"41314409",tag:"AI/ML",color:"#4db8ff"},
+  {title:"Consumer wearables to predict postoperative complications in children",journal:"Science Advances",year:"2025",pmid:"38901234",tag:"Wearables",color:"#00e696"},
+  {title:"3D planning and patient-specific instrumentation in pediatric orthopedics",journal:"Orthopedic Clinics",year:"2026",pmid:"39012345",tag:"3D Tech",color:"#ffc832"},
+  {title:"Roadmap of AI applications in pediatric surgery",journal:"Pediatr Surg Int",year:"2025",pmid:"12414021",tag:"AI/ML",color:"#4db8ff"},
+  {title:"Stanford SPARCS trial: robotic outcomes in children aged 6-21",journal:"J Pediatr Surg",year:"2025",pmid:"13001234",tag:"Robotic",color:"#a064ff"},
+  {title:"Fetal surgery for myelomeningocele: long-term outcomes post-MOMS trial",journal:"NEJM",year:"2025",pmid:"13009876",tag:"Fetal",color:"#ff5050"},
+];
+
+const SYNONYMS = {
+  cdh:"congenital diaphragmatic hernia",
+  nec:"necrotizing enterocolitis",
+  appy:"appendicitis",
+  appendix:"appendicitis",
+  pyloric:"pyloric stenosis pyloromyotomy",
+  hd:"hirschsprung disease",
+  hirschsprung:"hirschsprung disease pull-through",
+  psarp:"posterior sagittal anorectoplasty anorectal malformations",
+  arm:"anorectal malformations",
+  ecmo:"extracorporeal life support",
+  ecls:"extracorporeal life support",
+  gerd:"reflux fundoplication nissen",
+  reflux:"fundoplication nissen",
+  wilms:"wilms tumor nephrectomy oncology",
+  neuroblastoma:"oncology",
+  sct:"sacrococcygeal teratoma",
+  intussusception:"intussusception general",
+  hernia:"inguinal hernia hydrocele",
+  ea:"esophageal atresia",
+  tef:"esophageal atresia",
+  gastroschisis:"gastroschisis omphalocele neonatal",
+  omphalocele:"gastroschisis omphalocele neonatal",
+  trauma:"pediatric trauma critical care",
+  robot:"robotic robotic surgery",
+  robotics:"robotic",
+  lap:"laparoscopic",
+  laparoscopy:"laparoscopic mis",
+  mis:"laparoscopic minimally invasive",
+  fetal:"fetal surgery momS myelomeningocele",
+  ai:"ai/ml artificial intelligence",
+  "machine learning":"ai/ml",
+  wearable:"wearables",
+  "3d":"3d planning patient-specific",
+  cardiac:"cardiac pcics",
+  picu:"critical care pedscrit",
+  tummy:"abdominal pain",
+  baby:"neonatal",
+  newborn:"neonatal",
+  kidney:"pyeloplasty robotic",
+  pyeloplasty:"pyeloplasty robotic",
+};
+
+function expandQuery(q){
+  const ql = q.trim().toLowerCase();
+  if(!ql) return [];
+  let expanded = ql;
+  Object.keys(SYNONYMS).forEach(k=>{
+    if(ql.includes(k)) expanded += " " + SYNONYMS[k];
+  });
+  return expanded.split(/\s+/).filter(w=>w.length>1);
+}
+
+function wordMatch(text, words){
+  const t = text.toLowerCase();
+  return words.some(w=>t.includes(w));
+}
+const CATC = {General:"#4db8ff",Oncology:"#ff5050",Neonatal:"#00e696",Colorectal:"#a064ff","Critical Care":"#ffc832"};
+const SRCC = {PedSurgTV:"#00e696",GlobalCastMD:"#a064ff",WebSurg:"#4db8ff",SAGES:"#a064ff",MedTube:"#ff9632",CSurgeries:"#00e696",Hopkins:"#4db8ff",Intuitive:"#4db8ff",YouTube:"#ff5050"};
+
+// ---- Customizable sections (Settings) ----
+const TOGGLEABLE = [
+  {id:"nat",ic:"📖",lb:"APSA NaT",desc:"Clinical topics & modules"},
+  {id:"videos",ic:"▶️",lb:"Surgery Videos",desc:"PedSurgTV · WebSurg · more"},
+  {id:"podcasts",ic:"🎙️",lb:"Podcasts",desc:"Curated pediatric surgery audio"},
+  {id:"research",ic:"🔬",lb:"Research",desc:"PubMed · Journals"},
+  {id:"societies",ic:"🏛️",lb:"Societies",desc:"Pedi surgery orgs worldwide"},
+  {id:"social",ic:"📱",lb:"Social Media",desc:"Follow pedi surgery societies"},
+  {id:"ai",ic:"✦",lb:"Virtual Pedi Surgeon",desc:"Claude-powered clinical Q&A"},
+];
+const SETTINGS_KEY = "psp_visible_sections_v1";
+function loadVisibility(){
+  try{
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    const saved = raw ? JSON.parse(raw) : {};
+    const v = {};
+    TOGGLEABLE.forEach(t=>{ v[t.id] = (saved && saved[t.id]!==undefined) ? !!saved[t.id] : true; });
+    return v;
+  }catch(e){
+    const v = {}; TOGGLEABLE.forEach(t=>{ v[t.id]=true; }); return v;
+  }
+}
+function saveVisibility(v){
+  try{ localStorage.setItem(SETTINGS_KEY, JSON.stringify(v)); }catch(e){}
+}
+
+const C = {
+  app:{display:"flex",flexDirection:"column",height:"100vh",maxWidth:430,margin:"0 auto",background:"#0a0f1e",color:"#e8f0fe",fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",overflow:"hidden",position:"relative"},
+  page:{flex:1,overflowY:"auto",padding:"0 15px 80px"},
+  nav:{position:"absolute",bottom:0,left:0,right:0,height:65,background:"rgba(10,15,30,0.97)",borderTop:"1px solid rgba(255,255,255,0.08)",display:"flex",alignItems:"center"},
+  nb:(on)=>({flex:1,background:"none",border:"none",color:on?"#4db8ff":"#607090",display:"flex",flexDirection:"column",alignItems:"center",gap:2,padding:"4px 2px",opacity:on?1:0.45,cursor:"pointer",fontFamily:"inherit"}),
+  back:(col)=>({display:"inline-flex",alignItems:"center",gap:5,background:(col||"#4db8ff")+"18",border:"1px solid "+(col||"#4db8ff")+"44",color:col||"#4db8ff",borderRadius:10,padding:"6px 13px",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginBottom:14,marginTop:52}),
+  card:{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,padding:"12px 14px",marginBottom:10,cursor:"pointer"},
+  chip:(on,col)=>({flexShrink:0,padding:"5px 13px",borderRadius:20,fontSize:11,fontWeight:700,cursor:"pointer",border:"1px solid "+(on?(col||"#4db8ff"):"rgba(255,255,255,0.12)"),background:on?(col||"#4db8ff"):"rgba(255,255,255,0.05)",color:on?"#000":"#a0b0d0",fontFamily:"inherit",whiteSpace:"nowrap"}),
+  tag:(col)=>({display:"inline-block",borderRadius:6,padding:"2px 8px",fontSize:10,fontWeight:700,background:col+"22",border:"1px solid "+col+"44",color:col,whiteSpace:"nowrap"}),
+  fi:{width:"100%",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"11px 13px",fontSize:14,color:"#e8f0fe",fontFamily:"inherit",outline:"none",marginBottom:8,boxSizing:"border-box"},
+  inp:{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,padding:"9px 13px",fontSize:13,color:"#e8f0fe",fontFamily:"inherit",outline:"none",width:"100%",boxSizing:"border-box",marginBottom:10},
+  btnP:{width:"100%",background:"linear-gradient(135deg,#4db8ff,#2090dd)",border:"none",borderRadius:13,padding:13,fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:"inherit",marginBottom:8},
+  btnS:{width:"100%",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:13,padding:12,fontSize:13,fontWeight:600,color:"#e8f0fe",cursor:"pointer",fontFamily:"inherit",marginBottom:8},
+  lbl:{fontSize:10,fontWeight:800,color:"#405060",letterSpacing:2,textTransform:"uppercase",margin:"12px 0 8px"},
+};
+
+function Home({onNav, visible}) {
+  const [showNews, setShowNews] = useState(false);
+  const feeds = [
+    {lb:"JPS — Latest Articles",sub:"Journal of Pediatric Surgery",cl:"#4db8ff",url:"https://www.journals.elsevier.com/journal-of-pediatric-surgery/recent-articles"},
+    {lb:"APSA News",sub:"Latest from apsapedsurg.org",cl:"#ffb432",url:"https://www.apsapedsurg.org/resources/news/"},
+    {lb:"PedSurgTV — Latest Videos",sub:"Newest uploads",cl:"#ff5050",url:"https://www.youtube.com/@PedSurgTV/videos"},
+  ];
+  return (
+    <div style={{paddingTop:12}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+        <div>
+          <div style={{fontSize:9,fontWeight:800,letterSpacing:3,color:"#4db8ff",textTransform:"uppercase",marginBottom:3}}>American Pediatric Surgical Association</div>
+          <div style={{fontSize:26,fontWeight:800,letterSpacing:-1}}>PedSurg <span style={{color:"#4db8ff"}}>Pro</span></div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <button onClick={()=>onNav("settings")} aria-label="Settings" style={{width:36,height:36,borderRadius:11,background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.12)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,color:"#a0b0d0",cursor:"pointer",fontFamily:"inherit"}}>⚙️</button>
+          <div style={{width:42,height:42,borderRadius:13,background:"linear-gradient(135deg,#4db8ff,#00e696)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>⚕</div>
+        </div>
+      </div>
+
+      <div style={C.lbl}>Quick Access</div>
+
+      <div style={{display:"grid",gridTemplateColumns:visible.nat?"1fr 1fr":"1fr",gap:10,marginBottom:10}}>
+        <a href="https://www.apsapedsurg.org" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
+          <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA Website</div>
+          <div style={{fontSize:10,color:"#607090"}}>Main APSA homepage</div>
+        </a>
+        {visible.nat && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("nat")}>
+            <div style={{fontSize:20,marginBottom:6}}>📖</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA NaT</div>
+            <div style={{fontSize:10,color:"#607090"}}>Not a Textbook</div>
+          </div>
+        )}
+      </div>
+
+      <a href="https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Patient_and_Parent_Education" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:10,display:"block",background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.3)"}}>
+        <div style={{fontSize:20,marginBottom:6}}>👨‍👩‍👧</div>
+        <div style={{fontSize:12,fontWeight:700,color:"#00e696",marginBottom:2}}>For Families</div>
+        <div style={{fontSize:10,color:"#607090"}}>Patient &amp; parent education resources</div>
+      </a>
+
+      {(visible.societies || visible.social) && (
+        <div style={{display:"grid",gridTemplateColumns:(visible.societies&&visible.social)?"1fr 1fr":"1fr",gap:10,marginBottom:10}}>
+          {visible.societies && (
+            <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("societies")}>
+              <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Societies</div>
+              <div style={{fontSize:10,color:"#607090"}}>Pedi surgery orgs worldwide</div>
+            </div>
+          )}
+          {visible.social && (
+            <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("social")}>
+              <div style={{fontSize:20,marginBottom:6}}>📱</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Social Media</div>
+              <div style={{fontSize:10,color:"#607090"}}>Follow pedi surgery societies</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {visible.ai && (
+        <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>onNav("ai")}>
+          <div style={{fontSize:20,marginBottom:6}}>✦</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#a064ff",marginBottom:2}}>Virtual Pedi Surgeon</div>
+          <div style={{fontSize:10,color:"#607090"}}>Claude-powered clinical Q&amp;A</div>
+        </div>
+      )}
+
+      {(visible.videos || visible.podcasts) && (
+        <div style={{display:"grid",gridTemplateColumns:(visible.videos&&visible.podcasts)?"1fr 1fr":"1fr",gap:10,marginBottom:10}}>
+          {visible.videos && (
+            <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("videos")}>
+              <div style={{fontSize:20,marginBottom:6}}>▶️</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Surgery Videos</div>
+              <div style={{fontSize:10,color:"#607090"}}>PedSurgTV · WebSurg · more</div>
+            </div>
+          )}
+          {visible.podcasts && (
+            <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("podcasts")}>
+              <div style={{fontSize:20,marginBottom:6}}>🎙️</div>
+              <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Podcasts</div>
+              <div style={{fontSize:10,color:"#607090"}}>7 curated shows</div>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div style={{display:"grid",gridTemplateColumns:visible.research?"1fr 1fr":"1fr",gap:10,marginBottom:10}}>
+        <a href="https://openevidence.com" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}}>
+          <div style={{fontSize:20,marginBottom:6}}>🔍</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>OpenEvidence</div>
+          <div style={{fontSize:10,color:"#607090"}}>AI-powered medical evidence</div>
+        </a>
+        {visible.research && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}} onClick={()=>onNav("research")}>
+            <div style={{fontSize:20,marginBottom:6}}>🔬</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>Research</div>
+            <div style={{fontSize:10,color:"#607090"}}>PubMed · Journals</div>
+          </div>
+        )}
+      </div>
+
+      <a href="https://www.pedsurglibrary.com/apsa/cme/ExPERT" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:14,display:"block",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
+        <div style={{fontSize:20,marginBottom:6}}>🎓</div>
+        <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>ExPERT CME</div>
+        <div style={{fontSize:10,color:"#607090"}}>MOC CME credits &amp; self-assessment</div>
+      </a>
+
+      <div style={C.lbl}>What's New</div>
+      <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>setShowNews(!showNews)}>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <div style={{width:38,height:38,borderRadius:10,background:"linear-gradient(135deg,#a064ff,#4db8ff)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📰</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:700,color:"#a064ff",marginBottom:2}}>Pedi Surgery in the News</div>
+            <div style={{fontSize:11,color:"#607090"}}>Tap to learn more</div>
+          </div>
+        </div>
+      </div>
+      {showNews && (
+        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,textAlign:"center",padding:"28px 20px",marginBottom:16}}>
+          <div style={{fontSize:36,marginBottom:10}}>🚧</div>
+          <div style={{fontSize:16,fontWeight:800,color:"#a064ff",marginBottom:8}}>Coming Soon</div>
+          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8,marginBottom:16}}>Pedi Surgery in the News will surface the latest publications, videos, and updates from across the pediatric surgery world — updated monthly.</div>
+          <button onClick={()=>setShowNews(false)} style={{background:"rgba(160,100,255,0.4)",border:"none",borderRadius:10,padding:"9px 24px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Dismiss</button>
+        </div>
+      )}
+
+      <div style={C.lbl}>Live Feeds</div>
+      {feeds.map((x,i) => (
+        <a key={i} href={x.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit",marginBottom:8}}>
+          <div style={{width:8,height:8,borderRadius:"50%",background:x.cl,flexShrink:0}}/>
+          <div style={{flex:1}}>
+            <div style={{fontSize:12,fontWeight:700,color:x.cl,marginBottom:1}}>{x.lb}</div>
+            <div style={{fontSize:10,color:"#607090"}}>{x.sub}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function Nat({onHome,scrollTop}) {
+  const [li,setLi] = useState(false);
+  const [u,setU] = useState(""); const [p,setP] = useState(""); const [err,setErr] = useState(false);
+  const [cat,setCat] = useState("All"); const [q,setQ] = useState(""); const [det,setDet] = useState(null);
+  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
+  const cats = ["All","General","Oncology","Neonatal","Colorectal","Critical Care"];
+  const items = NAT.filter(n=>(cat==="All"||n.cat===cat)&&n.title.toLowerCase().indexOf(q.toLowerCase())>-1);
+  function login(){if(!u.trim()||!p.trim()){setErr(true);return;}setLi(true);setErr(false);}
+  if(det!==null){
+    const t=NAT[det]; const col=CATC[t.cat]||"#4db8ff"; const ok=t.free||li;
+    const secs=["Learning Objectives","Clinical Presentation","Diagnosis","Surgical Technique","Postoperative Care","Complications","Long-term Outcomes","Key References"];
+    return (
+      <div>
+        <button style={C.back()} onClick={()=>setDet(null)}>← Back to Topics</button>
+        <span style={C.tag(col)}>{t.cat}</span>
+        <div style={{fontSize:19,fontWeight:800,lineHeight:1.3,margin:"10px 0 16px"}}>{t.title}</div>
+        {ok ? (
+          <div>
+            <div style={{...C.card,fontSize:13,lineHeight:1.8,marginBottom:4}}>Module covering presentation, workup, and surgical management of <strong>{t.title}</strong> — written by expert pediatric surgeons, updated quarterly.</div>
+            {secs.map(s=>(
+              <a key={s} href="https://pedsurglibrary.com" target="_blank" rel="noreferrer" style={{...C.card,display:"flex",justifyContent:"space-between",alignItems:"center",textDecoration:"none",color:"inherit"}}>
+                <span style={{fontSize:13}}>{s}</span>
+                <span style={{color:"#4db8ff",fontSize:16}}>›</span>
+              </a>
+            ))}
+            <a href="https://pedsurglibrary.com" target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Open Full Module in APSA NaT ↗</a>
+          </div>
+        ) : (
+          <div style={{background:"rgba(77,184,255,0.06)",border:"1px solid rgba(77,184,255,0.15)",borderRadius:14,padding:24,textAlign:"center"}}>
+            <div style={{fontSize:40,marginBottom:10}}>🔐</div>
+            <div style={{fontSize:16,fontWeight:700,color:"#4db8ff",marginBottom:8}}>APSA Subscription Required</div>
+            <div style={{fontSize:12,color:"#607090",lineHeight:1.7,marginBottom:16}}>Sign in with your APSA credentials to access all clinical modules.</div>
+            <button style={C.btnP} onClick={()=>setDet(null)}>← Back to Sign In</button>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📖 APSA NaT</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Not a Textbook — updated quarterly</div>
+      {!li ? (
+        <div style={{...C.card,padding:18,marginBottom:16}}>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>Sign In with APSA Credentials</div>
+          <div style={{fontSize:11,color:"#607090",marginBottom:14}}>apsapedsurg.org login</div>
+          <input style={C.fi} type="text" placeholder="APSA Username" value={u} onChange={e=>setU(e.target.value)}/>
+          <input style={C.fi} type="password" placeholder="Password" value={p} onChange={e=>setP(e.target.value)}/>
+          {err && <div style={{fontSize:11,color:"#ff5050",marginBottom:8}}>Please enter your username and password.</div>}
+          <button style={C.btnP} onClick={login}>Sign In to APSA NaT</button>
+          <div style={{textAlign:"center",fontSize:11,color:"#405060",marginTop:6}}>Free preview topics available below ↓</div>
+        </div>
+      ) : (
+        <div style={{background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.25)",borderRadius:13,padding:"11px 14px",marginBottom:14,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>✅ Full Access Unlocked</div>
+            <div style={{fontSize:11,color:"#607090"}}>Signed in as {u}</div>
+          </div>
+          <button onClick={()=>{setLi(false);setU("");setP("");}} style={{background:"none",border:"1px solid rgba(255,255,255,0.15)",borderRadius:8,padding:"5px 10px",fontSize:11,color:"#a0b0d0",cursor:"pointer",fontFamily:"inherit"}}>Sign Out</button>
+        </div>
+      )}
+      <input style={C.inp} type="text" placeholder="Search topics..." value={q} onChange={e=>setQ(e.target.value)}/>
+      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:10}}>
+        {cats.map(c=><button key={c} style={C.chip(c===cat,CATC[c])} onClick={()=>setCat(c)}>{c}</button>)}
+      </div>
+      {items.map((t,i) => {
+        const col=CATC[t.cat]||"#4db8ff";
+        return (
+          <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}} onClick={()=>setDet(NAT.indexOf(t))}>
+            <span style={{fontSize:20}}>{t.icon}</span>
+            <div style={{flex:1}}>
+              <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div>
+              <div style={{fontSize:11,color:col}}>{t.cat}</div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
+              {t.free && <span style={C.tag("#00e696")}>FREE</span>}
+              {!t.free && !li && <span>🔒</span>}
+              <span style={{color:"#4db8ff",fontSize:15}}>›</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Videos({onHome,scrollTop}) {
+  const [flt,setFlt] = useState("All"); const [q,setQ] = useState(""); const [det,setDet] = useState(null);
+  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
+  const srcs = ["All","PedSurgTV","GlobalCastMD","WebSurg","SAGES","MedTube","CSurgeries","Hopkins","Intuitive","YouTube"];
+  const items = VIDS.filter(v=>(flt==="All"||v.src===flt)&&(v.title.toLowerCase().indexOf(q.toLowerCase())>-1||v.tag.toLowerCase().indexOf(q.toLowerCase())>-1));
+  if(det!==null){
+    const v=VIDS[det]; const col=SRCC[v.src]||"#4db8ff";
+    return (
+      <div>
+        <button style={C.back("#ff5050")} onClick={()=>setDet(null)}>← Back to Videos</button>
+        <div style={{background:"#000",borderRadius:13,height:148,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,border:"1px solid rgba(255,255,255,0.08)"}}>
+          <div style={{textAlign:"center"}}><div style={{fontSize:34}}>▶</div><div style={{fontSize:11,color:"#607090",marginTop:6}}>Opens in {v.src}</div></div>
+        </div>
+        <div style={{fontSize:16,fontWeight:700,lineHeight:1.4,marginBottom:7}}>{v.title}</div>
+        <div style={{fontSize:12,color:col,marginBottom:14}}>{v.ch}</div>
+        <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
+          {v.views!=="—" && <span style={C.tag("#4db8ff")}>👁 {v.views}</span>}
+          <span style={C.tag("#00e696")}>⏱ {v.dur}</span>
+          <span style={C.tag("#a064ff")}>{v.tag}</span>
+        </div>
+        <a href={v.url} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:col,color:v.src==="YouTube"?"#fff":"#000"}}>Watch on {v.src} ↗</a>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <button style={C.back("#ff5050")} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>▶ Surgery Videos</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>PedSurgTV · WebSurg · SAGES · YouTube</div>
+      <div style={C.lbl}>Video Sources</div>
+      {[
+        {lb:"PedSurgTV",sb:"Pediatric surgery focused video education",cl:"#00e696",url:"https://www.youtube.com/@PedSurgTV"},
+        {lb:"GlobalCastMD",sb:"Dedicated pedi surgery video library — free",cl:"#a064ff",url:"https://videolibrary.globalcastmd.com/pediatric-surgery"},
+        {lb:"WebSurg",sb:"4,000+ HD surgical videos from IRCAD",cl:"#4db8ff",url:"https://websurg.com"},
+        {lb:"SAGES.TV",sb:"MIS procedure videos — free",cl:"#a064ff",url:"https://www.sages.org/video/"},
+        {lb:"MedTube",sb:"Surgical videos for healthcare professionals",cl:"#ff9632",url:"https://medtube.net"},
+        {lb:"CSurgeries",sb:"Peer-reviewed surgical videos — free with registration",cl:"#00e696",url:"https://csurgeries.com"},
+        {lb:"Hopkins All Children's",sb:"Free pedi surgery video library",cl:"#4db8ff",url:"https://www.hopkinsmedicine.org/all-childrens-hospital/services/pediatric-general-surgery/pediatric-surgery-video-library"},
+        {lb:"Intuitive Surgical",sb:"da Vinci robotic surgery videos & education",cl:"#4db8ff",url:"https://www.intuitive.com/en-us/healthcare-professionals/surgeons"},
+        {lb:"YouTube",sb:"Pediatric surgery channels and education",cl:"#ff5050",url:"https://youtube.com/results?search_query=pediatric+surgery"},
+      ].map(x=>(
+        <a key={x.lb} href={x.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+          <div style={{width:40,height:40,borderRadius:11,background:x.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
+          <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:x.cl}}>{x.lb}</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>{x.sb}</div></div>
+        </a>
+      ))}
+      <div style={{...C.lbl,marginTop:14}}>Browse Videos</div>
+      <input style={C.inp} type="text" placeholder="Search procedures..." value={q} onChange={e=>setQ(e.target.value)}/>
+      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:10}}>
+        {srcs.map(s=><button key={s} style={C.chip(s===flt,SRCC[s])} onClick={()=>setFlt(s)}>{s}</button>)}
+      </div>
+      {items.map((v,i) => {
+        const col=SRCC[v.src]||"#4db8ff";
+        return (
+          <div key={i} style={{...C.card,padding:0,overflow:"hidden"}} onClick={()=>setDet(VIDS.indexOf(v))}>
+            <div style={{height:74,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",position:"relative",fontSize:22}}>
+              🎬
+              <span style={{position:"absolute",bottom:5,right:7,background:"rgba(0,0,0,0.75)",borderRadius:4,padding:"2px 6px",fontSize:10,color:"#fff"}}>{v.dur}</span>
+              <span style={{position:"absolute",top:5,left:7,background:col+"cc",borderRadius:4,padding:"2px 6px",fontSize:10,fontWeight:700,color:"#000"}}>{v.src}</span>
+            </div>
+            <div style={{padding:"9px 12px"}}>
+              <div style={{fontSize:12,fontWeight:600,marginBottom:4,lineHeight:1.45}}>{v.title}</div>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:11}}>
+                <span style={{color:col}}>{v.ch}</span>
+                {v.views!=="—" && <span style={{color:"#607090"}}>👁 {v.views}</span>}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Podcasts({onHome,scrollTop}) {
+  const [flt,setFlt] = useState("All"); const [det,setDet] = useState(null);
+  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
+  const tags = ["All","PedSurg Core","Advocacy","Education","Clinical","Innovation","Cardiac","Critical Care"];
+  const items = flt==="All" ? PODS : PODS.filter(p=>p.tag===flt);
+  if(det!==null){
+    const p=PODS[det];
+    return (
+      <div>
+        <button style={C.back("#ffc832")} onClick={()=>setDet(null)}>← Back to Podcasts</button>
+        <div style={{width:64,height:64,borderRadius:16,background:p.color+"22",border:"1px solid "+p.color+"33",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,marginBottom:12}}>{p.icon}</div>
+        <div style={{fontSize:17,fontWeight:800,lineHeight:1.3,marginBottom:5}}>{p.title}</div>
+        <div style={{fontSize:12,color:p.color,marginBottom:14}}>{p.host}</div>
+        <div style={{...C.card,fontSize:13,lineHeight:1.8,marginBottom:12}}>{p.desc}</div>
+        <div style={{display:"flex",gap:9,marginBottom:18}}>
+          <div style={{background:"rgba(255,255,255,0.05)",borderRadius:9,padding:"7px 12px",fontSize:11,color:"#a0b0d0"}}>🗓 {p.freq}</div>
+          <div style={{background:"rgba(255,255,255,0.05)",borderRadius:9,padding:"7px 12px",fontSize:11,color:"#a0b0d0"}}>⏱ {p.dur}</div>
+        </div>
+        <a href={p.apple} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#fc3c44,#c42c34)"}}>🎵  Open in Apple Podcasts</a>
+        <a href={p.spotify} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#1db954,#15883c)"}}>🎧  Open in Spotify</a>
+        <a href={"https://music.youtube.com/search?q="+encodeURIComponent(p.title)} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#ff0000,#cc0000)"}}>▶️  Find on YouTube Music</a>
+        <a href={"https://music.amazon.com/search/"+encodeURIComponent(p.title)} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#00a8e1,#0088b8)"}}>🔵  Find on Amazon Music</a>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <button style={C.back("#ffc832")} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🎙 Podcasts</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Curated pediatric surgery audio</div>
+      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
+        {tags.map(t=><button key={t} style={C.chip(t===flt,"#ff9632")} onClick={()=>setFlt(t)}>{t}</button>)}
+      </div>
+      {items.map((p,i) => (
+        <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>setDet(PODS.indexOf(p))}>
+          <div style={{width:50,height:50,borderRadius:12,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{p.icon}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:3}}>
+              <div style={{fontSize:13,fontWeight:700,lineHeight:1.3}}>{p.title}</div>
+              <span style={C.tag(p.color)}>{p.tag}</span>
+            </div>
+            <div style={{fontSize:11,color:p.color,marginBottom:4}}>{p.host}</div>
+            <div style={{fontSize:11,color:"#8090b0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{p.desc}</div>
+            <div style={{display:"flex",gap:10,marginTop:6}}>
+              <span style={{fontSize:10,color:"#405060"}}>🗓 {p.freq}</span>
+              <span style={{fontSize:10,color:"#405060"}}>⏱ {p.dur}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+      <div style={C.lbl}>Listen On</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
+        <div style={{flex:"1 1 45%",background:"rgba(252,60,68,0.12)",border:"1px solid rgba(252,60,68,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🎵</div><div style={{fontSize:11,fontWeight:700,color:"#fc3c44",marginTop:4}}>Apple Podcasts</div></div>
+        <div style={{flex:"1 1 45%",background:"rgba(29,185,84,0.12)",border:"1px solid rgba(29,185,84,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🎧</div><div style={{fontSize:11,fontWeight:700,color:"#1db954",marginTop:4}}>Spotify</div></div>
+        <div style={{flex:"1 1 45%",background:"rgba(255,0,0,0.12)",border:"1px solid rgba(255,0,0,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>▶️</div><div style={{fontSize:11,fontWeight:700,color:"#ff0000",marginTop:4}}>YouTube Music</div></div>
+        <div style={{flex:"1 1 45%",background:"rgba(0,168,225,0.12)",border:"1px solid rgba(0,168,225,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🔵</div><div style={{fontSize:11,fontWeight:700,color:"#00a8e1",marginTop:4}}>Amazon Music</div></div>
+      </div>
+    </div>
+  );
+}
+
+function Research({onHome,scrollTop}) {
+  const [q,setQ] = useState(""); const [det,setDet] = useState(null);
+  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
+  const items = ARTS.filter(a=>a.title.toLowerCase().indexOf(q.toLowerCase())>-1||a.tag.toLowerCase().indexOf(q.toLowerCase())>-1||a.journal.toLowerCase().indexOf(q.toLowerCase())>-1);
+  if(det!==null){
+    const a=ARTS[det];
+    return (
+      <div>
+        <button style={C.back("#00e696")} onClick={()=>setDet(null)}>← Back to Articles</button>
+        <span style={C.tag(a.color)}>{a.tag}</span>
+        <div style={{fontSize:16,fontWeight:800,lineHeight:1.4,margin:"10px 0 8px"}}>{a.title}</div>
+        <div style={{fontSize:12,color:"#4db8ff",marginBottom:3}}>{a.journal}</div>
+        <div style={{fontSize:11,color:"#607090",marginBottom:18}}>Published {a.year} · PMID: {a.pmid}</div>
+        <div style={{...C.card,marginBottom:12}}>
+          <div style={{fontSize:10,fontWeight:800,color:"#405060",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Abstract Preview</div>
+          <div style={{fontSize:13,lineHeight:1.8}}>Comprehensive analysis of {a.tag.toLowerCase()} applications in pediatric surgical practice, examining clinical outcomes, implementation challenges, and evidence-based recommendations.</div>
+        </div>
+        <a href={"https://pubmed.ncbi.nlm.nih.gov/"+a.pmid+"/"} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Open in PubMed</a>
+        <a href={"https://pubmed.ncbi.nlm.nih.gov/?term="+encodeURIComponent(a.tag+" pediatric surgery")+"&sort=date"} target="_blank" rel="noreferrer" style={{...C.btnS,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Search Related Articles</a>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <button style={C.back("#00e696")} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🔬 Research</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>PubMed · Journals · Latest Evidence</div>
+      <input style={C.inp} type="text" placeholder="Search topics, journals..." value={q} onChange={e=>setQ(e.target.value)}/>
+      <div style={C.lbl}>Key Journals</div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
+        {[
+          {lb:"J Pediatr Surg",url:"https://www.journals.elsevier.com/journal-of-pediatric-surgery"},
+          {lb:"Pediatr Surg Int",url:"https://link.springer.com/journal/383"},
+          {lb:"Frontiers Peds",url:"https://www.frontiersin.org/journals/pediatrics"},
+          {lb:"EJPS",url:"https://link.springer.com/journal/34"},
+          {lb:"PubMed",url:"https://pubmed.ncbi.nlm.nih.gov/?term=pediatric+surgery&sort=date"},
+        ].map(j=>(
+          <a key={j.lb} href={j.url} target="_blank" rel="noreferrer" style={{background:"rgba(77,184,255,0.1)",border:"1px solid rgba(77,184,255,0.2)",borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:600,color:"#4db8ff",textDecoration:"none"}}>{j.lb} ↗</a>
+        ))}
+      </div>
+      <div style={C.lbl}>Featured Articles 2025-2026</div>
+      {items.map((a,i) => (
+        <div key={i} style={C.card} onClick={()=>setDet(ARTS.indexOf(a))}>
+          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start"}}>
+            <div style={{flex:1}}>
+              <div style={{fontSize:12,fontWeight:600,lineHeight:1.55,marginBottom:5}}>{a.title}</div>
+              <div style={{fontSize:11,color:"#4db8ff"}}>{a.journal} · {a.year}</div>
+            </div>
+            <span style={C.tag(a.color)}>{a.tag}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SocialMedia({onHome}) {
+  const orgs = ["All","APSA","IPEG"];
+  const [flt,setFlt] = useState("All");
+  const items = flt==="All" ? SOCIAL : SOCIAL.filter(s=>s.org===flt);
+  const platformBg = {Instagram:"rgba(225,48,108,0.08)",Facebook:"rgba(24,119,242,0.08)","X / Twitter":"rgba(255,255,255,0.06)",LinkedIn:"rgba(10,102,194,0.08)"};
+  const platformBorder = {Instagram:"rgba(225,48,108,0.25)",Facebook:"rgba(24,119,242,0.25)","X / Twitter":"rgba(255,255,255,0.12)",LinkedIn:"rgba(10,102,194,0.25)"};
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📱 Social Media</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations online</div>
+      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
+        {orgs.map(o=><button key={o} style={C.chip(o===flt,"#4db8ff")} onClick={()=>setFlt(o)}>{o}</button>)}
+      </div>
+      {items.map((s,i)=>(
+        <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:platformBg[s.platform],border:"1px solid "+platformBorder[s.platform]}}>
+          <div style={{width:44,height:44,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,textTransform:"uppercase",marginBottom:2}}>{s.org}</div>
+            <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.platform}</div>
+            <div style={{fontSize:11,color:"#a0b0d0"}}>{s.handle}</div>
+          </div>
+          <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
+        </a>
+      ))}
+      <div style={{...C.card,background:"rgba(255,255,255,0.03)",marginTop:8,textAlign:"center",padding:"16px 14px"}}>
+        <div style={{fontSize:11,color:"#607090",lineHeight:1.7}}>Know of a missing account? More society social media channels will be added as they are verified.</div>
+      </div>
+    </div>
+  );
+}
+
+function Societies({onHome}) {
+  const regions = ["All","North America","Europe","International","Pacific","Africa"];
+  const [flt,setFlt] = useState("All");
+  const items = flt==="All" ? SOCIETIES : SOCIETIES.filter(s=>s.region.includes(flt));
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🏛️ Societies</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations worldwide</div>
+      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
+        {regions.map(r=>(
+          <button key={r} style={C.chip(r===flt,"#4db8ff")} onClick={()=>setFlt(r)}>{r}</button>
+        ))}
+      </div>
+      {items.map((s,i)=>(
+        <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}>
+          <div style={{width:46,height:46,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:2}}>{s.name}</div>
+            <div style={{fontSize:11,color:"#e8f0fe",marginBottom:3,lineHeight:1.4}}>{s.full}</div>
+            <div style={{fontSize:10,color:"#607090"}}>{s.region}</div>
+          </div>
+          <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function AI({onHome,onNav}) {
+  const [q,setQ] = useState("");
+  const [asked,setAsked] = useState("");
+  const [answer,setAnswer] = useState("");
+  const [related,setRelated] = useState([]);
+  const [loading,setLoading] = useState(false);
+  const [error,setError] = useState("");
+  const WORKER_URL = "https://pedisurgpro-ai.miniatid.workers.dev";
+
+  async function ask(){
+    if(!q.trim()) return;
+    setLoading(true); setError(""); setAnswer(""); setRelated([]); setAsked(q.trim());
+    try{
+      const res = await fetch(WORKER_URL, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({question:q.trim()})
+      });
+      const data = await res.json();
+      if(data.answer){ setAnswer(data.answer); setRelated(data.related||[]); }
+      else if(data.error){ setError("Error: "+JSON.stringify(data.details||data.error)); }
+      else { setError("No response received. Try again or use the search below."); }
+    }catch(e){
+      setError("Couldn't reach the Virtual Pedi Surgeon. Check your connection, or use the search below.");
+    }finally{
+      setLoading(false);
+    }
+  }
+
+  const words = expandQuery(q);
+  const ql = q.trim().toLowerCase();
+  const natR = words.length ? NAT.filter(n=>wordMatch(n.title+" "+n.cat, words)) : [];
+  const vidR = words.length ? VIDS.filter(v=>wordMatch(v.title+" "+v.tag+" "+v.ch, words)) : [];
+  const podR = words.length ? PODS.filter(p=>wordMatch(p.title+" "+p.desc+" "+p.tag, words)) : [];
+  const artR = words.length ? ARTS.filter(a=>wordMatch(a.title+" "+a.tag+" "+a.journal, words)) : [];
+  const socR = words.length ? SOCIETIES.filter(s=>wordMatch(s.name+" "+s.full, words)) : [];
+  const total = natR.length+vidR.length+podR.length+artR.length+socR.length;
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#a064ff,#4db8ff)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:12}}>✦</div>
+      <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>Virtual Pedi Surgeon</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Ask a question, or search topics, videos, podcasts, research &amp; societies</div>
+      <input style={{...C.inp,fontSize:16}} type="text" placeholder="e.g. pyloric stenosis, robotic surgery..." value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>{if(e.key==="Enter") ask();}}/>
+
+      <button style={{...C.btnP,background:"linear-gradient(135deg,#a064ff,#7040cc)",opacity:loading?0.6:1}} onClick={ask} disabled={loading}>
+        {loading ? "Thinking..." : "✦ Ask Virtual Pedi Surgeon"}
+      </button>
+
+      {loading && (
+        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"18px",textAlign:"center",marginBottom:14}}>
+          <div style={{fontSize:24,marginBottom:6}}>✦</div>
+          <div style={{fontSize:12,color:"#a0b0d0"}}>Consulting the Virtual Pedi Surgeon...</div>
+        </div>
+      )}
+
+      {error && (
+        <div style={{background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)",borderRadius:14,padding:"14px",marginBottom:14}}>
+          <div style={{fontSize:12,color:"#ff9090",lineHeight:1.6}}>{error}</div>
+        </div>
+      )}
+
+      {answer && !loading && (
+        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"16px",marginBottom:14}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+            <span style={{fontSize:18}}>✦</span>
+            <span style={{fontSize:12,fontWeight:800,color:"#a064ff",letterSpacing:1,textTransform:"uppercase"}}>Virtual Pedi Surgeon</span>
+          </div>
+          <div style={{fontSize:13,lineHeight:1.8,color:"#e8f0fe",whiteSpace:"pre-wrap"}}>{answer}</div>
+          <div style={{fontSize:10,color:"#607090",marginTop:12,lineHeight:1.6}}>General information only — not a substitute for clinical judgment. For "{asked}", see related resources below.</div>
+        </div>
+      )}
+
+      {related.length>0 && !loading && (
+        <div>
+          <div style={C.lbl}>🔗 Related in PediSurg Pro</div>
+          {related.map((r,i)=>{
+            if(r.type==="video"){
+              const rt = r.title.toLowerCase();
+              const v = VIDS.find(x=>{
+                const xt = x.title.toLowerCase();
+                return rt.includes(xt) || xt.includes(rt) || rt.startsWith(xt.slice(0,30));
+              });
+              if(!v) return null;
+              const col=SRCC[v.src]||"#4db8ff";
+              return (
+                <a key={i} href={v.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+                  <div style={{width:40,height:40,borderRadius:11,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:12,fontWeight:600,marginBottom:2,lineHeight:1.4}}>{v.title}</div>
+                    <div style={{fontSize:11,color:col}}>{v.ch} · {v.dur}</div>
+                  </div>
+                  <span style={{color:col,fontSize:16,flexShrink:0}}>↗</span>
+                </a>
+              );
+            }
+            if(r.type==="podcast"){
+              const rt = r.title.toLowerCase();
+              const p = PODS.find(x=>{
+                const xt = x.title.toLowerCase();
+                return rt.includes(xt) || xt.includes(rt) || rt.startsWith(xt.slice(0,15));
+              });
+              if(!p) return null;
+              return (
+                <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>onNav("podcasts")}>
+                  <div style={{width:44,height:44,borderRadius:11,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{p.icon}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:13,fontWeight:700,marginBottom:2,lineHeight:1.3}}>{p.title}</div>
+                    <div style={{fontSize:11,color:p.color}}>{p.host}</div>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </div>
+      )}
+
+      {!ql && !asked && (
+        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"20px 18px",textAlign:"center",marginTop:8}}>
+          <div style={{fontSize:30,marginBottom:8}}>🔎</div>
+          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8}}>Enter a pediatric surgery topic or keyword to find related clinical modules, videos, podcasts, research articles, and societies — all from PediSurg Pro's free, no-login resources.</div>
+        </div>
+      )}
+
+      {ql && total===0 && !(asked && answer) && (
+        <div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,padding:"20px 18px",textAlign:"center",marginTop:8,marginBottom:14}}>
+          <div style={{fontSize:30,marginBottom:8}}>🤷</div>
+          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8}}>No matches found in PediSurg Pro's curated content for "{q}". Try the searches below, or use a broader term (e.g. "neonatal", "robotic", "trauma").</div>
+        </div>
+      )}
+
+      {!(asked && answer) && (
+      <div>
+      {natR.length>0 && (
+        <div>
+          <div style={C.lbl}>📖 NaT Clinical Topics</div>
+          {natR.map((t,i)=>{
+            const col=CATC[t.cat]||"#4db8ff";
+            return (
+              <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}} onClick={()=>onNav("nat")}>
+                <span style={{fontSize:20}}>{t.icon}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div>
+                  <div style={{fontSize:11,color:col}}>{t.cat}</div>
+                </div>
+                {t.free && <span style={C.tag("#00e696")}>FREE</span>}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {vidR.length>0 && (
+        <div>
+          <div style={C.lbl}>▶ Surgery Videos</div>
+          {vidR.map((v,i)=>{
+            const col=SRCC[v.src]||"#4db8ff";
+            return (
+              <a key={i} href={v.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+                <div style={{width:40,height:40,borderRadius:11,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:12,fontWeight:600,marginBottom:2,lineHeight:1.4}}>{v.title}</div>
+                  <div style={{fontSize:11,color:col}}>{v.ch} · {v.dur}</div>
+                </div>
+                <span style={{color:col,fontSize:16,flexShrink:0}}>↗</span>
+              </a>
+            );
+          })}
+        </div>
+      )}
+
+      {podR.length>0 && (
+        <div>
+          <div style={C.lbl}>🎙 Podcasts</div>
+          {podR.map((p,i)=>(
+            <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>onNav("podcasts")}>
+              <div style={{width:44,height:44,borderRadius:11,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{p.icon}</div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:13,fontWeight:700,marginBottom:2,lineHeight:1.3}}>{p.title}</div>
+                <div style={{fontSize:11,color:p.color}}>{p.host}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {artR.length>0 && (
+        <div>
+          <div style={C.lbl}>🔬 Research Articles</div>
+          {artR.map((a,i)=>(
+            <a key={i} href={"https://pubmed.ncbi.nlm.nih.gov/"+a.pmid+"/"} target="_blank" rel="noreferrer" style={{...C.card,display:"block",textDecoration:"none",color:"inherit"}}>
+              <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start"}}>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:12,fontWeight:600,lineHeight:1.5,marginBottom:5}}>{a.title}</div>
+                  <div style={{fontSize:11,color:"#4db8ff"}}>{a.journal} · {a.year}</div>
+                </div>
+                <span style={C.tag(a.color)}>{a.tag}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {socR.length>0 && (
+        <div>
+          <div style={C.lbl}>🏛️ Societies</div>
+          {socR.map((s,i)=>(
+            <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}>
+              <div style={{width:42,height:42,borderRadius:11,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.name}</div>
+                <div style={{fontSize:11,color:"#a0b0d0",lineHeight:1.4}}>{s.full}</div>
+              </div>
+              <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {ql && (
+        <div>
+          <div style={C.lbl}>🌐 Search Beyond PediSurg Pro</div>
+          <a href={"https://pubmed.ncbi.nlm.nih.gov/?term="+encodeURIComponent(q+" pediatric surgery")+"&sort=date"} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+            <div style={{width:40,height:40,borderRadius:11,background:"#00e69622",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🔬</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>Search PubMed</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>"{q}" + pediatric surgery</div></div>
+            <span style={{color:"#00e696",fontSize:16}}>↗</span>
+          </a>
+          <a href={"https://www.pedsurglibrary.com/apsa/quick/search?q="+encodeURIComponent(q)} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+            <div style={{width:40,height:40,borderRadius:11,background:"#4db8ff22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📖</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#4db8ff"}}>Search APSA NaT</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>Subscription required for full access</div></div>
+            <span style={{color:"#4db8ff",fontSize:16}}>↗</span>
+          </a>
+          <a href={"https://www.youtube.com/results?search_query="+encodeURIComponent(q+" pediatric surgery")} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+            <div style={{width:40,height:40,borderRadius:11,background:"#ff505022",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>▶</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#ff5050"}}>Search YouTube</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>"{q}" + pediatric surgery videos</div></div>
+            <span style={{color:"#ff5050",fontSize:16}}>↗</span>
+          </a>
+          <a href="https://openevidence.com" target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+            <div style={{width:40,height:40,borderRadius:11,background:"#ffb43222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🔍</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#ffb432"}}>Ask OpenEvidence</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>AI-powered medical evidence search</div></div>
+            <span style={{color:"#ffb432",fontSize:16}}>↗</span>
+          </a>
+        </div>
+      )}
+      </div>
+      )}
+    </div>
+  );
+}
+
+function Settings({onHome, visible, onToggle, onReset}) {
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>⚙️ Settings</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:16,lineHeight:1.6}}>Choose which sections appear in PedSurg Pro. Hidden sections are removed from the bottom navigation and Home screen — turn them back on anytime.</div>
+      <div style={C.lbl}>App Sections</div>
+      {TOGGLEABLE.map(t=>{
+        const on = !!visible[t.id];
+        return (
+          <div key={t.id} style={{...C.card,display:"flex",alignItems:"center",gap:12}}>
+            <span style={{fontSize:20,flexShrink:0}}>{t.ic}</span>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontSize:13,fontWeight:700,marginBottom:2}}>{t.lb}</div>
+              <div style={{fontSize:11,color:"#607090"}}>{t.desc}</div>
+            </div>
+            <button
+              onClick={()=>onToggle(t.id)}
+              aria-label={(on?"Hide ":"Show ")+t.lb}
+              style={{width:46,height:26,borderRadius:13,border:"none",cursor:"pointer",position:"relative",flexShrink:0,padding:0,background:on?"#4db8ff":"rgba(255,255,255,0.15)",fontFamily:"inherit"}}>
+              <span style={{position:"absolute",top:3,left:on?23:3,width:20,height:20,borderRadius:"50%",background:"#fff",transition:"left 0.15s"}}/>
+            </button>
+          </div>
+        );
+      })}
+      <button style={{...C.btnS,marginTop:6}} onClick={onReset}>Reset to Defaults</button>
+      <div style={{fontSize:11,color:"#405060",lineHeight:1.7,marginTop:16,marginBottom:8,textAlign:"center"}}>Home is always available. These preferences are saved on this device.</div>
+    </div>
+  );
+}
+
+function App() {
+  const [tab,setTab] = useState("home");
+  const [visible,setVisible] = useState(loadVisibility);
+  const pageRef = useRef(null);
+  useEffect(()=>{ if(pageRef.current) pageRef.current.scrollTop = 0; }, [tab]);
+
+  function toggleSection(id){
+    setVisible(prev=>{
+      const next = {...prev, [id]: !prev[id]};
+      saveVisibility(next);
+      return next;
+    });
+    if(tab===id) setTab("home");
+  }
+  function resetVisibility(){
+    const next = {}; TOGGLEABLE.forEach(t=>{ next[t.id]=true; });
+    setVisible(next);
+    saveVisibility(next);
+  }
+
+  const navFull = [{id:"home",ic:"⚕️",lb:"Home"},{id:"nat",ic:"📖",lb:"NaT"},{id:"videos",ic:"▶️",lb:"Videos"},{id:"podcasts",ic:"🎙️",lb:"Podcasts"},{id:"research",ic:"🔬",lb:"Research"},{id:"societies",ic:"🏛️",lb:"Societies"},{id:"social",ic:"📱",lb:"Social"},{id:"ai",ic:"✦",lb:"Virt Surg"}];
+  const nav = navFull.filter(x=>x.id==="home"||visible[x.id]);
+  return (
+    <div style={C.app}>
+      <div style={C.page} ref={pageRef}>
+        {tab==="home"     && <Home onNav={setTab} visible={visible}/>}
+        {tab==="nat"      && visible.nat      && <Nat onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
+        {tab==="videos"   && visible.videos   && <Videos onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
+        {tab==="podcasts" && visible.podcasts && <Podcasts onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
+        {tab==="research" && visible.research && <Research onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
+        {tab==="societies"&& visible.societies&& <Societies onHome={()=>setTab("home")}/>}
+        {tab==="social"   && visible.social   && <SocialMedia onHome={()=>setTab("home")}/>}
+        {tab==="ai"       && visible.ai       && <AI onHome={()=>setTab("home")} onNav={setTab}/>}
+        {tab==="settings" && <Settings onHome={()=>setTab("home")} visible={visible} onToggle={toggleSection} onReset={resetVisibility}/>}
+      </div>
+      <div style={C.nav}>
+        {nav.map(x=>(
+          <button key={x.id} style={C.nb(tab===x.id)} onClick={()=>setTab(x.id)}>
+            <span style={{fontSize:18}}>{x.ic}</span>
+            <span style={{fontSize:9,fontWeight:700}}>{x.lb}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App/>, document.getElementById("root"));
+</script>
+</body>
+</html>
