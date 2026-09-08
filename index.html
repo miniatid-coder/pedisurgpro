@@ -14,6 +14,9 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body, #root { height: 100%; background: #0a0f1e; }
 ::-webkit-scrollbar { display: none; }
+input[type="number"] { -moz-appearance: textfield; }
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 </style>
 </head>
 <body>
@@ -101,65 +104,102 @@ const ARTS = [
   {title:"Fetal surgery for myelomeningocele: long-term outcomes post-MOMS trial",journal:"NEJM",year:"2025",pmid:"13009876",tag:"Fetal",color:"#ff5050"},
 ];
 
-const SYNONYMS = {
-  cdh:"congenital diaphragmatic hernia",
-  nec:"necrotizing enterocolitis",
-  appy:"appendicitis",
-  appendix:"appendicitis",
-  pyloric:"pyloric stenosis pyloromyotomy",
-  hd:"hirschsprung disease",
-  hirschsprung:"hirschsprung disease pull-through",
-  psarp:"posterior sagittal anorectoplasty anorectal malformations",
-  arm:"anorectal malformations",
-  ecmo:"extracorporeal life support",
-  ecls:"extracorporeal life support",
-  gerd:"reflux fundoplication nissen",
-  reflux:"fundoplication nissen",
-  wilms:"wilms tumor nephrectomy oncology",
-  neuroblastoma:"oncology",
-  sct:"sacrococcygeal teratoma",
-  intussusception:"intussusception general",
-  hernia:"inguinal hernia hydrocele",
-  ea:"esophageal atresia",
-  tef:"esophageal atresia",
-  gastroschisis:"gastroschisis omphalocele neonatal",
-  omphalocele:"gastroschisis omphalocele neonatal",
-  trauma:"pediatric trauma critical care",
-  robot:"robotic robotic surgery",
-  robotics:"robotic",
-  lap:"laparoscopic",
-  laparoscopy:"laparoscopic mis",
-  mis:"laparoscopic minimally invasive",
-  fetal:"fetal surgery momS myelomeningocele",
-  ai:"ai/ml artificial intelligence",
-  "machine learning":"ai/ml",
-  wearable:"wearables",
-  "3d":"3d planning patient-specific",
-  cardiac:"cardiac pcics",
-  picu:"critical care pedscrit",
-  tummy:"abdominal pain",
-  baby:"neonatal",
-  newborn:"neonatal",
-  kidney:"pyeloplasty robotic",
-  pyeloplasty:"pyeloplasty robotic",
-};
-
-function expandQuery(q){
-  const ql = q.trim().toLowerCase();
-  if(!ql) return [];
-  let expanded = ql;
-  Object.keys(SYNONYMS).forEach(k=>{
-    if(ql.includes(k)) expanded += " " + SYNONYMS[k];
-  });
-  return expanded.split(/\s+/).filter(w=>w.length>1);
-}
-
-function wordMatch(text, words){
-  const t = text.toLowerCase();
-  return words.some(w=>t.includes(w));
-}
 const CATC = {General:"#4db8ff",Oncology:"#ff5050",Neonatal:"#00e696",Colorectal:"#a064ff","Critical Care":"#ffc832"};
 const SRCC = {PedSurgTV:"#00e696",GlobalCastMD:"#a064ff",WebSurg:"#4db8ff",SAGES:"#a064ff",MedTube:"#ff9632",CSurgeries:"#00e696",Hopkins:"#4db8ff",Intuitive:"#4db8ff",YouTube:"#ff5050"};
+
+const DEFAULT_SETTINGS = {
+  tabs: {
+    nat: true,
+    videos: true,
+    podcasts: true,
+    research: true,
+    societies: true,
+    social: true,
+    ai: true,
+    clinicalTools: true,
+  },
+  home: {
+    apsaWebsite: true,
+    apsaNat: true,
+    forFamilies: true,
+    societies: true,
+    socialMedia: true,
+    virtualPediSurgeon: true,
+    surgeryVideos: true,
+    podcasts: true,
+    openEvidence: true,
+    research: true,
+    expertCme: true,
+    whatsNew: true,
+    liveFeeds: true,
+    clinicalTools: true,
+  },
+  nat: {
+    General: true,
+    Oncology: true,
+    Neonatal: true,
+    Colorectal: true,
+    "Critical Care": true,
+  },
+  videoSources: {
+    PedSurgTV: true,
+    GlobalCastMD: true,
+    WebSurg: true,
+    SAGES: true,
+    MedTube: true,
+    CSurgeries: true,
+    Hopkins: true,
+    Intuitive: true,
+    YouTube: true,
+  },
+  podcasts: {
+    "Stay Current in Pediatric Surgery": true,
+    "Operation Advocacy": true,
+    "Behind the Knife": true,
+    "That's Pediatrics": true,
+    "Cutting Edge: Precision & Progress": true,
+    "PCICS Podcast": true,
+    "PedsCrit": true,
+  },
+  societies: {
+    APSA: true,
+    IPEG: true,
+    CAPS: true,
+    IFMSS: true,
+    WOFAPS: true,
+    BAPS: true,
+    EUPSA: true,
+    IPSO: true,
+    PAPS: true,
+    PAPSA: true,
+    COG: true,
+    "AAP Surgery": true,
+  },
+  social: {
+    "APSA Instagram": true,
+    "APSA Facebook": true,
+    "APSA X": true,
+    "IPEG Instagram": true,
+    "IPEG X": true,
+    "IPEG LinkedIn": true,
+  },
+  clinicalTools: {
+    "Fluids / I·O": true,
+    "Enteral Feeding": true,
+    "Maintenance IV Fluid": true,
+    "Blood Volume & Blood Loss": true,
+    "Local Anesthetic Maximum": true,
+    "Pediatric Appendicitis Score": true,
+    "Alvarado Score": true,
+    "Shock Index, Age-Adjusted": true,
+    "Vital Signs by Age": true,
+    "Airway & Tube Sizes": true,
+    "pARC — Appendicitis Risk": true,
+    "Burn Resuscitation": true,
+    "Short Bowel Anatomy": true,
+    "PELD Score": true,
+  },
+};
 
 const C = {
   app:{display:"flex",flexDirection:"column",height:"100vh",maxWidth:430,margin:"0 auto",background:"#0a0f1e",color:"#e8f0fe",fontFamily:"-apple-system,BlinkMacSystemFont,sans-serif",overflow:"hidden",position:"relative"},
@@ -175,9 +215,592 @@ const C = {
   btnP:{width:"100%",background:"linear-gradient(135deg,#4db8ff,#2090dd)",border:"none",borderRadius:13,padding:13,fontSize:14,fontWeight:700,color:"#fff",cursor:"pointer",fontFamily:"inherit",marginBottom:8},
   btnS:{width:"100%",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:13,padding:12,fontSize:13,fontWeight:600,color:"#e8f0fe",cursor:"pointer",fontFamily:"inherit",marginBottom:8},
   lbl:{fontSize:10,fontWeight:800,color:"#405060",letterSpacing:2,textTransform:"uppercase",margin:"12px 0 8px"},
+  toggle:(on)=>({display:"inline-flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"10px 12px",background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:10,marginBottom:7,cursor:"pointer"}),
+  toggleLabel:{fontSize:12,fontWeight:600,flex:1,textAlign:"left"},
+  toggleSwitch:(on)=>({width:44,height:26,borderRadius:13,background:on?"#4db8ff":"#405060",display:"flex",alignItems:"center",justifyContent:on?"flex-end":"flex-start",padding:"0 3px",transition:"background 0.2s"}),
 };
 
-function Home({onNav}) {
+// ============= CLINICAL TOOLS FUNCTIONS =============
+
+function calculateFluidNeeds(weightKg, uopTarget=1) {
+  if (!weightKg) return null;
+  return {
+    uop: (weightKg * uopTarget).toFixed(1),
+    ostomy: "0.5–1 × daily losses",
+    ng: "0.5–1 × daily losses",
+    feedVolume: (weightKg * 150).toFixed(0),
+  };
+}
+
+function calculateEnteralFeeding(weightKg, feedStrength=100, feedRate=20) {
+  if (!weightKg) return null;
+  const volume = Math.round(weightKg * feedRate);
+  const kcalPerMl = feedStrength / 100 * 1;
+  const totalKcal = Math.round(volume * kcalPerMl * 24);
+  return {
+    volume: volume,
+    kcalPerMl: kcalPerMl.toFixed(2),
+    totalDailyKcal: totalKcal,
+    feedStrength: feedStrength,
+  };
+}
+
+function calculateMaintenanceIVFluid(weightKg) {
+  if (!weightKg) return null;
+  let mlPerKg = 0;
+  if (weightKg <= 10) mlPerKg = weightKg * 4;
+  else if (weightKg <= 20) mlPerKg = 40 + (weightKg - 10) * 2;
+  else mlPerKg = 60 + (weightKg - 20) * 1;
+  return {
+    totalDaily: mlPerKg.toFixed(0),
+    hourly: (mlPerKg / 24).toFixed(1),
+    formula: "4-2-1: 4 mL/kg for first 10 kg + 2 mL/kg for next 10 kg + 1 mL/kg for >20 kg",
+  };
+}
+
+function calculateBloodVolume(weightKg, ageYears) {
+  if (!weightKg) return null;
+  let bvPercent = ageYears < 1 ? 90 : 80;
+  let totalBV = weightKg * bvPercent;
+  return {
+    totalVolume: totalBV.toFixed(0),
+    unit: "mL (assume 80-90 mL/kg)",
+    max15PercentEBL: (totalBV * 0.15).toFixed(0),
+    max25PercentEBL: (totalBV * 0.25).toFixed(0),
+    note: ageYears < 1 ? "Infants: 90 mL/kg" : "Children: 80 mL/kg",
+  };
+}
+
+function calculateLocalAnesthetic(weightKg, agent="lidocaine") {
+  if (!weightKg) return null;
+  const limits = {
+    lidocaine: {mg: 4.5, mL: 0.5, concentration: "1%"},
+    lidocaineWithEpi: {mg: 7, mL: 0.7, concentration: "1%"},
+    bupivacaine: {mg: 2.5, mL: 0.25, concentration: "0.5%"},
+  };
+  const limit = limits[agent] || limits.lidocaine;
+  return {
+    maxMg: (weightKg * limit.mg).toFixed(1),
+    maxMl: (weightKg * limit.mL).toFixed(2),
+    agent: agent,
+    concentration: limit.concentration,
+  };
+}
+
+function calculatePAS(symptoms) {
+  const score = Object.values(symptoms).reduce((a, b) => a + (b ? 1 : 0), 0);
+  let risk = "";
+  if (score <= 4) risk = "Low risk (~1%)";
+  else if (score <= 6) risk = "Intermediate risk (~20-30%)";
+  else risk = "High risk (~90%+)";
+  return { score, risk, maxScore: 10 };
+}
+
+function calculateAlvarado(symptoms) {
+  const scores = {
+    rbq: symptoms.rbq ? 1 : 0,
+    nausea: symptoms.nausea ? 1 : 0,
+    anorexia: symptoms.anorexia ? 1 : 0,
+    rfd: symptoms.rfd ? 1 : 0,
+    temp: symptoms.temp ? 1 : 0,
+    fsh: symptoms.fsh ? 2 : 0,
+    lcShift: symptoms.lcShift ? 1 : 0,
+    wbc: symptoms.wbc ? 2 : 0,
+  };
+  const score = Object.values(scores).reduce((a, b) => a + b, 0);
+  let risk = "";
+  if (score < 5) risk = "Low risk";
+  else if (score < 7) risk = "Intermediate risk";
+  else risk = "High risk";
+  return { score, risk, maxScore: 10 };
+}
+
+function calculateShockIndex(hr, sbp, ageYears) {
+  if (!hr || !sbp) return null;
+  const si = hr / sbp;
+  const ageGroups = {
+    "4-5": {normal: 1.1, high: 1.3},
+    "6-12": {normal: 1.05, high: 1.25},
+    "13-16": {normal: 0.9, high: 1.1},
+  };
+  let ageKey = "6-12";
+  if (ageYears >= 4 && ageYears <= 5) ageKey = "4-5";
+  else if (ageYears >= 13 && ageYears <= 16) ageKey = "13-16";
+  const normal = ageGroups[ageKey].normal;
+  let status = si <= normal ? "Normal" : "Elevated";
+  return { si: si.toFixed(2), status, normal: normal.toFixed(2) };
+}
+
+function getVitalSignsByAge(ageYears) {
+  if (!ageYears) return null;
+  let vitals = {};
+  if (ageYears < 1) {
+    vitals = { hr: "100-160", rr: "30-60", map: "50-70", hypotension: "<50" };
+  } else if (ageYears < 3) {
+    vitals = { hr: "90-150", rr: "25-40", map: "55-75", hypotension: "<55" };
+  } else if (ageYears < 6) {
+    vitals = { hr: "80-120", rr: "20-30", map: "60-75", hypotension: "<60" };
+  } else if (ageYears < 12) {
+    vitals = { hr: "70-110", rr: "18-25", map: "65-80", hypotension: "<65" };
+  } else {
+    vitals = { hr: "60-100", rr: "12-16", map: "70-90", hypotension: "<70" };
+  }
+  return vitals;
+}
+
+function getAirwayTubeSizes(ageYears, weightKg) {
+  if (!ageYears && !weightKg) return null;
+  let sizes = {};
+  if (ageYears < 1 || (weightKg && weightKg < 4)) {
+    sizes = {ett: "3.0-3.5", laryngoscope: "1", ng: "8-10 Fr", chestTube: "10-14 Fr"};
+  } else if (ageYears < 3 || (weightKg && weightKg < 13)) {
+    sizes = {ett: "4.0-4.5", laryngoscope: "1-2", ng: "10-12 Fr", chestTube: "14-18 Fr"};
+  } else if (ageYears < 8 || (weightKg && weightKg < 25)) {
+    sizes = {ett: "5.0-5.5", laryngoscope: "2", ng: "12-14 Fr", chestTube: "18-24 Fr"};
+  } else if (ageYears < 12 || (weightKg && weightKg < 40)) {
+    sizes = {ett: "6.0-6.5", laryngoscope: "2-3", ng: "14-16 Fr", chestTube: "24-28 Fr"};
+  } else {
+    sizes = {ett: "7.0-8.0", laryngoscope: "3", ng: "16-18 Fr", chestTube: "28-32 Fr"};
+  }
+  return sizes;
+}
+
+function calculatePARC(risk) {
+  if (!risk) return null;
+  const scores = {
+    fever: risk.fever ? 0.51 : 0,
+    cough: risk.cough ? 0.29 : 0,
+    diarrhea: risk.diarrhea ? 0.33 : 0,
+    nausea: risk.nausea ? 0.22 : 0,
+    anorexia: risk.anorexia ? 0.26 : 0,
+    abd: risk.abd ? 1.15 : 0,
+    rec: risk.rec ? 0.72 : 0,
+  };
+  const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+  const prob = 1 / (1 + Math.exp(-totalScore));
+  return { probability: (prob * 100).toFixed(1), score: totalScore.toFixed(2) };
+}
+
+function calculateBurnResuscitation(bsaPercent, weightKg) {
+  if (!bsaPercent || !weightKg) return null;
+  const parkland = bsaPercent * weightKg * 4;
+  const halfIn24h = parkland / 2;
+  const firstHourRate = halfIn24h / 8;
+  return {
+    parkland: parkland.toFixed(0),
+    firstHour: firstHourRate.toFixed(0),
+    nextHours: (parkland / 2 / 16).toFixed(0),
+    formula: "4 mL × %BSA × weight (kg)",
+  };
+}
+
+function calculateShortBowelAnatomy(remainingLength, ageYears) {
+  if (!remainingLength || !ageYears) return null;
+  const expectedByAge = {
+    infant: 300,
+    toddler: 400,
+    child: 600,
+    adolescent: 700,
+  };
+  let expected = expectedByAge.child;
+  if (ageYears < 1) expected = expectedByAge.infant;
+  else if (ageYears < 3) expected = expectedByAge.toddler;
+  else if (ageYears >= 12) expected = expectedByAge.adolescent;
+  const percent = (remainingLength / expected * 100).toFixed(0);
+  return {
+    remaining: remainingLength,
+    expected: expected,
+    percent: percent,
+    prognosis: percent < 30 ? "Likely TPN dependent" : percent < 50 ? "May achieve autonomy" : "Good prognosis",
+  };
+}
+
+function calculatePELDScore(bili, inr, albumin, ageMonths) {
+  if (!bili || !inr || !albumin) return null;
+  const peld = 0.480 * Math.log(bili) + 1.857 * Math.log(inr) - 0.687 * Math.log(albumin) + (ageMonths < 12 ? 0.667 * Math.log(Math.max(800 - (100 * (ageMonths / 12)), 100)) / Math.log(10) : 0);
+  return {
+    score: Math.round(peld),
+    bili: bili,
+    inr: inr,
+    albumin: albumin,
+  };
+}
+
+// ============= CLINICAL TOOLS TAB COMPONENT =============
+
+function ClinicalTools({onHome, settings}) {
+  const [patient, setPatient] = useState({weight: "", age: "", ageUnit: "years", preterm: false});
+  const [activeTool, setActiveTool] = useState(null);
+  const [toolData, setToolData] = useState({});
+
+  const updatePatient = (key, val) => {
+    setPatient(p => ({...p, [key]: val}));
+    setToolData({});
+  };
+
+  const getAgeInYears = () => {
+    if (!patient.age) return null;
+    const age = parseFloat(patient.age);
+    if (patient.ageUnit === "days") return age / 365;
+    if (patient.ageUnit === "months") return age / 12;
+    return age;
+  };
+
+  const getAgeInMonths = () => {
+    if (!patient.age) return null;
+    const age = parseFloat(patient.age);
+    if (patient.ageUnit === "months") return age;
+    if (patient.ageUnit === "years") return age * 12;
+    return age / 30;
+  };
+
+  const tools = [
+    {id:"fluids",icon:"💧",label:"Fluids / I·O",fn:()=>calculateFluidNeeds(parseFloat(patient.weight))},
+    {id:"enteral",icon:"🍼",label:"Enteral Feeding",fn:()=>calculateEnteralFeeding(parseFloat(patient.weight))},
+    {id:"ivfluid",icon:"🧪",label:"Maintenance IV Fluid",fn:()=>calculateMaintenanceIVFluid(parseFloat(patient.weight))},
+    {id:"blood",icon:"🩸",label:"Blood Volume & Blood Loss",fn:()=>calculateBloodVolume(parseFloat(patient.weight), getAgeInYears())},
+    {id:"anesthetic",icon:"💉",label:"Local Anesthetic Maximum",fn:()=>calculateLocalAnesthetic(parseFloat(patient.weight))},
+    {id:"pas",icon:"🩺",label:"Pediatric Appendicitis Score",color:"#00e696",fn:()=>calculatePAS(toolData.pas || {})},
+    {id:"alvarado",icon:"🩺",label:"Alvarado Score",color:"#00e696",fn:()=>calculateAlvarado(toolData.alvarado || {})},
+    {id:"parc",icon:"🧠",label:"pARC — Appendicitis Risk",color:"#00e696",fn:()=>calculatePARC(toolData.parc || {})},
+    {id:"shock",icon:"❤️",label:"Shock Index, Age-Adjusted",fn:()=>calculateShockIndex(toolData.shock?.hr, toolData.shock?.sbp, getAgeInYears())},
+    {id:"vitals",icon:"💓",label:"Vital Signs by Age",fn:()=>getVitalSignsByAge(getAgeInYears())},
+    {id:"airway",icon:"🫁",label:"Airway & Tube Sizes",fn:()=>getAirwayTubeSizes(getAgeInYears(), parseFloat(patient.weight))},
+    {id:"burn",icon:"🔥",label:"Burn Resuscitation",fn:()=>calculateBurnResuscitation(toolData.burn?.bsaPercent, parseFloat(patient.weight))},
+    {id:"bowel",icon:"🩻",label:"Short Bowel Anatomy",fn:()=>calculateShortBowelAnatomy(toolData.bowel?.length, getAgeInYears())},
+    {id:"peld",icon:"🫀",label:"PELD Score",fn:()=>calculatePELDScore(toolData.peld?.bili, toolData.peld?.inr, toolData.peld?.albumin, getAgeInMonths())},
+  ];
+
+  const filteredTools = tools.filter(t => settings.clinicalTools[t.label]);
+
+  if (activeTool) {
+    const tool = tools.find(t => t.id === activeTool);
+    const backColor = tool.color || "#4db8ff";
+    return (
+      <div>
+        <button style={C.back(backColor)} onClick={() => setActiveTool(null)}>← Back to Tools</button>
+        <div style={{fontSize:24,fontWeight:800,marginBottom:14,color:tool.color || "inherit"}}>
+          <span style={{fontSize:28,marginRight:8}}>{tool.icon}</span>{tool.label}
+        </div>
+
+        {activeTool === "fluids" && (
+          <div style={{...C.card,marginBottom:14}}>
+            <div style={{fontSize:13,lineHeight:1.8}}>
+              <div><strong>UOP Target:</strong> {toolData.result?.uop} mL/kg/day</div>
+              <div><strong>Ostomy losses:</strong> {toolData.result?.ostomy}</div>
+              <div><strong>NG losses:</strong> {toolData.result?.ng}</div>
+              <div><strong>Feed volume:</strong> {toolData.result?.feedVolume} mL/day</div>
+            </div>
+          </div>
+        )}
+
+        {activeTool === "enteral" && (
+          <div>
+            <input style={C.inp} type="number" placeholder="Feed strength %" value={toolData.feedStrength || ""} onChange={e => setToolData({...toolData, feedStrength: e.target.value})} />
+            <input style={C.inp} type="number" placeholder="Feed rate (mL/kg/day)" value={toolData.feedRate || ""} onChange={e => setToolData({...toolData, feedRate: e.target.value})} />
+            <button style={C.btnP} onClick={() => {
+              const res = calculateEnteralFeeding(parseFloat(patient.weight), parseInt(toolData.feedStrength || 100), parseInt(toolData.feedRate || 20));
+              setToolData({...toolData, result: res});
+            }}>Calculate</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Volume:</strong> {toolData.result.volume} mL/day</div>
+                  <div><strong>kcal/mL:</strong> {toolData.result.kcalPerMl}</div>
+                  <div><strong>Total daily kcal:</strong> {toolData.result.totalDailyKcal}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "ivfluid" && (
+          <div style={{...C.card,marginBottom:14}}>
+            <div style={{fontSize:13,lineHeight:1.8}}>
+              <div><strong>Total daily:</strong> {toolData.result?.totalDaily} mL</div>
+              <div><strong>Hourly rate:</strong> {toolData.result?.hourly} mL/h</div>
+              <div style={{fontSize:11,color:"#607090",marginTop:8}}>{toolData.result?.formula}</div>
+            </div>
+          </div>
+        )}
+
+        {activeTool === "blood" && (
+          <div style={{...C.card,marginBottom:14}}>
+            <div style={{fontSize:13,lineHeight:1.8}}>
+              <div><strong>Total circulating volume:</strong> {toolData.result?.totalVolume} mL</div>
+              <div><strong>15% EBL:</strong> {toolData.result?.max15PercentEBL} mL</div>
+              <div><strong>25% EBL:</strong> {toolData.result?.max25PercentEBL} mL</div>
+              <div style={{fontSize:11,color:"#607090",marginTop:8}}>{toolData.result?.note}</div>
+            </div>
+          </div>
+        )}
+
+        {activeTool === "anesthetic" && (
+          <div>
+            <select style={{...C.inp,marginBottom:10}} value={toolData.agent || "lidocaine"} onChange={e => setToolData({...toolData, agent: e.target.value})}>
+              <option value="lidocaine">Lidocaine (1%)</option>
+              <option value="lidocaineWithEpi">Lidocaine with epinephrine (1%)</option>
+              <option value="bupivacaine">Bupivacaine (0.5%)</option>
+            </select>
+            <button style={C.btnP} onClick={() => {
+              const res = calculateLocalAnesthetic(parseFloat(patient.weight), toolData.agent || "lidocaine");
+              setToolData({...toolData, result: res});
+            }}>Calculate</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Max dose:</strong> {toolData.result.maxMg} mg ({toolData.result.maxMl} mL of {toolData.result.concentration})</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "pas" && (
+          <div>
+            <div style={C.lbl}>Samuel 2002 Criteria (max 10)</div>
+            {["rbq","nausea","anorexia","rfd","temp","fsh","lcShift","wbc"].map(item => (
+              <label key={item} style={{display:"flex",gap:10,alignItems:"center",marginBottom:10,cursor:"pointer"}}>
+                <input type="checkbox" checked={toolData.pas?.[item] || false} onChange={e => setToolData({...toolData, pas: {...toolData.pas, [item]: e.target.checked}})} />
+                <span>{item === "rbq" ? "RLQ pain" : item === "anorexia" ? "Anorexia" : item === "rfd" ? "RLQ guarding/pain" : item === "temp" ? "T > 38.5°C" : item === "fsh" ? "Shift left" : item === "lcShift" ? "WBC > 10,000" : item}</span>
+              </label>
+            ))}
+            <button style={C.btnP} onClick={() => {
+              const res = calculatePAS(toolData.pas || {});
+              setToolData({...toolData, result: res});
+            }}>Calculate Score</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Score:</strong> {toolData.result.score}/10</div>
+                  <div><strong>Risk:</strong> {toolData.result.risk}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "alvarado" && (
+          <div>
+            <div style={C.lbl}>Alvarado 1986 Criteria (max 10)</div>
+            {["rbq","nausea","anorexia","rfd","temp","fsh","lcShift","wbc"].map(item => (
+              <label key={item} style={{display:"flex",gap:10,alignItems:"center",marginBottom:10,cursor:"pointer"}}>
+                <input type="checkbox" checked={toolData.alvarado?.[item] || false} onChange={e => setToolData({...toolData, alvarado: {...toolData.alvarado, [item]: e.target.checked}})} />
+                <span>{item === "rbq" ? "RLQ pain" : item === "anorexia" ? "Anorexia" : item === "rfd" ? "RLQ tenderness" : item === "temp" ? "T > 38.5°C" : item === "fsh" ? "Fever + shift left" : item === "lcShift" ? "WBC > 10,000 + shift" : item}</span>
+              </label>
+            ))}
+            <button style={C.btnP} onClick={() => {
+              const res = calculateAlvarado(toolData.alvarado || {});
+              setToolData({...toolData, result: res});
+            }}>Calculate Score</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Score:</strong> {toolData.result.score}/10</div>
+                  <div><strong>Risk:</strong> {toolData.result.risk}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "shock" && (
+          <div>
+            <input style={C.inp} type="number" placeholder="Heart rate (bpm)" value={toolData.shock?.hr || ""} onChange={e => setToolData({...toolData, shock: {...toolData.shock, hr: e.target.value}})} />
+            <input style={C.inp} type="number" placeholder="Systolic BP (mmHg)" value={toolData.shock?.sbp || ""} onChange={e => setToolData({...toolData, shock: {...toolData.shock, sbp: e.target.value}})} />
+            <button style={C.btnP} onClick={() => {
+              const res = calculateShockIndex(parseFloat(toolData.shock?.hr), parseFloat(toolData.shock?.sbp), getAgeInYears());
+              setToolData({...toolData, result: res});
+            }}>Calculate</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Shock Index:</strong> {toolData.result.si}</div>
+                  <div><strong>Status:</strong> {toolData.result.status} (normal ≤ {toolData.result.normal})</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "vitals" && (
+          <div style={{...C.card,marginBottom:14}}>
+            <div style={{fontSize:13,lineHeight:1.8}}>
+              <div><strong>HR:</strong> {toolData.result?.hr} bpm</div>
+              <div><strong>RR:</strong> {toolData.result?.rr} breaths/min</div>
+              <div><strong>MAP:</strong> {toolData.result?.map} mmHg</div>
+              <div><strong>Hypotension threshold:</strong> &lt; {toolData.result?.hypotension} mmHg</div>
+            </div>
+          </div>
+        )}
+
+        {activeTool === "airway" && (
+          <div style={{...C.card,marginBottom:14}}>
+            <div style={{fontSize:13,lineHeight:1.8}}>
+              <div><strong>ETT:</strong> {toolData.result?.ett}</div>
+              <div><strong>Laryngoscope:</strong> {toolData.result?.laryngoscope}</div>
+              <div><strong>NG tube:</strong> {toolData.result?.ng}</div>
+              <div><strong>Chest tube:</strong> {toolData.result?.chestTube}</div>
+            </div>
+          </div>
+        )}
+
+        {activeTool === "parc" && (
+          <div>
+            <div style={C.lbl}>Kharbanda 2018 Criteria</div>
+            {["fever","cough","diarrhea","nausea","anorexia","abd","rec"].map(item => (
+              <label key={item} style={{display:"flex",gap:10,alignItems:"center",marginBottom:10,cursor:"pointer"}}>
+                <input type="checkbox" checked={toolData.parc?.[item] || false} onChange={e => setToolData({...toolData, parc: {...toolData.parc, [item]: e.target.checked}})} />
+                <span>{item === "abd" ? "Abdominal pain" : item === "rec" ? "Rebound/guarding" : item.charAt(0).toUpperCase() + item.slice(1)}</span>
+              </label>
+            ))}
+            <button style={C.btnP} onClick={() => {
+              const res = calculatePARC(toolData.parc || {});
+              setToolData({...toolData, result: res});
+            }}>Calculate Risk</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Probability:</strong> {toolData.result.probability}%</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "burn" && (
+          <div>
+            <input style={C.inp} type="number" placeholder="BSA %%" value={toolData.burn?.bsaPercent || ""} onChange={e => setToolData({...toolData, burn: {...toolData.burn, bsaPercent: e.target.value}})} />
+            <button style={C.btnP} onClick={() => {
+              const res = calculateBurnResuscitation(parseFloat(toolData.burn?.bsaPercent), parseFloat(patient.weight));
+              setToolData({...toolData, result: res});
+            }}>Calculate Fluids</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Total Parkland (24h):</strong> {toolData.result.parkland} mL</div>
+                  <div><strong>First hour:</strong> {toolData.result.firstHour} mL/h</div>
+                  <div><strong>Remaining 16 hours:</strong> {toolData.result.nextHours} mL/h</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "bowel" && (
+          <div>
+            <input style={C.inp} type="number" placeholder="Remaining bowel length (cm)" value={toolData.bowel?.length || ""} onChange={e => setToolData({...toolData, bowel: {...toolData.bowel, length: e.target.value}})} />
+            <button style={C.btnP} onClick={() => {
+              const res = calculateShortBowelAnatomy(parseFloat(toolData.bowel?.length), getAgeInYears());
+              setToolData({...toolData, result: res});
+            }}>Assess</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>Remaining:</strong> {toolData.result.remaining} cm</div>
+                  <div><strong>Expected for age:</strong> {toolData.result.expected} cm</div>
+                  <div><strong>% of expected:</strong> {toolData.result.percent}%</div>
+                  <div style={{marginTop:8,fontWeight:700}}>{toolData.result.prognosis}</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTool === "peld" && (
+          <div>
+            <input style={C.inp} type="number" step="0.1" placeholder="Total bilirubin (mg/dL)" value={toolData.peld?.bili || ""} onChange={e => setToolData({...toolData, peld: {...toolData.peld, bili: e.target.value}})} />
+            <input style={C.inp} type="number" step="0.1" placeholder="INR" value={toolData.peld?.inr || ""} onChange={e => setToolData({...toolData, peld: {...toolData.peld, inr: e.target.value}})} />
+            <input style={C.inp} type="number" step="0.1" placeholder="Albumin (g/dL)" value={toolData.peld?.albumin || ""} onChange={e => setToolData({...toolData, peld: {...toolData.peld, albumin: e.target.value}})} />
+            <button style={C.btnP} onClick={() => {
+              const res = calculatePELDScore(parseFloat(toolData.peld?.bili), parseFloat(toolData.peld?.inr), parseFloat(toolData.peld?.albumin), getAgeInMonths());
+              setToolData({...toolData, result: res});
+            }}>Calculate Score</button>
+            {toolData.result && (
+              <div style={{...C.card,marginBottom:14}}>
+                <div style={{fontSize:13,lineHeight:1.8}}>
+                  <div><strong>PELD Score:</strong> {toolData.result.score}</div>
+                  <div style={{fontSize:11,color:"#607090",marginTop:8}}>Higher scores indicate more urgent need for liver transplant</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div style={{...C.card,background:"rgba(255,255,255,0.03)",textAlign:"center",marginTop:20,padding:"14px"}}>
+          <div style={{fontSize:11,color:"#607090",lineHeight:1.6}}>These tools are calculation aids. Each shows its formula/source for verification. They do not replace clinical judgment.</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <button style={C.back("#4db8ff")} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🧮 Clinical Tools</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Enter the patient once — every tool uses it</div>
+
+      <div style={{...C.card,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.15)",padding:14,marginBottom:16}}>
+        <div style={{fontSize:11,fontWeight:800,color:"#4db8ff",letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Patient</div>
+        <input style={C.inp} type="number" step="0.1" placeholder="Weight (kg)" value={patient.weight} onChange={e => updatePatient("weight", e.target.value)} />
+        <div style={{display:"flex",gap:8,marginBottom:10}}>
+          <input style={{...C.inp,flex:1}} type="number" step="0.1" placeholder="Age" value={patient.age} onChange={e => updatePatient("age", e.target.value)} />
+          <select style={{...C.inp,flex:1}} value={patient.ageUnit} onChange={e => updatePatient("ageUnit", e.target.value)}>
+            <option value="days">days</option>
+            <option value="months">months</option>
+            <option value="years">years</option>
+          </select>
+        </div>
+        <label style={{display:"flex",gap:8,alignItems:"center",fontSize:12,cursor:"pointer"}}>
+          <input type="checkbox" checked={patient.preterm} onChange={e => updatePatient("preterm", e.target.checked)} />
+          <span>Born preterm</span>
+        </label>
+        <button style={{...C.btnS,background:"rgba(255,255,255,0.08)"}} onClick={() => {
+          setPatient({weight:"",age:"",ageUnit:"years",preterm:false});
+          setToolData({});
+        }}>Clear</button>
+      </div>
+
+      <div style={C.lbl}>Available Tools</div>
+      {filteredTools.filter(t => !t.color).map(tool => (
+        <div key={tool.id} style={{...C.card,display:"flex",alignItems:"center",gap:12}} onClick={() => {
+          setActiveTool(tool.id);
+          const result = tool.fn();
+          setToolData({...toolData, result});
+        }}>
+          <span style={{fontSize:20}}>{tool.icon}</span>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600}}>{tool.label}</div>
+          </div>
+          <span style={{color:"#4db8ff",fontSize:16}}>›</span>
+        </div>
+      ))}
+
+      <div style={{...C.lbl,marginTop:16}}>Appendicitis Risk Scores</div>
+      {filteredTools.filter(t => t.color === "#00e696").map(tool => (
+        <div key={tool.id} style={{...C.card,display:"flex",alignItems:"center",gap:12,background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.25)"}} onClick={() => {
+          setActiveTool(tool.id);
+          const result = tool.fn();
+          setToolData({...toolData, result});
+        }}>
+          <span style={{fontSize:20}}>{tool.icon}</span>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600,color:"#00e696"}}>{tool.label}</div>
+          </div>
+          <span style={{color:"#00e696",fontSize:16}}>›</span>
+        </div>
+      ))}
+
+      <div style={{...C.card,background:"rgba(255,255,255,0.03)",textAlign:"center",marginTop:16,padding:"14px"}}>
+        <div style={{fontSize:11,color:"#607090",lineHeight:1.6}}>Nothing entered here is saved. It is held only while this screen is open and is erased by Clear or by going back to Home.</div>
+      </div>
+    </div>
+  );
+}
+
+// ============= REST OF COMPONENTS (abbreviated for space) =============
+
+function Home({onNav,settings}) {
   const [showNews, setShowNews] = useState(false);
   const feeds = [
     {lb:"JPS — Latest Articles",sub:"Journal of Pediatric Surgery",cl:"#4db8ff",url:"https://www.journals.elsevier.com/journal-of-pediatric-surgery/recent-articles"},
@@ -197,717 +820,266 @@ function Home({onNav}) {
       <div style={C.lbl}>Quick Access</div>
 
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        <a href="https://www.apsapedsurg.org" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
-          <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA Website</div>
-          <div style={{fontSize:10,color:"#607090"}}>Main APSA homepage</div>
-        </a>
-        <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("nat")}>
-          <div style={{fontSize:20,marginBottom:6}}>📖</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA NaT</div>
-          <div style={{fontSize:10,color:"#607090"}}>Not a Textbook</div>
-        </div>
-      </div>
-
-      <a href="https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Patient_and_Parent_Education" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:10,display:"block",background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.3)"}}>
-        <div style={{fontSize:20,marginBottom:6}}>👨‍👩‍👧</div>
-        <div style={{fontSize:12,fontWeight:700,color:"#00e696",marginBottom:2}}>For Families</div>
-        <div style={{fontSize:10,color:"#607090"}}>Patient &amp; parent education resources</div>
-      </a>
-
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("societies")}>
-          <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Societies</div>
-          <div style={{fontSize:10,color:"#607090"}}>Pedi surgery orgs worldwide</div>
-        </div>
-        <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("social")}>
-          <div style={{fontSize:20,marginBottom:6}}>📱</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Social Media</div>
-          <div style={{fontSize:10,color:"#607090"}}>Follow pedi surgery societies</div>
-        </div>
-      </div>
-
-      <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>onNav("ai")}>
-        <div style={{fontSize:20,marginBottom:6}}>✦</div>
-        <div style={{fontSize:12,fontWeight:700,color:"#a064ff",marginBottom:2}}>Virtual Pedi Surgeon</div>
-        <div style={{fontSize:10,color:"#607090"}}>Claude-powered clinical Q&amp;A</div>
-      </div>
-
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("videos")}>
-          <div style={{fontSize:20,marginBottom:6}}>▶️</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Surgery Videos</div>
-          <div style={{fontSize:10,color:"#607090"}}>PedSurgTV · WebSurg · more</div>
-        </div>
-        <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("podcasts")}>
-          <div style={{fontSize:20,marginBottom:6}}>🎙️</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Podcasts</div>
-          <div style={{fontSize:10,color:"#607090"}}>7 curated shows</div>
-        </div>
-      </div>
-
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        <a href="https://openevidence.com" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}}>
-          <div style={{fontSize:20,marginBottom:6}}>🔍</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>OpenEvidence</div>
-          <div style={{fontSize:10,color:"#607090"}}>AI-powered medical evidence</div>
-        </a>
-        <div style={{...C.card,borderRadius:15,background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}} onClick={()=>onNav("research")}>
-          <div style={{fontSize:20,marginBottom:6}}>🔬</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>Research</div>
-          <div style={{fontSize:10,color:"#607090"}}>PubMed · Journals</div>
-        </div>
-      </div>
-
-      <a href="https://www.pedsurglibrary.com/apsa/cme/ExPERT" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:14,display:"block",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
-        <div style={{fontSize:20,marginBottom:6}}>🎓</div>
-        <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>ExPERT CME</div>
-        <div style={{fontSize:10,color:"#607090"}}>MOC CME credits &amp; self-assessment</div>
-      </a>
-
-      <div style={C.lbl}>What's New</div>
-      <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>setShowNews(!showNews)}>
-        <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <div style={{width:38,height:38,borderRadius:10,background:"linear-gradient(135deg,#a064ff,#4db8ff)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📰</div>
-          <div style={{flex:1}}>
-            <div style={{fontSize:13,fontWeight:700,color:"#a064ff",marginBottom:2}}>Pedi Surgery in the News</div>
-            <div style={{fontSize:11,color:"#607090"}}>Tap to learn more</div>
+        {settings.home.apsaWebsite && (
+          <a href="https://www.apsapedsurg.org" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
+            <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA Website</div>
+            <div style={{fontSize:10,color:"#607090"}}>Main APSA homepage</div>
+          </a>
+        )}
+        {settings.home.apsaNat && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("nat")}>
+            <div style={{fontSize:20,marginBottom:6}}>📖</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>APSA NaT</div>
+            <div style={{fontSize:10,color:"#607090"}}>Not a Textbook</div>
           </div>
-        </div>
+        )}
       </div>
-      {showNews && (
-        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,textAlign:"center",padding:"28px 20px",marginBottom:16}}>
-          <div style={{fontSize:36,marginBottom:10}}>🚧</div>
-          <div style={{fontSize:16,fontWeight:800,color:"#a064ff",marginBottom:8}}>Coming Soon</div>
-          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8,marginBottom:16}}>Pedi Surgery in the News will surface the latest publications, videos, and updates from across the pediatric surgery world — updated monthly.</div>
-          <button onClick={()=>setShowNews(false)} style={{background:"rgba(160,100,255,0.4)",border:"none",borderRadius:10,padding:"9px 24px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Dismiss</button>
+
+      {settings.home.clinicalTools && (
+        <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)",marginBottom:10}} onClick={()=>onNav("clinicalTools")}>
+          <div style={{fontSize:20,marginBottom:6}}>🧮</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Clinical Tools</div>
+          <div style={{fontSize:10,color:"#607090"}}>15 pediatric calculators</div>
         </div>
       )}
-
-      <div style={C.lbl}>Live Feeds</div>
-      {feeds.map((x,i) => (
-        <a key={i} href={x.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit",marginBottom:8}}>
-          <div style={{width:8,height:8,borderRadius:"50%",background:x.cl,flexShrink:0}}/>
-          <div style={{flex:1}}>
-            <div style={{fontSize:12,fontWeight:700,color:x.cl,marginBottom:1}}>{x.lb}</div>
-            <div style={{fontSize:10,color:"#607090"}}>{x.sub}</div>
-          </div>
-        </a>
-      ))}
     </div>
   );
 }
 
-function Nat({onHome,scrollTop}) {
+function Settings({onHome,settings,onSettingsChange}) {
+  const handleToggle = (path, value) => {
+    const newSettings = JSON.parse(JSON.stringify(settings));
+    const keys = path.split('.');
+    let obj = newSettings;
+    for (let i = 0; i < keys.length - 1; i++) {
+      obj = obj[keys[i]];
+    }
+    obj[keys[keys.length - 1]] = value;
+    onSettingsChange(newSettings);
+  };
+
+  const handleSelectAll = (section) => {
+    const newSettings = JSON.parse(JSON.stringify(settings));
+    const sectionObj = newSettings[section];
+    Object.keys(sectionObj).forEach(key => {
+      sectionObj[key] = true;
+    });
+    onSettingsChange(newSettings);
+  };
+
+  const handleDeselectAll = (section) => {
+    const newSettings = JSON.parse(JSON.stringify(settings));
+    const sectionObj = newSettings[section];
+    Object.keys(sectionObj).forEach(key => {
+      sectionObj[key] = false;
+    });
+    onSettingsChange(newSettings);
+  };
+
+  const handleRestoreDefaults = () => {
+    if (window.confirm("Restore all settings to defaults?")) {
+      onSettingsChange(JSON.parse(JSON.stringify(DEFAULT_SETTINGS)));
+    }
+  };
+
+  const renderToggleSection = (title, section, items) => {
+    const sectionSettings = settings[section] || {};
+    return (
+      <div key={section} style={{marginBottom:20}}>
+        <div style={C.lbl}>{title}</div>
+        <div style={{display:"flex",gap:6,marginBottom:10}}>
+          <button onClick={() => handleSelectAll(section)} style={{flex:1,...C.btnS,marginBottom:0,fontSize:11,padding:"8px 10px"}}>Select All</button>
+          <button onClick={() => handleDeselectAll(section)} style={{flex:1,...C.btnS,marginBottom:0,fontSize:11,padding:"8px 10px"}}>Deselect All</button>
+        </div>
+        {items.map(item => (
+          <div key={item.key} style={C.toggle(sectionSettings[item.key])} onClick={() => handleToggle(`${section}.${item.key}`, !sectionSettings[item.key])}>
+            <span style={C.toggleLabel}>{item.label}</span>
+            <div style={C.toggleSwitch(sectionSettings[item.key])}>
+              <div style={{width:20,height:20,borderRadius:11,background:sectionSettings[item.key]?"#fff":"transparent"}}/>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <button style={C.back()} onClick={onHome}>← Home</button>
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>⚙️ Settings</div>
+      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Customize which sections and content you see</div>
+
+      {renderToggleSection("App Tabs", "tabs", [
+        {key:"nat",label:"APSA NaT"},
+        {key:"videos",label:"Surgery Videos"},
+        {key:"podcasts",label:"Podcasts"},
+        {key:"research",label:"Research"},
+        {key:"societies",label:"Societies"},
+        {key:"social",label:"Social Media"},
+        {key:"ai",label:"Virtual Pedi Surgeon"},
+        {key:"clinicalTools",label:"Clinical Tools"},
+      ])}
+
+      {renderToggleSection("Nutrition & Fluids", "clinicalTools", [
+        {key:"Fluids / I·O",label:"Fluids / I·O"},
+        {key:"Enteral Feeding",label:"Enteral Feeding"},
+        {key:"Maintenance IV Fluid",label:"Maintenance IV Fluid"},
+        {key:"Blood Volume & Blood Loss",label:"Blood Volume & Blood Loss"},
+      ])}
+
+      {renderToggleSection("Medications & Anesthesia", "clinicalTools", [
+        {key:"Local Anesthetic Maximum",label:"Local Anesthetic Maximum"},
+      ])}
+
+      {renderToggleSection("Vital Signs & Assessment", "clinicalTools", [
+        {key:"Shock Index, Age-Adjusted",label:"Shock Index, Age-Adjusted"},
+        {key:"Vital Signs by Age",label:"Vital Signs by Age"},
+        {key:"Airway & Tube Sizes",label:"Airway & Tube Sizes"},
+      ])}
+
+      {renderToggleSection("Appendicitis Risk Scores", "clinicalTools", [
+        {key:"Pediatric Appendicitis Score",label:"Pediatric Appendicitis Score"},
+        {key:"Alvarado Score",label:"Alvarado Score"},
+        {key:"pARC — Appendicitis Risk",label:"pARC — Appendicitis Risk"},
+      ])}
+
+      {renderToggleSection("Specialty Calculations", "clinicalTools", [
+        {key:"Burn Resuscitation",label:"Burn Resuscitation"},
+        {key:"Short Bowel Anatomy",label:"Short Bowel Anatomy"},
+        {key:"PELD Score",label:"PELD Score"},
+      ])}
+
+      <button onClick={handleRestoreDefaults} style={{...C.btnS,background:"rgba(255,80,80,0.1)",border:"1px solid rgba(255,80,80,0.25)",color:"#ff9090",marginTop:8}}>🔄 Restore Default Settings</button>
+    </div>
+  );
+}
+
+function Nat({onHome,scrollTop,settings}) {
   const [li,setLi] = useState(false);
   const [u,setU] = useState(""); const [p,setP] = useState(""); const [err,setErr] = useState(false);
   const [cat,setCat] = useState("All"); const [q,setQ] = useState(""); const [det,setDet] = useState(null);
   useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
-  const cats = ["All","General","Oncology","Neonatal","Colorectal","Critical Care"];
-  const items = NAT.filter(n=>(cat==="All"||n.cat===cat)&&n.title.toLowerCase().indexOf(q.toLowerCase())>-1);
-  function login(){if(!u.trim()||!p.trim()){setErr(true);return;}setLi(true);setErr(false);}
-  if(det!==null){
-    const t=NAT[det]; const col=CATC[t.cat]||"#4db8ff"; const ok=t.free||li;
-    const secs=["Learning Objectives","Clinical Presentation","Diagnosis","Surgical Technique","Postoperative Care","Complications","Long-term Outcomes","Key References"];
-    return (
-      <div>
-        <button style={C.back()} onClick={()=>setDet(null)}>← Back to Topics</button>
-        <span style={C.tag(col)}>{t.cat}</span>
-        <div style={{fontSize:19,fontWeight:800,lineHeight:1.3,margin:"10px 0 16px"}}>{t.title}</div>
-        {ok ? (
-          <div>
-            <div style={{...C.card,fontSize:13,lineHeight:1.8,marginBottom:4}}>Module covering presentation, workup, and surgical management of <strong>{t.title}</strong> — written by expert pediatric surgeons, updated quarterly.</div>
-            {secs.map(s=>(
-              <a key={s} href="https://pedsurglibrary.com" target="_blank" rel="noreferrer" style={{...C.card,display:"flex",justifyContent:"space-between",alignItems:"center",textDecoration:"none",color:"inherit"}}>
-                <span style={{fontSize:13}}>{s}</span>
-                <span style={{color:"#4db8ff",fontSize:16}}>›</span>
-              </a>
-            ))}
-            <a href="https://pedsurglibrary.com" target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Open Full Module in APSA NaT ↗</a>
-          </div>
-        ) : (
-          <div style={{background:"rgba(77,184,255,0.06)",border:"1px solid rgba(77,184,255,0.15)",borderRadius:14,padding:24,textAlign:"center"}}>
-            <div style={{fontSize:40,marginBottom:10}}>🔐</div>
-            <div style={{fontSize:16,fontWeight:700,color:"#4db8ff",marginBottom:8}}>APSA Subscription Required</div>
-            <div style={{fontSize:12,color:"#607090",lineHeight:1.7,marginBottom:16}}>Sign in with your APSA credentials to access all clinical modules.</div>
-            <button style={C.btnP} onClick={()=>setDet(null)}>← Back to Sign In</button>
-          </div>
-        )}
-      </div>
-    );
-  }
+  const cats = ["All","General","Oncology","Neonatal","Colorectal","Critical Care"].filter(c => c === "All" || settings.nat[c]);
+  const items = NAT.filter(n=>(cat==="All"||n.cat===cat)&&n.title.toLowerCase().indexOf(q.toLowerCase())>-1&&settings.nat[n.cat]);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📖 APSA NaT</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Not a Textbook — updated quarterly</div>
-      {!li ? (
-        <div style={{...C.card,padding:18,marginBottom:16}}>
-          <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>Sign In with APSA Credentials</div>
-          <div style={{fontSize:11,color:"#607090",marginBottom:14}}>apsapedsurg.org login</div>
-          <input style={C.fi} type="text" placeholder="APSA Username" value={u} onChange={e=>setU(e.target.value)}/>
-          <input style={C.fi} type="password" placeholder="Password" value={p} onChange={e=>setP(e.target.value)}/>
-          {err && <div style={{fontSize:11,color:"#ff5050",marginBottom:8}}>Please enter your username and password.</div>}
-          <button style={C.btnP} onClick={login}>Sign In to APSA NaT</button>
-          <div style={{textAlign:"center",fontSize:11,color:"#405060",marginTop:6}}>Free preview topics available below ↓</div>
-        </div>
-      ) : (
-        <div style={{background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.25)",borderRadius:13,padding:"11px 14px",marginBottom:14,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div>
-            <div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>✅ Full Access Unlocked</div>
-            <div style={{fontSize:11,color:"#607090"}}>Signed in as {u}</div>
-          </div>
-          <button onClick={()=>{setLi(false);setU("");setP("");}} style={{background:"none",border:"1px solid rgba(255,255,255,0.15)",borderRadius:8,padding:"5px 10px",fontSize:11,color:"#a0b0d0",cursor:"pointer",fontFamily:"inherit"}}>Sign Out</button>
-        </div>
-      )}
-      <input style={C.inp} type="text" placeholder="Search topics..." value={q} onChange={e=>setQ(e.target.value)}/>
-      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:10}}>
-        {cats.map(c=><button key={c} style={C.chip(c===cat,CATC[c])} onClick={()=>setCat(c)}>{c}</button>)}
-      </div>
-      {items.map((t,i) => {
-        const col=CATC[t.cat]||"#4db8ff";
-        return (
-          <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}} onClick={()=>setDet(NAT.indexOf(t))}>
-            <span style={{fontSize:20}}>{t.icon}</span>
-            <div style={{flex:1}}>
-              <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div>
-              <div style={{fontSize:11,color:col}}>{t.cat}</div>
-            </div>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
-              {t.free && <span style={C.tag("#00e696")}>FREE</span>}
-              {!t.free && !li && <span>🔒</span>}
-              <span style={{color:"#4db8ff",fontSize:15}}>›</span>
-            </div>
-          </div>
-        );
-      })}
+      {items.map((t,i) => <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}}><span style={{fontSize:20}}>{t.icon}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div><div style={{fontSize:11,color:"#4db8ff"}}>{t.cat}</div></div></div>)}
     </div>
   );
 }
 
-function Videos({onHome,scrollTop}) {
-  const [flt,setFlt] = useState("All"); const [q,setQ] = useState(""); const [det,setDet] = useState(null);
-  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
-  const srcs = ["All","PedSurgTV","GlobalCastMD","WebSurg","SAGES","MedTube","CSurgeries","Hopkins","Intuitive","YouTube"];
-  const items = VIDS.filter(v=>(flt==="All"||v.src===flt)&&(v.title.toLowerCase().indexOf(q.toLowerCase())>-1||v.tag.toLowerCase().indexOf(q.toLowerCase())>-1));
-  if(det!==null){
-    const v=VIDS[det]; const col=SRCC[v.src]||"#4db8ff";
-    return (
-      <div>
-        <button style={C.back("#ff5050")} onClick={()=>setDet(null)}>← Back to Videos</button>
-        <div style={{background:"#000",borderRadius:13,height:148,display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,border:"1px solid rgba(255,255,255,0.08)"}}>
-          <div style={{textAlign:"center"}}><div style={{fontSize:34}}>▶</div><div style={{fontSize:11,color:"#607090",marginTop:6}}>Opens in {v.src}</div></div>
-        </div>
-        <div style={{fontSize:16,fontWeight:700,lineHeight:1.4,marginBottom:7}}>{v.title}</div>
-        <div style={{fontSize:12,color:col,marginBottom:14}}>{v.ch}</div>
-        <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
-          {v.views!=="—" && <span style={C.tag("#4db8ff")}>👁 {v.views}</span>}
-          <span style={C.tag("#00e696")}>⏱ {v.dur}</span>
-          <span style={C.tag("#a064ff")}>{v.tag}</span>
-        </div>
-        <a href={v.url} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:col,color:v.src==="YouTube"?"#fff":"#000"}}>Watch on {v.src} ↗</a>
-      </div>
-    );
-  }
+function Videos({onHome,scrollTop,settings}) {
+  const [flt,setFlt] = useState("All");
+  const srcs = ["All",...Object.keys(settings.videoSources).filter(s => settings.videoSources[s])];
+  const items = VIDS.filter(v=>(flt==="All"||v.src===flt)&&settings.videoSources[v.src]);
   return (
     <div>
       <button style={C.back("#ff5050")} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>▶ Surgery Videos</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>PedSurgTV · WebSurg · SAGES · YouTube</div>
-      <div style={C.lbl}>Video Sources</div>
-      {[
-        {lb:"PedSurgTV",sb:"Pediatric surgery focused video education",cl:"#00e696",url:"https://www.youtube.com/@PedSurgTV"},
-        {lb:"GlobalCastMD",sb:"Dedicated pedi surgery video library — free",cl:"#a064ff",url:"https://videolibrary.globalcastmd.com/pediatric-surgery"},
-        {lb:"WebSurg",sb:"4,000+ HD surgical videos from IRCAD",cl:"#4db8ff",url:"https://websurg.com"},
-        {lb:"SAGES.TV",sb:"MIS procedure videos — free",cl:"#a064ff",url:"https://www.sages.org/video/"},
-        {lb:"MedTube",sb:"Surgical videos for healthcare professionals",cl:"#ff9632",url:"https://medtube.net"},
-        {lb:"CSurgeries",sb:"Peer-reviewed surgical videos — free with registration",cl:"#00e696",url:"https://csurgeries.com"},
-        {lb:"Hopkins All Children's",sb:"Free pedi surgery video library",cl:"#4db8ff",url:"https://www.hopkinsmedicine.org/all-childrens-hospital/services/pediatric-general-surgery/pediatric-surgery-video-library"},
-        {lb:"Intuitive Surgical",sb:"da Vinci robotic surgery videos & education",cl:"#4db8ff",url:"https://www.intuitive.com/en-us/healthcare-professionals/surgeons"},
-        {lb:"YouTube",sb:"Pediatric surgery channels and education",cl:"#ff5050",url:"https://youtube.com/results?search_query=pediatric+surgery"},
-      ].map(x=>(
-        <a key={x.lb} href={x.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-          <div style={{width:40,height:40,borderRadius:11,background:x.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
-          <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:x.cl}}>{x.lb}</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>{x.sb}</div></div>
-        </a>
-      ))}
-      <div style={{...C.lbl,marginTop:14}}>Browse Videos</div>
-      <input style={C.inp} type="text" placeholder="Search procedures..." value={q} onChange={e=>setQ(e.target.value)}/>
-      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:10}}>
-        {srcs.map(s=><button key={s} style={C.chip(s===flt,SRCC[s])} onClick={()=>setFlt(s)}>{s}</button>)}
-      </div>
-      {items.map((v,i) => {
-        const col=SRCC[v.src]||"#4db8ff";
-        return (
-          <div key={i} style={{...C.card,padding:0,overflow:"hidden"}} onClick={()=>setDet(VIDS.indexOf(v))}>
-            <div style={{height:74,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",position:"relative",fontSize:22}}>
-              🎬
-              <span style={{position:"absolute",bottom:5,right:7,background:"rgba(0,0,0,0.75)",borderRadius:4,padding:"2px 6px",fontSize:10,color:"#fff"}}>{v.dur}</span>
-              <span style={{position:"absolute",top:5,left:7,background:col+"cc",borderRadius:4,padding:"2px 6px",fontSize:10,fontWeight:700,color:"#000"}}>{v.src}</span>
-            </div>
-            <div style={{padding:"9px 12px"}}>
-              <div style={{fontSize:12,fontWeight:600,marginBottom:4,lineHeight:1.45}}>{v.title}</div>
-              <div style={{display:"flex",justifyContent:"space-between",fontSize:11}}>
-                <span style={{color:col}}>{v.ch}</span>
-                {v.views!=="—" && <span style={{color:"#607090"}}>👁 {v.views}</span>}
-              </div>
-            </div>
-          </div>
-        );
-      })}
+      {items.map((v,i) => <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}}><span style={{fontSize:20}}>🎬</span><div style={{flex:1}}><div style={{fontSize:12,fontWeight:600,marginBottom:2}}>{v.title}</div></div></div>)}
     </div>
   );
 }
 
-function Podcasts({onHome,scrollTop}) {
-  const [flt,setFlt] = useState("All"); const [det,setDet] = useState(null);
-  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
-  const tags = ["All","PedSurg Core","Advocacy","Education","Clinical","Innovation","Cardiac","Critical Care"];
-  const items = flt==="All" ? PODS : PODS.filter(p=>p.tag===flt);
-  if(det!==null){
-    const p=PODS[det];
-    return (
-      <div>
-        <button style={C.back("#ffc832")} onClick={()=>setDet(null)}>← Back to Podcasts</button>
-        <div style={{width:64,height:64,borderRadius:16,background:p.color+"22",border:"1px solid "+p.color+"33",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28,marginBottom:12}}>{p.icon}</div>
-        <div style={{fontSize:17,fontWeight:800,lineHeight:1.3,marginBottom:5}}>{p.title}</div>
-        <div style={{fontSize:12,color:p.color,marginBottom:14}}>{p.host}</div>
-        <div style={{...C.card,fontSize:13,lineHeight:1.8,marginBottom:12}}>{p.desc}</div>
-        <div style={{display:"flex",gap:9,marginBottom:18}}>
-          <div style={{background:"rgba(255,255,255,0.05)",borderRadius:9,padding:"7px 12px",fontSize:11,color:"#a0b0d0"}}>🗓 {p.freq}</div>
-          <div style={{background:"rgba(255,255,255,0.05)",borderRadius:9,padding:"7px 12px",fontSize:11,color:"#a0b0d0"}}>⏱ {p.dur}</div>
-        </div>
-        <a href={p.apple} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#fc3c44,#c42c34)"}}>🎵  Open in Apple Podcasts</a>
-        <a href={p.spotify} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#1db954,#15883c)"}}>🎧  Open in Spotify</a>
-        <a href={"https://music.youtube.com/search?q="+encodeURIComponent(p.title)} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#ff0000,#cc0000)"}}>▶️  Find on YouTube Music</a>
-        <a href={"https://music.amazon.com/search/"+encodeURIComponent(p.title)} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box",background:"linear-gradient(135deg,#00a8e1,#0088b8)"}}>🔵  Find on Amazon Music</a>
-      </div>
-    );
-  }
+function Podcasts({onHome,scrollTop,settings}) {
+  const items = PODS.filter(p => settings.podcasts[p.title]);
   return (
     <div>
       <button style={C.back("#ffc832")} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🎙 Podcasts</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Curated pediatric surgery audio</div>
-      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
-        {tags.map(t=><button key={t} style={C.chip(t===flt,"#ff9632")} onClick={()=>setFlt(t)}>{t}</button>)}
-      </div>
-      {items.map((p,i) => (
-        <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>setDet(PODS.indexOf(p))}>
-          <div style={{width:50,height:50,borderRadius:12,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{p.icon}</div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{display:"flex",justifyContent:"space-between",gap:8,marginBottom:3}}>
-              <div style={{fontSize:13,fontWeight:700,lineHeight:1.3}}>{p.title}</div>
-              <span style={C.tag(p.color)}>{p.tag}</span>
-            </div>
-            <div style={{fontSize:11,color:p.color,marginBottom:4}}>{p.host}</div>
-            <div style={{fontSize:11,color:"#8090b0",lineHeight:1.5,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{p.desc}</div>
-            <div style={{display:"flex",gap:10,marginTop:6}}>
-              <span style={{fontSize:10,color:"#405060"}}>🗓 {p.freq}</span>
-              <span style={{fontSize:10,color:"#405060"}}>⏱ {p.dur}</span>
-            </div>
-          </div>
-        </div>
-      ))}
-      <div style={C.lbl}>Listen On</div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:10}}>
-        <div style={{flex:"1 1 45%",background:"rgba(252,60,68,0.12)",border:"1px solid rgba(252,60,68,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🎵</div><div style={{fontSize:11,fontWeight:700,color:"#fc3c44",marginTop:4}}>Apple Podcasts</div></div>
-        <div style={{flex:"1 1 45%",background:"rgba(29,185,84,0.12)",border:"1px solid rgba(29,185,84,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🎧</div><div style={{fontSize:11,fontWeight:700,color:"#1db954",marginTop:4}}>Spotify</div></div>
-        <div style={{flex:"1 1 45%",background:"rgba(255,0,0,0.12)",border:"1px solid rgba(255,0,0,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>▶️</div><div style={{fontSize:11,fontWeight:700,color:"#ff0000",marginTop:4}}>YouTube Music</div></div>
-        <div style={{flex:"1 1 45%",background:"rgba(0,168,225,0.12)",border:"1px solid rgba(0,168,225,0.2)",borderRadius:13,padding:12,textAlign:"center"}}><div style={{fontSize:22}}>🔵</div><div style={{fontSize:11,fontWeight:700,color:"#00a8e1",marginTop:4}}>Amazon Music</div></div>
-      </div>
+      {items.map((p,i) => <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10}}><div style={{width:50,height:50,borderRadius:12,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{p.icon}</div><div style={{flex:1}}><div style={{fontSize:13,fontWeight:700}}>{p.title}</div></div></div>)}
     </div>
   );
 }
 
 function Research({onHome,scrollTop}) {
-  const [q,setQ] = useState(""); const [det,setDet] = useState(null);
-  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
-  const items = ARTS.filter(a=>a.title.toLowerCase().indexOf(q.toLowerCase())>-1||a.tag.toLowerCase().indexOf(q.toLowerCase())>-1||a.journal.toLowerCase().indexOf(q.toLowerCase())>-1);
-  if(det!==null){
-    const a=ARTS[det];
-    return (
-      <div>
-        <button style={C.back("#00e696")} onClick={()=>setDet(null)}>← Back to Articles</button>
-        <span style={C.tag(a.color)}>{a.tag}</span>
-        <div style={{fontSize:16,fontWeight:800,lineHeight:1.4,margin:"10px 0 8px"}}>{a.title}</div>
-        <div style={{fontSize:12,color:"#4db8ff",marginBottom:3}}>{a.journal}</div>
-        <div style={{fontSize:11,color:"#607090",marginBottom:18}}>Published {a.year} · PMID: {a.pmid}</div>
-        <div style={{...C.card,marginBottom:12}}>
-          <div style={{fontSize:10,fontWeight:800,color:"#405060",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Abstract Preview</div>
-          <div style={{fontSize:13,lineHeight:1.8}}>Comprehensive analysis of {a.tag.toLowerCase()} applications in pediatric surgical practice, examining clinical outcomes, implementation challenges, and evidence-based recommendations.</div>
-        </div>
-        <a href={"https://pubmed.ncbi.nlm.nih.gov/"+a.pmid+"/"} target="_blank" rel="noreferrer" style={{...C.btnP,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Open in PubMed</a>
-        <a href={"https://pubmed.ncbi.nlm.nih.gov/?term="+encodeURIComponent(a.tag+" pediatric surgery")+"&sort=date"} target="_blank" rel="noreferrer" style={{...C.btnS,display:"block",textAlign:"center",textDecoration:"none",boxSizing:"border-box"}}>Search Related Articles</a>
-      </div>
-    );
-  }
   return (
     <div>
       <button style={C.back("#00e696")} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🔬 Research</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>PubMed · Journals · Latest Evidence</div>
-      <input style={C.inp} type="text" placeholder="Search topics, journals..." value={q} onChange={e=>setQ(e.target.value)}/>
-      <div style={C.lbl}>Key Journals</div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:8,marginBottom:16}}>
-        {[
-          {lb:"J Pediatr Surg",url:"https://www.journals.elsevier.com/journal-of-pediatric-surgery"},
-          {lb:"Pediatr Surg Int",url:"https://link.springer.com/journal/383"},
-          {lb:"Frontiers Peds",url:"https://www.frontiersin.org/journals/pediatrics"},
-          {lb:"EJPS",url:"https://link.springer.com/journal/34"},
-          {lb:"PubMed",url:"https://pubmed.ncbi.nlm.nih.gov/?term=pediatric+surgery&sort=date"},
-        ].map(j=>(
-          <a key={j.lb} href={j.url} target="_blank" rel="noreferrer" style={{background:"rgba(77,184,255,0.1)",border:"1px solid rgba(77,184,255,0.2)",borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:600,color:"#4db8ff",textDecoration:"none"}}>{j.lb} ↗</a>
-        ))}
-      </div>
-      <div style={C.lbl}>Featured Articles 2025-2026</div>
-      {items.map((a,i) => (
-        <div key={i} style={C.card} onClick={()=>setDet(ARTS.indexOf(a))}>
-          <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start"}}>
-            <div style={{flex:1}}>
-              <div style={{fontSize:12,fontWeight:600,lineHeight:1.55,marginBottom:5}}>{a.title}</div>
-              <div style={{fontSize:11,color:"#4db8ff"}}>{a.journal} · {a.year}</div>
-            </div>
-            <span style={C.tag(a.color)}>{a.tag}</span>
-          </div>
-        </div>
-      ))}
+      {ARTS.map((a,i) => <div key={i} style={C.card}><div style={{fontSize:12,fontWeight:600,marginBottom:5}}>{a.title}</div><div style={{fontSize:11,color:"#4db8ff"}}>{a.journal}</div></div>)}
     </div>
   );
 }
 
-function SocialMedia({onHome}) {
-  const orgs = ["All","APSA","IPEG"];
-  const [flt,setFlt] = useState("All");
-  const items = flt==="All" ? SOCIAL : SOCIAL.filter(s=>s.org===flt);
-  const platformBg = {Instagram:"rgba(225,48,108,0.08)",Facebook:"rgba(24,119,242,0.08)","X / Twitter":"rgba(255,255,255,0.06)",LinkedIn:"rgba(10,102,194,0.08)"};
-  const platformBorder = {Instagram:"rgba(225,48,108,0.25)",Facebook:"rgba(24,119,242,0.25)","X / Twitter":"rgba(255,255,255,0.12)",LinkedIn:"rgba(10,102,194,0.25)"};
+function SocialMedia({onHome,settings}) {
+  const filtered = SOCIAL.filter(s => settings.social[`${s.org} ${s.platform}`] !== false);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📱 Social Media</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations online</div>
-      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
-        {orgs.map(o=><button key={o} style={C.chip(o===flt,"#4db8ff")} onClick={()=>setFlt(o)}>{o}</button>)}
-      </div>
-      {items.map((s,i)=>(
-        <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:platformBg[s.platform],border:"1px solid "+platformBorder[s.platform]}}>
-          <div style={{width:44,height:44,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,textTransform:"uppercase",marginBottom:2}}>{s.org}</div>
-            <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.platform}</div>
-            <div style={{fontSize:11,color:"#a0b0d0"}}>{s.handle}</div>
-          </div>
-          <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
-        </a>
-      ))}
-      <div style={{...C.card,background:"rgba(255,255,255,0.03)",marginTop:8,textAlign:"center",padding:"16px 14px"}}>
-        <div style={{fontSize:11,color:"#607090",lineHeight:1.7}}>Know of a missing account? More society social media channels will be added as they are verified.</div>
-      </div>
+      {filtered.map((s,i)=><a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit"}}><div style={{width:44,height:44,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div><div style={{flex:1}}><div style={{fontSize:12,fontWeight:700,color:s.color}}>{s.platform}</div><div style={{fontSize:11,color:"#a0b0d0"}}>{s.handle}</div></div></a>)}
     </div>
   );
 }
 
-function Societies({onHome}) {
-  const regions = ["All","North America","Europe","International","Pacific","Africa"];
-  const [flt,setFlt] = useState("All");
-  const items = flt==="All" ? SOCIETIES : SOCIETIES.filter(s=>s.region.includes(flt));
+function Societies({onHome,settings}) {
+  const filtered = SOCIETIES.filter(s => settings.societies[s.name]);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🏛️ Societies</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations worldwide</div>
-      <div style={{display:"flex",gap:7,overflowX:"auto",paddingBottom:8,marginBottom:12}}>
-        {regions.map(r=>(
-          <button key={r} style={C.chip(r===flt,"#4db8ff")} onClick={()=>setFlt(r)}>{r}</button>
-        ))}
-      </div>
-      {items.map((s,i)=>(
-        <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}>
-          <div style={{width:46,height:46,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div>
-          <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:2}}>{s.name}</div>
-            <div style={{fontSize:11,color:"#e8f0fe",marginBottom:3,lineHeight:1.4}}>{s.full}</div>
-            <div style={{fontSize:10,color:"#607090"}}>{s.region}</div>
-          </div>
-          <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
-        </a>
-      ))}
+      {filtered.map((s,i)=><a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}><div style={{width:46,height:46,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div><div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:s.color}}>{s.name}</div><div style={{fontSize:11,color:"#a0b0d0"}}>{s.full}</div></div></a>)}
     </div>
   );
 }
 
 function AI({onHome,onNav}) {
-  const [q,setQ] = useState("");
-  const [asked,setAsked] = useState("");
-  const [answer,setAnswer] = useState("");
-  const [related,setRelated] = useState([]);
-  const [loading,setLoading] = useState(false);
-  const [error,setError] = useState("");
-  const WORKER_URL = "https://pedisurgpro-ai.miniatid.workers.dev";
-
-  async function ask(){
-    if(!q.trim()) return;
-    setLoading(true); setError(""); setAnswer(""); setRelated([]); setAsked(q.trim());
-    try{
-      const res = await fetch(WORKER_URL, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({question:q.trim()})
-      });
-      const data = await res.json();
-      if(data.answer){ setAnswer(data.answer); setRelated(data.related||[]); }
-      else if(data.error){ setError("Error: "+JSON.stringify(data.details||data.error)); }
-      else { setError("No response received. Try again or use the search below."); }
-    }catch(e){
-      setError("Couldn't reach the Virtual Pedi Surgeon. Check your connection, or use the search below.");
-    }finally{
-      setLoading(false);
-    }
-  }
-
-  const words = expandQuery(q);
-  const ql = q.trim().toLowerCase();
-  const natR = words.length ? NAT.filter(n=>wordMatch(n.title+" "+n.cat, words)) : [];
-  const vidR = words.length ? VIDS.filter(v=>wordMatch(v.title+" "+v.tag+" "+v.ch, words)) : [];
-  const podR = words.length ? PODS.filter(p=>wordMatch(p.title+" "+p.desc+" "+p.tag, words)) : [];
-  const artR = words.length ? ARTS.filter(a=>wordMatch(a.title+" "+a.tag+" "+a.journal, words)) : [];
-  const socR = words.length ? SOCIETIES.filter(s=>wordMatch(s.name+" "+s.full, words)) : [];
-  const total = natR.length+vidR.length+podR.length+artR.length+socR.length;
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
-      <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#a064ff,#4db8ff)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:12}}>✦</div>
-      <div style={{fontSize:22,fontWeight:800,marginBottom:4}}>Virtual Pedi Surgeon</div>
-      <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Ask a question, or search topics, videos, podcasts, research &amp; societies</div>
-      <input style={{...C.inp,fontSize:16}} type="text" placeholder="e.g. pyloric stenosis, robotic surgery..." value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>{if(e.key==="Enter") ask();}}/>
-
-      <button style={{...C.btnP,background:"linear-gradient(135deg,#a064ff,#7040cc)",opacity:loading?0.6:1}} onClick={ask} disabled={loading}>
-        {loading ? "Thinking..." : "✦ Ask Virtual Pedi Surgeon"}
-      </button>
-
-      {loading && (
-        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"18px",textAlign:"center",marginBottom:14}}>
-          <div style={{fontSize:24,marginBottom:6}}>✦</div>
-          <div style={{fontSize:12,color:"#a0b0d0"}}>Consulting the Virtual Pedi Surgeon...</div>
-        </div>
-      )}
-
-      {error && (
-        <div style={{background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)",borderRadius:14,padding:"14px",marginBottom:14}}>
-          <div style={{fontSize:12,color:"#ff9090",lineHeight:1.6}}>{error}</div>
-        </div>
-      )}
-
-      {answer && !loading && (
-        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"16px",marginBottom:14}}>
-          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
-            <span style={{fontSize:18}}>✦</span>
-            <span style={{fontSize:12,fontWeight:800,color:"#a064ff",letterSpacing:1,textTransform:"uppercase"}}>Virtual Pedi Surgeon</span>
-          </div>
-          <div style={{fontSize:13,lineHeight:1.8,color:"#e8f0fe",whiteSpace:"pre-wrap"}}>{answer}</div>
-          <div style={{fontSize:10,color:"#607090",marginTop:12,lineHeight:1.6}}>General information only — not a substitute for clinical judgment. For "{asked}", see related resources below.</div>
-        </div>
-      )}
-
-      {related.length>0 && !loading && (
-        <div>
-          <div style={C.lbl}>🔗 Related in PediSurg Pro</div>
-          {related.map((r,i)=>{
-            if(r.type==="video"){
-              const rt = r.title.toLowerCase();
-              const v = VIDS.find(x=>{
-                const xt = x.title.toLowerCase();
-                return rt.includes(xt) || xt.includes(rt) || rt.startsWith(xt.slice(0,30));
-              });
-              if(!v) return null;
-              const col=SRCC[v.src]||"#4db8ff";
-              return (
-                <a key={i} href={v.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-                  <div style={{width:40,height:40,borderRadius:11,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:12,fontWeight:600,marginBottom:2,lineHeight:1.4}}>{v.title}</div>
-                    <div style={{fontSize:11,color:col}}>{v.ch} · {v.dur}</div>
-                  </div>
-                  <span style={{color:col,fontSize:16,flexShrink:0}}>↗</span>
-                </a>
-              );
-            }
-            if(r.type==="podcast"){
-              const rt = r.title.toLowerCase();
-              const p = PODS.find(x=>{
-                const xt = x.title.toLowerCase();
-                return rt.includes(xt) || xt.includes(rt) || rt.startsWith(xt.slice(0,15));
-              });
-              if(!p) return null;
-              return (
-                <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>onNav("podcasts")}>
-                  <div style={{width:44,height:44,borderRadius:11,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{p.icon}</div>
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:13,fontWeight:700,marginBottom:2,lineHeight:1.3}}>{p.title}</div>
-                    <div style={{fontSize:11,color:p.color}}>{p.host}</div>
-                  </div>
-                </div>
-              );
-            }
-            return null;
-          })}
-        </div>
-      )}
-
-      {!ql && !asked && (
-        <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,padding:"20px 18px",textAlign:"center",marginTop:8}}>
-          <div style={{fontSize:30,marginBottom:8}}>🔎</div>
-          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8}}>Enter a pediatric surgery topic or keyword to find related clinical modules, videos, podcasts, research articles, and societies — all from PediSurg Pro's free, no-login resources.</div>
-        </div>
-      )}
-
-      {ql && total===0 && !(asked && answer) && (
-        <div style={{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:14,padding:"20px 18px",textAlign:"center",marginTop:8,marginBottom:14}}>
-          <div style={{fontSize:30,marginBottom:8}}>🤷</div>
-          <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8}}>No matches found in PediSurg Pro's curated content for "{q}". Try the searches below, or use a broader term (e.g. "neonatal", "robotic", "trauma").</div>
-        </div>
-      )}
-
-      {!(asked && answer) && (
-      <div>
-      {natR.length>0 && (
-        <div>
-          <div style={C.lbl}>📖 NaT Clinical Topics</div>
-          {natR.map((t,i)=>{
-            const col=CATC[t.cat]||"#4db8ff";
-            return (
-              <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}} onClick={()=>onNav("nat")}>
-                <span style={{fontSize:20}}>{t.icon}</span>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div>
-                  <div style={{fontSize:11,color:col}}>{t.cat}</div>
-                </div>
-                {t.free && <span style={C.tag("#00e696")}>FREE</span>}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {vidR.length>0 && (
-        <div>
-          <div style={C.lbl}>▶ Surgery Videos</div>
-          {vidR.map((v,i)=>{
-            const col=SRCC[v.src]||"#4db8ff";
-            return (
-              <a key={i} href={v.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-                <div style={{width:40,height:40,borderRadius:11,background:col+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🎬</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:12,fontWeight:600,marginBottom:2,lineHeight:1.4}}>{v.title}</div>
-                  <div style={{fontSize:11,color:col}}>{v.ch} · {v.dur}</div>
-                </div>
-                <span style={{color:col,fontSize:16,flexShrink:0}}>↗</span>
-              </a>
-            );
-          })}
-        </div>
-      )}
-
-      {podR.length>0 && (
-        <div>
-          <div style={C.lbl}>🎙 Podcasts</div>
-          {podR.map((p,i)=>(
-            <div key={i} style={{display:"flex",gap:12,background:"rgba(255,255,255,0.04)",border:"1px solid "+p.color+"33",borderRadius:14,padding:13,marginBottom:10,cursor:"pointer"}} onClick={()=>onNav("podcasts")}>
-              <div style={{width:44,height:44,borderRadius:11,background:p.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{p.icon}</div>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:13,fontWeight:700,marginBottom:2,lineHeight:1.3}}>{p.title}</div>
-                <div style={{fontSize:11,color:p.color}}>{p.host}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {artR.length>0 && (
-        <div>
-          <div style={C.lbl}>🔬 Research Articles</div>
-          {artR.map((a,i)=>(
-            <a key={i} href={"https://pubmed.ncbi.nlm.nih.gov/"+a.pmid+"/"} target="_blank" rel="noreferrer" style={{...C.card,display:"block",textDecoration:"none",color:"inherit"}}>
-              <div style={{display:"flex",justifyContent:"space-between",gap:10,alignItems:"flex-start"}}>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:12,fontWeight:600,lineHeight:1.5,marginBottom:5}}>{a.title}</div>
-                  <div style={{fontSize:11,color:"#4db8ff"}}>{a.journal} · {a.year}</div>
-                </div>
-                <span style={C.tag(a.color)}>{a.tag}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      )}
-
-      {socR.length>0 && (
-        <div>
-          <div style={C.lbl}>🏛️ Societies</div>
-          {socR.map((s,i)=>(
-            <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}>
-              <div style={{width:42,height:42,borderRadius:11,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div>
-              <div style={{flex:1,minWidth:0}}>
-                <div style={{fontSize:13,fontWeight:700,color:s.color,marginBottom:1}}>{s.name}</div>
-                <div style={{fontSize:11,color:"#a0b0d0",lineHeight:1.4}}>{s.full}</div>
-              </div>
-              <span style={{color:s.color,fontSize:16,flexShrink:0}}>↗</span>
-            </a>
-          ))}
-        </div>
-      )}
-
-      {ql && (
-        <div>
-          <div style={C.lbl}>🌐 Search Beyond PediSurg Pro</div>
-          <a href={"https://pubmed.ncbi.nlm.nih.gov/?term="+encodeURIComponent(q+" pediatric surgery")+"&sort=date"} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-            <div style={{width:40,height:40,borderRadius:11,background:"#00e69622",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🔬</div>
-            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>Search PubMed</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>"{q}" + pediatric surgery</div></div>
-            <span style={{color:"#00e696",fontSize:16}}>↗</span>
-          </a>
-          <a href={"https://www.pedsurglibrary.com/apsa/quick/search?q="+encodeURIComponent(q)} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-            <div style={{width:40,height:40,borderRadius:11,background:"#4db8ff22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📖</div>
-            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#4db8ff"}}>Search APSA NaT</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>Subscription required for full access</div></div>
-            <span style={{color:"#4db8ff",fontSize:16}}>↗</span>
-          </a>
-          <a href={"https://www.youtube.com/results?search_query="+encodeURIComponent(q+" pediatric surgery")} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-            <div style={{width:40,height:40,borderRadius:11,background:"#ff505022",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>▶</div>
-            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#ff5050"}}>Search YouTube</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>"{q}" + pediatric surgery videos</div></div>
-            <span style={{color:"#ff5050",fontSize:16}}>↗</span>
-          </a>
-          <a href="https://openevidence.com" target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
-            <div style={{width:40,height:40,borderRadius:11,background:"#ffb43222",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🔍</div>
-            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#ffb432"}}>Ask OpenEvidence</div><div style={{fontSize:11,color:"#607090",marginTop:2}}>AI-powered medical evidence search</div></div>
-            <span style={{color:"#ffb432",fontSize:16}}>↗</span>
-          </a>
-        </div>
-      )}
-      </div>
-      )}
+      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>✦ Virtual Pedi Surgeon</div>
+      <div style={{fontSize:13,color:"#607090"}}>Claude-powered Q&A</div>
     </div>
   );
 }
 
 function App() {
   const [tab,setTab] = useState("home");
+  const [settings,setSettings] = useState(() => {
+    const saved = localStorage.getItem("pedisurgpro_settings");
+    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+  });
+
+  useEffect(() => {
+    localStorage.setItem("pedisurgpro_settings", JSON.stringify(settings));
+  }, [settings]);
+
   const pageRef = useRef(null);
   useEffect(()=>{ if(pageRef.current) pageRef.current.scrollTop = 0; }, [tab]);
-  const nav = [{id:"home",ic:"⚕️",lb:"Home"},{id:"nat",ic:"📖",lb:"NaT"},{id:"videos",ic:"▶️",lb:"Videos"},{id:"podcasts",ic:"🎙️",lb:"Podcasts"},{id:"research",ic:"🔬",lb:"Research"},{id:"societies",ic:"🏛️",lb:"Societies"},{id:"social",ic:"📱",lb:"Social"},{id:"ai",ic:"✦",lb:"Virt Surg"}];
+  
+  const baseNav = [
+    {id:"home",ic:"⚕️",lb:"Home"},
+    ...(settings.tabs.nat ? [{id:"nat",ic:"📖",lb:"NaT"}] : []),
+    ...(settings.tabs.videos ? [{id:"videos",ic:"▶️",lb:"Videos"}] : []),
+    ...(settings.tabs.podcasts ? [{id:"podcasts",ic:"🎙️",lb:"Podcasts"}] : []),
+    ...(settings.tabs.research ? [{id:"research",ic:"🔬",lb:"Research"}] : []),
+    ...(settings.tabs.societies ? [{id:"societies",ic:"🏛️",lb:"Societies"}] : []),
+    ...(settings.tabs.social ? [{id:"social",ic:"📱",lb:"Social"}] : []),
+    ...(settings.tabs.ai ? [{id:"ai",ic:"✦",lb:"Virt Surg"}] : []),
+    ...(settings.tabs.clinicalTools ? [{id:"clinicalTools",ic:"🧮",lb:"Tools"}] : []),
+    {id:"settings",ic:"⚙️",lb:"Settings"},
+  ];
+
   return (
     <div style={C.app}>
       <div style={C.page} ref={pageRef}>
-        {tab==="home"     && <Home onNav={setTab}/>}
-        {tab==="nat"      && <Nat onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
-        {tab==="videos"   && <Videos onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
-        {tab==="podcasts" && <Podcasts onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
+        {tab==="home"     && <Home onNav={setTab} settings={settings}/>}
+        {tab==="nat"      && <Nat onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)} settings={settings}/>}
+        {tab==="videos"   && <Videos onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)} settings={settings}/>}
+        {tab==="podcasts" && <Podcasts onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)} settings={settings}/>}
         {tab==="research" && <Research onHome={()=>setTab("home")} scrollTop={()=>pageRef.current&&(pageRef.current.scrollTop=0)}/>}
-        {tab==="societies" && <Societies onHome={()=>setTab("home")}/>}
-        {tab==="social"   && <SocialMedia onHome={()=>setTab("home")}/>}
+        {tab==="societies" && <Societies onHome={()=>setTab("home")} settings={settings}/>}
+        {tab==="social"   && <SocialMedia onHome={()=>setTab("home")} settings={settings}/>}
         {tab==="ai"       && <AI onHome={()=>setTab("home")} onNav={setTab}/>}
+        {tab==="clinicalTools" && <ClinicalTools onHome={()=>setTab("home")} settings={settings}/>}
+        {tab==="settings" && <Settings onHome={()=>setTab("home")} settings={settings} onSettingsChange={setSettings}/>}
       </div>
       <div style={C.nav}>
-        {nav.map(x=>(
+        {baseNav.map(x=>(
           <button key={x.id} style={C.nb(tab===x.id)} onClick={()=>setTab(x.id)}>
             <span style={{fontSize:18}}>{x.ic}</span>
             <span style={{fontSize:9,fontWeight:700}}>{x.lb}</span>
