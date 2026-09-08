@@ -25,24 +25,24 @@ input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; marg
 const { useState, useEffect, useRef } = React;
 
 const NAT = [
-  {title:"Acute Abdominal Pain",cat:"General",icon:"🩺",free:true},
-  {title:"Appendicitis",cat:"General",icon:"🩺",free:false},
-  {title:"Pyloric Stenosis",cat:"General",icon:"🩺",free:false},
-  {title:"Intussusception",cat:"General",icon:"🩺",free:false},
-  {title:"Inguinal Hernia & Hydrocele",cat:"General",icon:"🩺",free:false},
-  {title:"Wilms Tumor",cat:"Oncology",icon:"🔴",free:true},
-  {title:"Neuroblastoma",cat:"Oncology",icon:"🔴",free:false},
-  {title:"Sacrococcygeal Teratoma",cat:"Oncology",icon:"🔴",free:false},
-  {title:"Hepatoblastoma",cat:"Oncology",icon:"🔴",free:false},
-  {title:"Congenital Diaphragmatic Hernia",cat:"Neonatal",icon:"🫁",free:false},
-  {title:"Esophageal Atresia",cat:"Neonatal",icon:"🫁",free:false},
-  {title:"Gastroschisis & Omphalocele",cat:"Neonatal",icon:"🫁",free:false},
-  {title:"Necrotizing Enterocolitis",cat:"Neonatal",icon:"🫁",free:false},
-  {title:"Hirschsprung Disease",cat:"Colorectal",icon:"🩻",free:false},
-  {title:"Anorectal Malformations",cat:"Colorectal",icon:"🩻",free:false},
-  {title:"Posterior Sagittal Anorectoplasty",cat:"Colorectal",icon:"🩻",free:true},
-  {title:"Extracorporeal Life Support",cat:"Critical Care",icon:"❤️",free:true},
-  {title:"Pediatric Trauma",cat:"Critical Care",icon:"❤️",free:false},
+  {title:"Acute Abdominal Pain",cat:"General",icon:"🩺",free:true,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Acute_Abdominal_Pain"},
+  {title:"Appendicitis",cat:"General",icon:"🩺",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Appendicitis"},
+  {title:"Pyloric Stenosis",cat:"General",icon:"🩺",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Pyloric_Stenosis"},
+  {title:"Intussusception",cat:"General",icon:"🩺",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Intussusception"},
+  {title:"Inguinal Hernia & Hydrocele",cat:"General",icon:"🩺",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Inguinal_Hernia"},
+  {title:"Wilms Tumor",cat:"Oncology",icon:"🔴",free:true,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Wilms_Tumor"},
+  {title:"Neuroblastoma",cat:"Oncology",icon:"🔴",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Neuroblastoma"},
+  {title:"Sacrococcygeal Teratoma",cat:"Oncology",icon:"🔴",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Sacrococcygeal_Teratoma"},
+  {title:"Hepatoblastoma",cat:"Oncology",icon:"🔴",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Hepatoblastoma"},
+  {title:"Congenital Diaphragmatic Hernia",cat:"Neonatal",icon:"🫁",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Congenital_Diaphragmatic_Hernia"},
+  {title:"Esophageal Atresia",cat:"Neonatal",icon:"🫁",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Esophageal_Atresia"},
+  {title:"Gastroschisis & Omphalocele",cat:"Neonatal",icon:"🫁",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Gastroschisis"},
+  {title:"Necrotizing Enterocolitis",cat:"Neonatal",icon:"🫁",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Necrotizing_Enterocolitis"},
+  {title:"Hirschsprung Disease",cat:"Colorectal",icon:"🩻",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Hirschsprung"},
+  {title:"Anorectal Malformations",cat:"Colorectal",icon:"🩻",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Anorectal_Malformations"},
+  {title:"Posterior Sagittal Anorectoplasty",cat:"Colorectal",icon:"🩻",free:true,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/PSARP"},
+  {title:"Extracorporeal Life Support",cat:"Critical Care",icon:"❤️",free:true,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/ECLS"},
+  {title:"Pediatric Trauma",cat:"Critical Care",icon:"❤️",free:false,url:"https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Pediatric_Trauma"},
 ];
 
 const VIDS = [
@@ -1069,17 +1069,31 @@ function Settings({onHome,settings,onSettingsChange}) {
 }
 
 function Nat({onHome,scrollTop,settings}) {
-  const [li,setLi] = useState(false);
-  const [u,setU] = useState(""); const [p,setP] = useState(""); const [err,setErr] = useState(false);
-  const [cat,setCat] = useState("All"); const [q,setQ] = useState(""); const [det,setDet] = useState(null);
-  useEffect(()=>{ scrollTop&&scrollTop(); }, [det]);
+  const [cat,setCat] = useState("All");
+  useEffect(()=>{ scrollTop&&scrollTop(); }, [cat]);
   const cats = ["All","General","Oncology","Neonatal","Colorectal","Critical Care"].filter(c => c === "All" || settings.nat[c]);
-  const items = NAT.filter(n=>(cat==="All"||n.cat===cat)&&n.title.toLowerCase().indexOf(q.toLowerCase())>-1&&settings.nat[n.cat]);
+  const items = NAT.filter(n=>(cat==="All"||n.cat===cat)&&settings.nat[n.cat]);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
-      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📖 APSA NaT</div>
-      {items.map((t,i) => <div key={i} style={{...C.card,display:"flex",alignItems:"center",gap:12}}><span style={{fontSize:20}}>{t.icon}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div><div style={{fontSize:11,color:"#4db8ff"}}>{t.cat}</div></div></div>)}
+      <div style={{fontSize:24,fontWeight:800,marginBottom:14}}>📖 APSA NaT</div>
+      
+      <div style={{display:"flex",gap:6,marginBottom:14,flexWrap:"wrap"}}>
+        {cats.map(c => (
+          <button key={c} style={{...C.chip(cat===c,"#4db8ff")}} onClick={()=>setCat(c)}>{c}</button>
+        ))}
+      </div>
+
+      {items.map((t,i) => (
+        <a key={i} href={t.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit"}}>
+          <span style={{fontSize:20}}>{t.icon}</span>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{t.title}</div>
+            <div style={{fontSize:11,color:"#4db8ff"}}>{t.cat}</div>
+          </div>
+          <span style={{color:"#4db8ff",fontSize:16}}>›</span>
+        </a>
+      ))}
     </div>
   );
 }
