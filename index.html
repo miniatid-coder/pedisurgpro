@@ -837,10 +837,123 @@ function Home({onNav,settings}) {
       </div>
 
       {settings.home.clinicalTools && (
-        <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)",marginBottom:10}} onClick={()=>onNav("clinicalTools")}>
+        <div style={{...C.card,borderRadius:15,background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.25)",marginBottom:10}} onClick={()=>onNav("clinicalTools")}>
           <div style={{fontSize:20,marginBottom:6}}>🧮</div>
-          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Clinical Tools</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#00e696",marginBottom:2}}>Clinical Tools</div>
           <div style={{fontSize:10,color:"#607090"}}>15 pediatric calculators</div>
+        </div>
+      )}
+
+      {settings.home.forFamilies && (
+        <a href="https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Patient_and_Parent_Education" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:10,display:"block",background:"rgba(0,230,150,0.08)",border:"1px solid rgba(0,230,150,0.3)"}}>
+          <div style={{fontSize:20,marginBottom:6}}>👨‍👩‍👧</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#00e696",marginBottom:2}}>For Families</div>
+          <div style={{fontSize:10,color:"#607090"}}>Patient &amp; parent education resources</div>
+        </a>
+      )}
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+        {settings.home.societies && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("societies")}>
+            <div style={{fontSize:20,marginBottom:6}}>🏛️</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Societies</div>
+            <div style={{fontSize:10,color:"#607090"}}>Pedi surgery orgs worldwide</div>
+          </div>
+        )}
+        {settings.home.socialMedia && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}} onClick={()=>onNav("social")}>
+            <div style={{fontSize:20,marginBottom:6}}>📱</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>Social Media</div>
+            <div style={{fontSize:10,color:"#607090"}}>Follow pedi surgery societies</div>
+          </div>
+        )}
+      </div>
+
+      {settings.home.virtualPediSurgeon && (
+        <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>onNav("ai")}>
+          <div style={{fontSize:20,marginBottom:6}}>✦</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#a064ff",marginBottom:2}}>Virtual Pedi Surgeon</div>
+          <div style={{fontSize:10,color:"#607090"}}>Claude-powered clinical Q&amp;A</div>
+        </div>
+      )}
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+        {settings.home.surgeryVideos && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("videos")}>
+            <div style={{fontSize:20,marginBottom:6}}>▶️</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Surgery Videos</div>
+            <div style={{fontSize:10,color:"#607090"}}>PedSurgTV · WebSurg · more</div>
+          </div>
+        )}
+        {settings.home.podcasts && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.25)"}} onClick={()=>onNav("podcasts")}>
+            <div style={{fontSize:20,marginBottom:6}}>🎙️</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ff5050",marginBottom:2}}>Podcasts</div>
+            <div style={{fontSize:10,color:"#607090"}}>7 curated shows</div>
+          </div>
+        )}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
+        {settings.home.openEvidence && (
+          <a href="https://openevidence.com" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}}>
+            <div style={{fontSize:20,marginBottom:6}}>🔍</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>OpenEvidence</div>
+            <div style={{fontSize:10,color:"#607090"}}>AI-powered medical evidence</div>
+          </a>
+        )}
+        {settings.home.research && (
+          <div style={{...C.card,borderRadius:15,background:"rgba(255,180,50,0.08)",border:"1px solid rgba(255,180,50,0.25)"}} onClick={()=>onNav("research")}>
+            <div style={{fontSize:20,marginBottom:6}}>🔬</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ffb432",marginBottom:2}}>Research</div>
+            <div style={{fontSize:10,color:"#607090"}}>PubMed · Journals</div>
+          </div>
+        )}
+      </div>
+
+      {settings.home.expertCme && (
+        <a href="https://www.pedsurglibrary.com/apsa/cme/ExPERT" target="_blank" rel="noreferrer" style={{...C.card,borderRadius:15,textDecoration:"none",color:"inherit",marginBottom:14,display:"block",background:"rgba(77,184,255,0.08)",border:"1px solid rgba(77,184,255,0.25)"}}>
+          <div style={{fontSize:20,marginBottom:6}}>🎓</div>
+          <div style={{fontSize:12,fontWeight:700,color:"#4db8ff",marginBottom:2}}>ExPERT CME</div>
+          <div style={{fontSize:10,color:"#607090"}}>MOC CME credits &amp; self-assessment</div>
+        </a>
+      )}
+
+      {settings.home.whatsNew && (
+        <div>
+          <div style={C.lbl}>What's New</div>
+          <div style={{...C.card,borderRadius:15,marginBottom:10,background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)"}} onClick={()=>setShowNews(!showNews)}>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <div style={{width:38,height:38,borderRadius:10,background:"linear-gradient(135deg,#a064ff,#4db8ff)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📰</div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:700,color:"#a064ff",marginBottom:2}}>Pedi Surgery in the News</div>
+                <div style={{fontSize:11,color:"#607090"}}>Tap to learn more</div>
+              </div>
+            </div>
+          </div>
+          {showNews && (
+            <div style={{background:"rgba(160,100,255,0.08)",border:"1px solid rgba(160,100,255,0.25)",borderRadius:14,textAlign:"center",padding:"28px 20px",marginBottom:16}}>
+              <div style={{fontSize:36,marginBottom:10}}>🚧</div>
+              <div style={{fontSize:16,fontWeight:800,color:"#a064ff",marginBottom:8}}>Coming Soon</div>
+              <div style={{fontSize:13,color:"#8090b0",lineHeight:1.8,marginBottom:16}}>Pedi Surgery in the News will surface the latest publications, videos, and updates from across the pediatric surgery world — updated monthly.</div>
+              <button onClick={()=>setShowNews(false)} style={{background:"rgba(160,100,255,0.4)",border:"none",borderRadius:10,padding:"9px 24px",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Dismiss</button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {settings.home.liveFeeds && (
+        <div>
+          <div style={C.lbl}>Live Feeds</div>
+          {feeds.map((x,i) => (
+            <a key={i} href={x.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:12,textDecoration:"none",color:"inherit",marginBottom:8}}>
+              <div style={{width:8,height:8,borderRadius:"50%",background:x.cl,flexShrink:0}}/>
+              <div style={{flex:1}}>
+                <div style={{fontSize:12,fontWeight:700,color:x.cl,marginBottom:1}}>{x.lb}</div>
+                <div style={{fontSize:10,color:"#607090"}}>{x.sub}</div>
+              </div>
+            </a>
+          ))}
         </div>
       )}
     </div>
@@ -1054,13 +1167,13 @@ function App() {
   const baseNav = [
     {id:"home",ic:"⚕️",lb:"Home"},
     ...(settings.tabs.nat ? [{id:"nat",ic:"📖",lb:"NaT"}] : []),
-    ...(settings.tabs.videos ? [{id:"videos",ic:"▶️",lb:"Videos"}] : []),
-    ...(settings.tabs.podcasts ? [{id:"podcasts",ic:"🎙️",lb:"Podcasts"}] : []),
-    ...(settings.tabs.research ? [{id:"research",ic:"🔬",lb:"Research"}] : []),
+    ...(settings.tabs.clinicalTools ? [{id:"clinicalTools",ic:"🧮",lb:"Tools"}] : []),
     ...(settings.tabs.societies ? [{id:"societies",ic:"🏛️",lb:"Societies"}] : []),
     ...(settings.tabs.social ? [{id:"social",ic:"📱",lb:"Social"}] : []),
     ...(settings.tabs.ai ? [{id:"ai",ic:"✦",lb:"Virt Surg"}] : []),
-    ...(settings.tabs.clinicalTools ? [{id:"clinicalTools",ic:"🧮",lb:"Tools"}] : []),
+    ...(settings.tabs.videos ? [{id:"videos",ic:"▶️",lb:"Videos"}] : []),
+    ...(settings.tabs.podcasts ? [{id:"podcasts",ic:"🎙️",lb:"Podcasts"}] : []),
+    ...(settings.tabs.research ? [{id:"research",ic:"🔬",lb:"Research"}] : []),
     {id:"settings",ic:"⚙️",lb:"Settings"},
   ];
 
