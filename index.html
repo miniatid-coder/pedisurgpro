@@ -108,16 +108,6 @@ const CATC = {General:"#4db8ff",Oncology:"#ff5050",Neonatal:"#00e696",Colorectal
 const SRCC = {PedSurgTV:"#00e696",GlobalCastMD:"#a064ff",WebSurg:"#4db8ff",SAGES:"#a064ff",MedTube:"#ff9632",CSurgeries:"#00e696",Hopkins:"#4db8ff",Intuitive:"#4db8ff",YouTube:"#ff5050"};
 
 const DEFAULT_SETTINGS = {
-  tabs: {
-    nat: true,
-    videos: true,
-    podcasts: true,
-    research: true,
-    societies: true,
-    social: true,
-    ai: true,
-    clinicalTools: true,
-  },
   home: {
     apsaWebsite: true,
     apsaNat: true,
@@ -1023,14 +1013,20 @@ function Settings({onHome,settings,onSettingsChange}) {
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>⚙️ Settings</div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Customize which sections and content you see</div>
 
-      {renderToggleSection("App Tabs", "tabs", [
-        {key:"nat",label:"APSA NaT"},
-        {key:"videos",label:"Surgery Videos"},
-        {key:"podcasts",label:"Podcasts"},
-        {key:"research",label:"Research"},
+      {renderToggleSection("Home Page Elements", "home", [
+        {key:"apsaWebsite",label:"APSA Website"},
+        {key:"apsaNat",label:"APSA NaT"},
+        {key:"forFamilies",label:"For Families"},
         {key:"societies",label:"Societies"},
-        {key:"social",label:"Social Media"},
-        {key:"ai",label:"Virtual Pedi Surgeon"},
+        {key:"socialMedia",label:"Social Media"},
+        {key:"virtualPediSurgeon",label:"Virtual Pedi Surgeon"},
+        {key:"surgeryVideos",label:"Surgery Videos"},
+        {key:"podcasts",label:"Podcasts"},
+        {key:"openEvidence",label:"OpenEvidence"},
+        {key:"research",label:"Research"},
+        {key:"expertCme",label:"ExPERT CME"},
+        {key:"whatsNew",label:"What's New"},
+        {key:"liveFeeds",label:"Live Feeds"},
         {key:"clinicalTools",label:"Clinical Tools"},
       ])}
 
