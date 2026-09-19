@@ -23,6 +23,8 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html, body, #root { height: 100%; background: #0a0f1e; }
+.app-page-inner { padding-top: env(safe-area-inset-top, 0px); }
+.app-nav-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
 ::-webkit-scrollbar { display: none; }
 input[type="number"] { -moz-appearance: textfield; }
 input[type="number"]::-webkit-outer-spin-button,
@@ -83,13 +85,13 @@ const VIDEO_SOURCES = [
 ];
 
 const PODS = [
+{title:"Operation Advocacy: Voices for Children's Health",host:"Operation Advocacy",icon:"📢",color:"#ff5050",tag:"Advocacy",eps:"3 episodes",desc:"Advocacy and health policy shaping the future of children's surgical care.",apple:"https://podcasts.apple.com/us/podcast/id1896153355",spotify:"https://open.spotify.com/search/Operation%20Advocacy%20Voices%20for%20Children%27s%20Health"},
 {title:"Stay Current in Pediatric Surgery",host:"Journal of Pediatric Surgery",icon:"📖",color:"#4db8ff",tag:"PedSurg Core",eps:"446 episodes",desc:"The official JPS podcast — editors and authors discuss newly published research.",apple:"https://podcasts.apple.com/us/podcast/id971122268",spotify:"https://open.spotify.com/show/1TsfguFhhVrcGZ1C1k7idu"},
 {title:"Behind the Knife",host:"Behind the Knife Team",icon:"🔪",color:"#ff9632",tag:"Education",eps:"500 episodes",desc:"Widely used surgical education podcast, with a dedicated pediatric surgery series.",apple:"https://podcasts.apple.com/us/podcast/id980990143",spotify:"https://open.spotify.com/show/2yHr0A4N7NJk4NoTcNd1z7"},
 {title:"That's Pediatrics",host:"UPMC Children's Hospital of Pittsburgh",icon:"🏥",color:"#a064ff",tag:"Clinical",eps:"106 episodes",desc:"Clinicians and researchers from UPMC Children's on research, trauma and surgical advances.",apple:"https://podcasts.apple.com/us/podcast/id1438755426",spotify:"https://open.spotify.com/search/That%27s%20Pediatrics%20UPMC"},
 {title:"PCICS Podcast",host:"Pediatric Cardiac ICU Society",icon:"❤️",color:"#ff5050",tag:"Cardiac",eps:"158 episodes",desc:"Challenging cases, journal clubs, and novel ICU therapies from pediatric cardiac ICUs worldwide.",apple:"https://podcasts.apple.com/us/podcast/id1253068670",spotify:"https://open.spotify.com/show/75mWK6kaePa9b46UBNcTlH"},
 {title:"PedsCrit",host:"Shanklin & Hodges",icon:"🧠",color:"#a064ff",tag:"Critical Care",eps:"156 episodes",desc:"Collaborative PICU educational podcast with critical care educators worldwide.",apple:"https://podcasts.apple.com/us/podcast/id1574503119",spotify:"https://open.spotify.com/show/6PJuGLhMlxHPlOgQ7bLVQH"},
 {title:"The Lead in Peds",host:"Children's National",icon:"✦",color:"#00e696",tag:"Innovation",eps:"12 episodes",desc:"Children's National clinicians on advances and innovation in pediatric care.",apple:"https://podcasts.apple.com/us/podcast/id1797116427",spotify:"https://open.spotify.com/search/The%20Lead%20in%20Peds%20Children%27s%20National"},
-{title:"Operation Advocacy: Voices for Children's Health",host:"Operation Advocacy",icon:"📢",color:"#ff5050",tag:"Advocacy",eps:"3 episodes",desc:"Advocacy and health policy shaping the future of children's surgical care.",apple:"https://podcasts.apple.com/us/podcast/id1896153355",spotify:"https://open.spotify.com/search/Operation%20Advocacy%20Voices%20for%20Children%27s%20Health"},
 ];
 
 const SOCIAL = [
@@ -103,17 +105,17 @@ const SOCIAL = [
 
 const SOCIETIES = [
 {name:"APSA",full:"American Pediatric Surgical Association",region:"🇺🇸 North America",url:"https://www.apsapedsurg.org",color:"#4db8ff"},
-{name:"IPEG",full:"International Pediatric Endosurgery Group",region:"🌐 International",url:"https://www.ipeg.org",color:"#00e696"},
-{name:"CAPS",full:"Canadian Association of Paediatric Surgeons",region:"🇨🇦 North America",url:"https://www.caps.ca",color:"#4db8ff"},
-{name:"IFMSS",full:"International Fetal Medicine & Surgery Society",region:"🌐 International",url:"https://ifmss.org",color:"#a064ff"},
-{name:"WOFAPS",full:"World Federation of Associations of Pediatric Surgeons",region:"🌐 International",url:"https://www.wofaps.org",color:"#ffc832"},
-{name:"BAPS",full:"British Association of Paediatric Surgeons",region:"🇬🇧 Europe",url:"https://www.baps.org.uk",color:"#4db8ff"},
-{name:"EUPSA",full:"European Paediatric Surgeons' Association",region:"🇪🇺 Europe",url:"https://www.eupsa.info",color:"#4db8ff"},
-{name:"IPSO",full:"International Society of Paediatric Surgical Oncology",region:"🌐 International",url:"https://ipso-online.org",color:"#ff5050"},
-{name:"PAPS",full:"Pacific Association of Pediatric Surgeons",region:"🌏 Pacific",url:"https://www.papsmeeting.com",color:"#00e696"},
-{name:"PAPSA",full:"Pan-African Paediatric Surgical Association",region:"🌍 Africa",url:"http://www.papsa-africa.org",color:"#ffc832"},
-{name:"COG",full:"Children's Oncology Group",region:"🇺🇸 North America",url:"https://childrensoncologygroup.org",color:"#ff5050"},
 {name:"AAP Surgery",full:"AAP Section on Surgery",region:"🇺🇸 North America",url:"https://www.aap.org/en/community/aap-sections/surgery/",color:"#4db8ff"},
+{name:"CAPS",full:"Canadian Association of Paediatric Surgeons",region:"🇨🇦 North America",url:"https://www.caps.ca",color:"#4db8ff"},
+{name:"BAPS",full:"British Association of Paediatric Surgeons",region:"🇬🇧 Europe",url:"https://www.baps.org.uk",color:"#4db8ff"},
+{name:"IPEG",full:"International Pediatric Endosurgery Group",region:"🌐 International",url:"https://www.ipeg.org",color:"#00e696"},
+{name:"EUPSA",full:"European Paediatric Surgeons' Association",region:"🇪🇺 Europe",url:"https://www.eupsa.info",color:"#4db8ff"},
+{name:"PAPSA",full:"Pan-African Paediatric Surgical Association",region:"🌍 Africa",url:"http://www.papsa-africa.org",color:"#ffc832"},
+{name:"PAPS",full:"Pacific Association of Pediatric Surgeons",region:"🌏 Pacific",url:"https://www.papsmeeting.com",color:"#00e696"},
+{name:"IFMSS",full:"International Fetal Medicine & Surgery Society",region:"🌐 International",url:"https://ifmss.org",color:"#a064ff"},
+{name:"COG",full:"Children's Oncology Group",region:"🇺🇸 North America",url:"https://childrensoncologygroup.org",color:"#ff5050"},
+{name:"IPSO",full:"International Society of Paediatric Surgical Oncology",region:"🌐 International",url:"https://ipso-online.org",color:"#ff5050"},
+{name:"WOFAPS",full:"World Federation of Associations of Pediatric Surgeons",region:"🌐 International",url:"https://www.wofaps.org",color:"#ffc832"},
 ];
 
 const ARTS = [
@@ -126,11 +128,12 @@ const ARTS = [
 ];
 
 const DEFAULT_SETTINGS = {
+  v: 1,
   home: {
     apsaWebsite: true, apsaNat: true, forFamilies: true,
     societies: true, socialMedia: true, virtualPediSurgeon: true,
     surgeryVideos: true, podcasts: true, openEvidence: true,
-    research: true, expertCme: true, whatsNew: true,
+    research: true, expertCme: true, score: true, whatsNew: true,
     liveFeeds: true, clinicalTools: true,
   },
   clinicalTools: {
@@ -149,13 +152,15 @@ const DEFAULT_SETTINGS = {
   },
   natTopics: {},
   videoSources: {},
-  podcasts: {}
+  podcasts: {},
+  societies: {},
+  socials: {}
 };
 
 const C = {
   app:{display:"flex",flexDirection:"column",height:"100vh",background:"#0a0f1e",color:"#e8f0fe",fontFamily:"system-ui,sans-serif",fontSize:14},
-  page:{flex:1,overflow:"auto",padding:"16px",paddingBottom:"80px"},
-  nav:{position:"fixed",bottom:0,left:0,right:0,display:"grid",gridTemplateColumns:"repeat(8,1fr)",gap:1,height:70,padding:"8px",background:"rgba(15,20,35,0.95)",backdropFilter:"blur(10px)",borderTop:"1px solid rgba(255,255,255,0.08)"},
+  page:{flex:1,overflow:"auto",padding:"16px",paddingTop:"calc(16px + env(safe-area-inset-top, 0px))",paddingBottom:"90px"},
+  nav:{position:"fixed",bottom:0,left:0,right:0,display:"grid",gridTemplateColumns:"repeat(8,1fr)",gap:1,padding:"8px",paddingBottom:"calc(8px + env(safe-area-inset-bottom, 0px))",background:"rgba(15,20,35,0.95)",backdropFilter:"blur(10px)",borderTop:"1px solid rgba(255,255,255,0.08)"},
   nb:(on)=>({flex:1,background:on?"rgba(77,184,255,0.12)":"transparent",border:on?"1px solid rgba(77,184,255,0.3)":"1px solid rgba(255,255,255,0.08)",borderRadius:12,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:on?"#4db8ff":"#8090b0",fontWeight:on?700:500,fontSize:11,fontFamily:"inherit"}),
   back:(col)=>({background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",borderRadius:10,padding:"8px 12px",color:col||"#4db8ff",fontSize:13,fontWeight:600,cursor:"pointer",marginBottom:16,fontFamily:"inherit"}),
   card:{background:"rgba(255,255,255,0.04)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:13,padding:"13px 14px",marginBottom:10,cursor:"pointer"},
@@ -164,10 +169,17 @@ const C = {
   chip:(on,col)=>({background:on?(col||"#4db8ff")+"22":"rgba(255,255,255,0.04)",border:"1px solid "+(on?(col||"#4db8ff")+"55":"rgba(255,255,255,0.08)"),borderRadius:10,padding:"7px 12px",color:on?col||"#4db8ff":"#a0b0d0",fontSize:12,fontWeight:on?700:600,cursor:"pointer",fontFamily:"inherit"}),
   tag:(col)=>({background:col+"22",border:"1px solid "+col+"44",color:col,borderRadius:8,padding:"4px 8px",fontSize:10,fontWeight:800,textTransform:"uppercase"}),
 };
+// ============================================================================
+// CLINICAL TOOLS
+// ----------------------------------------------------------------------------
+// Design rules for everything in this section:
+//   1. NO PATIENT DATA IS STORED. The patient context lives in React state only.
+//      It is wiped by the Clear button and by leaving the Tools section, and it
+//      is never written to localStorage, sessionStorage, or the network.
+//   2. Every tool shows the formula it used, and where that formula came from.
+//   3. Enter weight and age ONCE at the top; every tool reads from there.
+// ============================================================================
 
-// ============================================================================
-// CLINICAL TOOLS - Complete code from Paul
-// ============================================================================
 const ML_PER_OZ = 30;
 const DAYS_PER_MONTH = 30.4375;
 const DAYS_PER_YEAR = 365.25;
@@ -182,6 +194,7 @@ function ageDays(val, unit){
   const n = num(val);
   if(n===null || n<0) return null;
   if(unit==="days") return n;
+  if(unit==="weeks") return n*7;
   if(unit==="months") return n*DAYS_PER_MONTH;
   return n*DAYS_PER_YEAR;
 }
@@ -234,25 +247,41 @@ const LA_AGENTS = [
   {name:"Chloroprocaine 1%", mgml:10, plain:15, epi:20},
 ];
 
-const TOOL_GROUPS = ["Fluids & nutrition","Appendicitis","Trauma & resuscitation","Airway & procedures","Intestinal & hepatic"];
+// Custom SVG icon (no emoji reads clearly as a score/equation). Fill inherits the tool colour.
+// Summation sigma as a real serif letterform — the score is the sum of the items.
+const IC_SCORE = '<svg viewBox="0 0 24 24" width="24" height="24"><text x="12" y="19.5" text-anchor="middle" font-family="Georgia, \'Times New Roman\', serif" font-size="23" font-weight="600" fill="currentColor">\u03A3</text></svg>';
+
+function renderToolIcon(icon, color){
+  if(typeof icon === "string" && icon.trim().slice(0,4) === "<svg"){
+    return <span style={{color:color,width:24,height:24,display:"inline-flex",alignItems:"center",justifyContent:"center"}} dangerouslySetInnerHTML={{__html:icon}}/>;
+  }
+  return icon;
+}
+
+const TOOL_GROUPS = ["Vital signs","Fluids & nutrition","Appendicitis",
+  "Airway & procedures","Intestinal & hepatic","Trauma & resuscitation"];
+
 const TOOL_LIST = [
   {id:"io", grp:"Fluids & nutrition", name:"Fluids / I·O", icon:"💧", cl:"#4db8ff", sub:"UOP, ostomy, NG and feed volumes per kg"},
   {id:"feeds", grp:"Fluids & nutrition", name:"Enteral Feeding", icon:"🍼", cl:"#00e696", sub:"Feed strength, continuous or bolus"},
   {id:"mivf", grp:"Fluids & nutrition", name:"Maintenance IV Fluid", icon:"🧪", cl:"#a064ff", sub:"Holliday-Segar 4-2-1"},
-  {id:"pas", grp:"Appendicitis", name:"Pediatric Appendicitis Score", icon:"🩺", cl:"#00e696", sub:"Samuel 2002 · 8 items, max 10"},
-  {id:"alv", grp:"Appendicitis", name:"Alvarado Score", icon:"🩺", cl:"#00e696", sub:"Alvarado 1986 · 8 items, max 10"},
-  {id:"parc", grp:"Appendicitis", name:"pARC — Appendicitis Risk", icon:"🧠", cl:"#00e696", sub:"Kharbanda 2018 · predicted probability"},
+
+  {id:"pas", grp:"Appendicitis", name:"Pediatric Appendicitis Score", icon:IC_SCORE, cl:"#00e696", sub:"Samuel 2002 · 8 items, max 10"},
+  {id:"alv", grp:"Appendicitis", name:"Alvarado Score", icon:IC_SCORE, cl:"#00e696", sub:"Alvarado 1986 · 8 items, max 10"},
+  {id:"parc", grp:"Appendicitis", name:"pARC — Appendicitis Risk", icon:IC_SCORE, cl:"#00e696", sub:"Kharbanda 2018 · predicted probability"},
+
   {id:"bv", grp:"Trauma & resuscitation", name:"Blood Volume & Blood Loss", icon:"🩸", cl:"#ff5050", sub:"Circulating volume, EBL as % of total"},
   {id:"sipa", grp:"Trauma & resuscitation", name:"Shock Index, Age-Adjusted", icon:"❤️", cl:"#ff5050", sub:"SIPA · Acker 2015 · ages 4–16"},
   {id:"burn", grp:"Trauma & resuscitation", name:"Burn Resuscitation", icon:"🔥", cl:"#ff9632", sub:"Lund-Browder, Parkland, time from injury"},
-  {id:"vitals",grp:"Trauma & resuscitation", name:"Vital Signs by Age", icon:"💓", cl:"#ff5050", sub:"PALS · HR, RR, MAP, hypotension"},
+  {id:"vitals",grp:"Vital signs", name:"Vital Signs by Age", icon:"💓", cl:"#ff5050", sub:"PALS · HR, RR, MAP, hypotension"},
+
   {id:"sizes", grp:"Airway & procedures", name:"Airway & Tube Sizes", icon:"🫁", cl:"#4db8ff", sub:"ETT, laryngoscope, NG/OG, chest tube"},
   {id:"la", grp:"Airway & procedures", name:"Local Anesthetic Maximum", icon:"💉", cl:"#ffc832", sub:"Max mg and mL for this weight"},
-  {id:"sbs", grp:"Intestinal & hepatic", name:"Short Bowel Anatomy", icon:"🩻", cl:"#a064ff", sub:"Remaining length vs expected for age"},
-  {id:"peld", grp:"Intestinal & hepatic", name:"PELD Score", icon:"🫀", cl:"#00e696", sub:"Bilirubin, INR, albumin, age, growth"},
+
+  {id:"sbs", grp:"Intestinal & hepatic", name:"Short Bowel Anatomy", icon:"📏", cl:"#a064ff", sub:"Remaining length vs expected for age"},
+  {id:"peld", grp:"Intestinal & hepatic", name:"PELD Score", icon:"🩸", cl:"#00e696", sub:"Bilirubin, INR, albumin, age, growth"},
 ];
 
-// Shared UI components
 function NumIn({label,value,onChange,unit,placeholder}){
   return (
     <div style={{marginBottom:10}}>
@@ -293,31 +322,1723 @@ function NeedCtx({need}){
   return (
     <div style={{background:"rgba(255,200,50,0.07)",border:"1px solid rgba(255,200,50,0.25)",borderRadius:13,padding:"14px 15px",marginBottom:10}}>
       <div style={{fontSize:12,color:"#ffc832",fontWeight:700,marginBottom:4}}>Patient details needed</div>
-      <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.6}}>Enter {need} at the top of the Tools screen.</div>
+      <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.6}}>Enter {need} above.</div>
     </div>
   );
 }
 
-// Placeholder: Paul's full clinical tools code (2000+ lines) goes here
-// Due to size, the calculator implementations have been omitted from this summary
-// In production, insert all tool functions: ToolIO, ToolFeeds, ToolMIVF, ToolBV, ToolLA, ToolPAS, ToolAlvarado, ToolSIPA, ToolVitals, ToolSizes, ToolPARC, ToolBurn, ToolShortBowel, ToolPELD
+// Compact patient-detail inputs shown inside a tool — only the fields that tool needs.
+// They write straight into the shared Patient Data, so entries map back for the session.
+function PatientInputs({need, patient, color}){
+  const {weight,setWeight, ageVal,ageUnit,setAgeVal,setAgeUnit, preterm,setPreterm, ga,setGa, cga} = patient;
+  const c = color||"#4db8ff";
+  return (
+    <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:13,padding:"12px 13px",marginBottom:14}}>
+      {need.weight && <NumIn label="Weight" value={weight} onChange={setWeight} unit="kg" placeholder="e.g. 12.4"/>}
+      {need.age && (
+        <div>
+          <div style={{fontSize:11,fontWeight:700,color:"#8090b0",marginBottom:4}}>Age</div>
+          <input type="number" inputMode="decimal" value={ageVal} placeholder="e.g. 3"
+            onChange={e=>setAgeVal(e.target.value)} style={{...C.inp,marginBottom:8,width:"100%",fontSize:16}}/>
+          <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:6}}>
+            {["days","weeks","months","years"].map(u=>(
+              <button key={u} style={{...C.chip(u===ageUnit,c),padding:"5px 11px"}} onClick={()=>setAgeUnit(u)}>{u}</button>
+            ))}
+          </div>
+        </div>
+      )}
+      {need.preterm && (
+        <div style={{marginTop:6}}>
+          <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:preterm?10:0,cursor:"pointer"}} onClick={()=>setPreterm(!preterm)}>
+            <div style={{width:19,height:19,borderRadius:5,border:"1px solid "+(preterm?c:"rgba(255,255,255,0.25)"),background:preterm?c:"transparent",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:"#000",flexShrink:0}}>{preterm?"✓":""}</div>
+            <span style={{fontSize:12.5,color:"#e8f0fe"}}>Born preterm</span>
+          </div>
+          {preterm && (
+            <div>
+              <NumIn label="Gestational age at birth" value={ga} onChange={setGa} unit="weeks" placeholder="e.g. 29"/>
+              {cga!==null && <div style={{fontSize:12,color:c,marginTop:-4,marginBottom:8}}>Corrected gestational age: {fmt(cga,1)} weeks</div>}
+            </div>
+          )}
+        </div>
+      )}
+      <div style={{fontSize:10.5,color:"#607090",lineHeight:1.6,marginTop:8}}>
+        Saved to Patient Data for this session, so every tool uses it.
+      </div>
+    </div>
+  );
+}
 
-// Simplified placeholder implementations
-function ToolIO(){return <NeedCtx need="a weight"/>;}
-function ToolFeeds(){return <NeedCtx need="a weight"/>;}
-function ToolMIVF(){return <NeedCtx need="a weight"/>;}
-function ToolBV(){return <NeedCtx need="a weight"/>;}
-function ToolLA(){return <NeedCtx need="a weight"/>;}
-function ToolPAS(){return <div><div style={C.lbl}>Pediatric Appendicitis Score</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon — Full calculator code available in Paul's repository</div></div>;}
-function ToolAlvarado(){return <div><div style={C.lbl}>Alvarado Score</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolSIPA(){return <div><div style={C.lbl}>Shock Index, Age-Adjusted</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolVitals(){return <div><div style={C.lbl}>Vital Signs by Age</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolSizes(){return <div><div style={C.lbl}>Airway & Tube Sizes</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolPARC(){return <div><div style={C.lbl}>pARC — Appendicitis Risk</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolBurn(){return <div><div style={C.lbl}>Burn Resuscitation</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolShortBowel(){return <div><div style={C.lbl}>Short Bowel Anatomy</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
-function ToolPELD(){return <div><div style={C.lbl}>PELD Score</div><div style={{fontSize:12,color:"#a0b0d0"}}>Coming Soon</div></div>;}
+// Which patient fields each tool actually uses (drives the inputs shown inside it).
+const TOOL_NEEDS = {
+  io:{weight:true,age:true}, feeds:{weight:true,age:true}, mivf:{weight:true},
+  bv:{weight:true,age:true,preterm:true}, la:{weight:true},
+  sipa:{age:true}, vitals:{age:true}, sizes:{weight:true,age:true,preterm:true},
+  parc:{age:true}, burn:{weight:true,age:true}, sbs:{age:true,preterm:true}, peld:{age:true},
+};
 
+// ============================ FLUIDS / I·O ==================================
+function OutputBlock({tag, label, vol, setter, w, h, showMath}){
+  const v = num(vol);
+  const pd = v===null ? null : v/w*(24/h);
+  const high = pd!==null && pd > 20;
+  return (
+    <div>
+      <NumIn label={label} value={vol} onChange={setter} unit="mL"/>
+      {v!==null && (
+        <Res label={tag+" output"} value={fmt(pd,1)} unit="mL/kg/day"
+          math={`${fmt(v,0)} mL ÷ ${fmt(w,2)} kg × (24 ÷ ${fmt(h,0)} h) = ${fmt(pd,1)}`}
+          showMath={showMath} alert={high}
+          alertText={high ? `Over 20 mL/kg/day. Consider replacement with 0.5:1 or 1:1 volume 0.9% NS — based on the ${fmt(v,0)} mL actually measured: 0.5:1 = ${fmt(v*0.5,0)} mL, 1:1 = ${fmt(v,0)} mL.` : null}/>
+      )}
+    </div>
+  );
+}
+
+function ToolIO({ctx,showMath}){
+  const [hrs,setHrs] = useState("24");
+  const [uop,setUop] = useState("");
+  const [ost,setOst] = useState("");
+  const [ng,setNg] = useState("");
+  const [feed,setFeed] = useState("");
+  const w = ctx.weight, days = ctx.days;
+  const h = num(hrs);
+
+  if(w===null) return <NeedCtx need="a weight"/>;
+  if(h===null || h<=0) return <div><NumIn label="Hours over which output was collected" value={hrs} onChange={setHrs} unit="hours"/><NeedCtx need="a collection period greater than zero"/></div>;
+
+  const perDay = v => v/w*(24/h);
+  const uopV = num(uop), ostV = num(ost), ngV = num(ng), feedV = num(feed);
+  const uopRate = uopV===null ? null : uopV/w/h;
+  const yrs = days===null ? null : days/DAYS_PER_YEAR;
+  const uopFloor = yrs===null ? null : (yrs < 13 ? 1 : 0.5);
+  const uopLow = uopRate!==null && uopFloor!==null && uopRate < uopFloor;
+
+  const goal = feedGoal(days, w);
+  const feedPerDay = feedV===null ? null : perDay(feedV);
+
+  return (
+    <div>
+      <NumIn label="Hours over which output was collected" value={hrs} onChange={setHrs} unit="hours"/>
+      <div style={{fontSize:11,color:"#607090",marginTop:-4,marginBottom:14,lineHeight:1.6}}>
+        Urine is reported per hour over this window. Ostomy, NG and feeds are normalised to a 24-hour day.
+      </div>
+
+      <div style={C.lbl}>Urine</div>
+      <NumIn label="Urine output" value={uop} onChange={setUop} unit="mL"/>
+      {uopV!==null && (
+        <Res label="Urine output" value={fmt(uopRate,2)} unit="mL/kg/hr"
+          math={`${fmt(uopV,0)} mL ÷ ${fmt(w,2)} kg ÷ ${fmt(h,0)} h = ${fmt(uopRate,2)}`}
+          showMath={showMath} alert={uopLow}
+          alertText={uopLow ? `Below ${uopFloor} mL/kg/hr, the threshold for a patient ${yrs<13?"under 13":"13 or older"}.` : null}/>
+      )}
+      {uopV!==null && uopFloor===null && (
+        <div style={{fontSize:11,color:"#ffc832",marginTop:-4,marginBottom:10,lineHeight:1.6}}>Enter an age to have this checked against a low-output threshold.</div>
+      )}
+
+      <div style={{...C.lbl,marginTop:16}}>Ostomy</div>
+      <OutputBlock tag="Ostomy" label="Ostomy output" vol={ost} setter={setOst} w={w} h={h} showMath={showMath}/>
+
+      <div style={{...C.lbl,marginTop:16}}>Nasogastric</div>
+      <OutputBlock tag="NG" label="NG output" vol={ng} setter={setNg} w={w} h={h} showMath={showMath}/>
+
+      <div style={{...C.lbl,marginTop:16}}>Enteral feeds</div>
+      <NumIn label="Total feed volume" value={feed} onChange={setFeed} unit="mL"/>
+      {feedV!==null && (
+        <Res label="Feed volume" value={fmt(feedPerDay,1)} unit="mL/kg/day"
+          math={`${fmt(feedV,0)} mL ÷ ${fmt(w,2)} kg × (24 ÷ ${fmt(h,0)} h) = ${fmt(feedPerDay,1)}`}
+          showMath={showMath} color="#00e696"/>
+      )}
+      {goal && !goal.none && (
+        <div style={{background:"rgba(0,230,150,0.06)",border:"1px solid rgba(0,230,150,0.2)",borderRadius:13,padding:"12px 13px",marginBottom:9}}>
+          <div style={{fontSize:11,fontWeight:800,color:"#00e696",letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Goal · {goal.band}</div>
+          {goal.holliday ? (
+            <div>
+              <div style={{fontSize:13,color:"#e8f0fe",marginBottom:3}}>{fmt(hsDaily(w),0)} mL/day total fluid ({fmt(hsDaily(w)/w,0)} mL/kg/day)</div>
+              <div style={{fontSize:12,color:"#a0b0d0"}}>Calorie goal {goal.loK}–{goal.hiK} kcal/kg/day</div>
+              {showMath && <div style={{fontSize:10,color:"#607090",marginTop:5,fontFamily:"ui-monospace,Menlo,monospace"}}>100 mL/kg first 10 kg + 50 mL/kg for 10–20 kg</div>}
+            </div>
+          ) : (
+            <div>
+              <div style={{fontSize:13,color:"#e8f0fe",marginBottom:3}}>{goal.loV}–{goal.hiV} mL/kg/day &nbsp;=&nbsp; {fmt(goal.loV*w,0)}–{fmt(goal.hiV*w,0)} mL/day</div>
+              <div style={{fontSize:11,color:"#8090b0",lineHeight:1.6}}>Assumes 20 kcal/oz feeds — see the Enteral Feeding tool to adjust feed strength.</div>
+            </div>
+          )}
+          {feedPerDay!==null && !goal.holliday && (
+            <div style={{fontSize:12,color:feedPerDay<goal.loV?"#ffc832":"#00e696",marginTop:7}}>
+              Currently {fmt(feedPerDay,0)} mL/kg/day — {feedPerDay<goal.loV?`${fmt(goal.loV-feedPerDay,0)} mL/kg/day below goal`:"at or above goal"}
+            </div>
+          )}
+        </div>
+      )}
+      {goal && goal.none && (
+        <div style={{fontSize:11,color:"#607090",lineHeight:1.6,marginBottom:9}}>No standard feed volume goal is shown above 3 years.</div>
+      )}
+
+      <Src>
+        Per-kilogram figures are simple arithmetic. Low-urine thresholds, the 20 mL/kg/day
+        ostomy and NG replacement trigger, and the feed volume goals are institutional values
+        supplied by the app owner, not a published standard. The 1–3 year fluid goal uses
+        Holliday-Segar daily volumes (Pediatrics 1957;19:823-32).
+      </Src>
+    </div>
+  );
+}
+
+function buildLadder(basePerKg, step, goalLoPerKg, maxRows){
+  const start = (basePerKg && basePerKg > 0) ? basePerKg : step;
+  const rows = []; let v = start; let goalIdx = -1;
+  for(let i=0; i<maxRows; i++){
+    rows.push(v);
+    if(goalLoPerKg!==null && goalIdx<0 && v >= goalLoPerKg) goalIdx = i;
+    if(goalIdx>=0 && i >= goalIdx+1) break;
+    v = Math.round((v + step)*1000)/1000;
+  }
+  let stepsToGoal = null;
+  if(goalLoPerKg!==null && goalIdx<0) stepsToGoal = Math.ceil((goalLoPerKg - start)/step);
+  return {rows, goalIdx, stepsToGoal};
+}
+
+function Ladder({step, basePerKg, w, goalLoPerKg, freq, contHrs, kcalMl}){
+  const {rows, goalIdx, stepsToGoal} = buildLadder(basePerKg, step, goalLoPerKg, 5);
+  const nFeeds = 24/freq;
+  const hrs = (contHrs && contHrs>0) ? contHrs : 24;
+  const cell = {fontSize:11.5,padding:"7px 4px",textAlign:"right"};
+  const head = {...cell,fontSize:9.5,fontWeight:800,color:"#506070",letterSpacing:0.5,textTransform:"uppercase"};
+  return (
+    <div style={{marginBottom:14}}>
+      <div style={{fontSize:12,fontWeight:800,color:"#00e696",marginBottom:7}}>Advancing by {step} mL/kg/day</div>
+      <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1.05fr 1fr 1fr 1fr",background:"rgba(255,255,255,0.05)"}}>
+          <div style={{...head,textAlign:"left",paddingLeft:10}}>mL/kg/d</div>
+          <div style={head}>mL/day</div>
+          <div style={head}>Q{freq}H</div>
+          <div style={{...head,paddingRight:10}}>mL/hr</div>
+        </div>
+        {rows.map((perKg,i)=>{
+          const total = perKg*w;
+          const perFeed = total/nFeeds;
+          const rate = total/hrs;
+          const isGoal = i===goalIdx;
+          const past = goalIdx>=0 && i>goalIdx;
+          return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"1.05fr 1fr 1fr 1fr",
+              background:isGoal?"rgba(0,230,150,0.14)":(past?"rgba(255,200,50,0.07)":"transparent"),
+              borderTop:"1px solid rgba(255,255,255,0.06)"}}>
+              <div style={{...cell,textAlign:"left",paddingLeft:10,fontWeight:isGoal?800:600,
+                color:isGoal?"#00e696":(past?"#ffc832":"#e8f0fe")}}>
+                {fmt(perKg,0)}{i===0 && basePerKg>0 ? " ·now" : ""}
+              </div>
+              <div style={{...cell,color:"#a0b0d0"}}>{fmt(total,0)}</div>
+              <div style={{...cell,color:"#e8f0fe",fontWeight:600}}>{Math.round(perFeed)}</div>
+              <div style={{...cell,paddingRight:10,color:"#e8f0fe",fontWeight:600}}>{fmt(rate,1)}</div>
+            </div>
+          );
+        })}
+      </div>
+      {goalIdx>=0 && (
+        <div style={{fontSize:11,color:"#00e696",marginTop:6,lineHeight:1.6}}>
+          Green row reaches the age-based goal of {fmt(goalLoPerKg,0)} mL/kg/day
+          {goalIdx>0 ? ` — ${goalIdx} advance${goalIdx>1?"s":""} from where you are now.` : " already."}
+        </div>
+      )}
+      {stepsToGoal!==null && stepsToGoal>0 && (
+        <div style={{fontSize:11,color:"#8090b0",marginTop:6,lineHeight:1.6}}>
+          Goal of {fmt(goalLoPerKg,0)} mL/kg/day is {stepsToGoal} advance{stepsToGoal>1?"s":""} away at this rate.
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ========================= ENTERAL FEEDING ==================================
+function ToolFeeds({ctx,showMath}){
+  const [kcalOz,setKcalOz] = useState(20);
+  const [contHrs,setContHrs] = useState("24");
+  const [freq,setFreq] = useState(3);
+  const [vol,setVol] = useState("");
+  const [volUnit,setVolUnit] = useState("perkg");
+  const w = ctx.weight, days = ctx.days;
+  if(w===null) return <NeedCtx need="a weight"/>;
+
+  const kcalMl = kcalOz/ML_PER_OZ;
+  const ch = num(contHrs);
+  const nFeeds = 24/freq;
+  const raw = num(vol);
+  const totalMl = raw===null ? null
+    : volUnit==="perkg" ? raw*w
+    : volUnit==="total" ? raw
+    : volUnit==="perfeed" ? raw*nFeeds
+    : (ch!==null && ch>0) ? raw*ch : null;
+  const perKg = totalMl===null ? null : totalMl/w;
+  const kcalKg = totalMl===null ? null : totalMl*kcalMl/w;
+  const rate = (totalMl===null || ch===null || ch<=0) ? null : totalMl/ch;
+  const perFeed = totalMl===null ? null : totalMl/nFeeds;
+  const VOL_LABEL = {perkg:"Feed volume", total:"Total daily volume",
+    perfeed:"Volume per feed (Q"+freq+"H)", rate:"Continuous rate"};
+  const VOL_UNIT = {perkg:"mL/kg/day", total:"mL/day", perfeed:"mL", rate:"mL/hr"};
+  const VOL_PH = {perkg:"e.g. 20", total:"e.g. 300", perfeed:"e.g. 16", rate:"e.g. 12"};
+  const totalMath = raw===null ? "" :
+    volUnit==="perkg" ? fmt(raw,1)+" mL/kg/day × "+fmt(w,2)+" kg = "+fmt(totalMl,1)+" mL/day"
+    : volUnit==="total" ? "entered directly"
+    : volUnit==="perfeed" ? fmt(raw,1)+" mL × "+nFeeds+" feeds = "+fmt(totalMl,1)+" mL/day"
+    : fmt(raw,1)+" mL/hr × "+fmt(ch,0)+" h = "+fmt(totalMl,1)+" mL/day";
+  const tag = (u) => volUnit===u ? " (entered)" : "";
+
+  const goal = feedGoal(days, w);
+  const goalLoPerKg = (!goal || goal.none) ? null : (goal.holliday ? hsDaily(w)/w : goal.loV);
+  const goalHiPerKg = (!goal || goal.none || goal.holliday) ? null : goal.hiV;
+
+  return (
+    <div>
+      <div style={C.lbl}>Feed strength</div>
+      <div style={{display:"flex",gap:7,marginBottom:6,flexWrap:"wrap"}}>
+        {[20,22,24,26].map(k=>(
+          <button key={k} style={C.chip(k===kcalOz,"#00e696")} onClick={()=>setKcalOz(k)}>{k} kcal/oz</button>
+        ))}
+      </div>
+      <div style={{fontSize:11,color:"#607090",marginBottom:14}}>
+        {kcalOz} kcal/oz = {fmt(kcalMl,3)} kcal/mL (at {ML_PER_OZ} mL/oz)
+      </div>
+
+      <div style={C.lbl}>Delivery parameters</div>
+      <NumIn label="Hours per day feeds are running" value={contHrs} onChange={setContHrs} unit="hours"/>
+      <div style={{marginBottom:12}}>
+        <div style={{fontSize:11,fontWeight:700,color:"#8090b0",marginBottom:6}}>Bolus frequency</div>
+        <div style={{display:"flex",gap:7}}>
+          {[3,4,6].map(f=>(
+            <button key={f} style={C.chip(f===freq,"#00e696")} onClick={()=>setFreq(f)}>Q{f}H</button>
+          ))}
+        </div>
+        <div style={{fontSize:11,color:"#607090",marginTop:6}}>{nFeeds} feeds per day</div>
+      </div>
+
+      <div style={{...C.lbl,marginTop:6}}>Current feeds — enter whichever you have</div>
+      <div style={{display:"flex",gap:7,marginBottom:8,flexWrap:"wrap"}}>
+        {[["perkg","mL/kg/day"],["total","mL/day"],["perfeed","mL per feed"],["rate","mL/hr"]].map(([id,lb])=>(
+          <button key={id} style={C.chip(id===volUnit,"#4db8ff")} onClick={()=>setVolUnit(id)}>{lb}</button>
+        ))}
+      </div>
+      <NumIn label={VOL_LABEL[volUnit]} value={vol} onChange={setVol}
+        unit={VOL_UNIT[volUnit]} placeholder={VOL_PH[volUnit]}/>
+      {volUnit==="rate" && (ch===null || ch<=0) && (
+        <div style={{fontSize:11,color:"#ffc832",lineHeight:1.6,marginTop:-4,marginBottom:10}}>
+          Enter the hours per day above before a rate can be converted to a daily volume.
+        </div>
+      )}
+
+      {totalMl!==null && (
+        <div>
+          <Res label={"Per kilogram"+tag("perkg")} value={fmt(perKg,1)} unit="mL/kg/day"
+            math={`${fmt(totalMl,1)} mL ÷ ${fmt(w,2)} kg = ${fmt(perKg,2)}`}
+            showMath={showMath} color="#00e696"/>
+          <Res label={"Total daily volume"+tag("total")} value={fmt(totalMl,0)} unit="mL/day"
+            math={totalMath} showMath={showMath} color="#00e696"/>
+          <Res label="Calories" value={fmt(kcalKg,1)} unit="kcal/kg/day"
+            math={`${fmt(totalMl,1)} mL × ${fmt(kcalMl,3)} kcal/mL ÷ ${fmt(w,2)} kg = ${fmt(kcalKg,1)}`}
+            showMath={showMath} color="#00e696"/>
+          <Res label={"Per feed (Q"+freq+"H)"+tag("perfeed")} value={String(Math.round(perFeed))} unit="mL"
+            math={`${fmt(totalMl,1)} mL ÷ ${nFeeds} feeds = ${perFeed.toFixed(2)} mL, rounded to ${Math.round(perFeed)}`}
+            showMath={showMath} color="#4db8ff"/>
+          {rate!==null && (
+            <Res label={"Continuous rate"+tag("rate")} value={fmt(rate,1)} unit="mL/hr"
+              math={`${fmt(totalMl,1)} mL ÷ ${fmt(ch,0)} h = ${fmt(rate,2)}`}
+              showMath={showMath} color="#4db8ff"/>
+          )}
+        </div>
+      )}
+
+      {goal && !goal.none && (
+        <div style={{background:"rgba(0,230,150,0.06)",border:"1px solid rgba(0,230,150,0.2)",borderRadius:13,padding:"12px 13px",marginTop:4,marginBottom:14}}>
+          <div style={{fontSize:11,fontWeight:800,color:"#00e696",letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>Goal · {goal.band}</div>
+          <div style={{fontSize:13,color:"#e8f0fe",marginBottom:goal.holliday?5:0}}>
+            {goal.holliday
+              ? `${fmt(hsDaily(w),0)} mL/day (${fmt(goalLoPerKg,0)} mL/kg/day)`
+              : `${goal.loV}–${goal.hiV} mL/kg/day = ${fmt(goal.loV*w,0)}–${fmt(goal.hiV*w,0)} mL/day`}
+          </div>
+          {goal.holliday && <div style={{fontSize:12,color:"#a0b0d0"}}>Calorie goal {goal.loK}–{goal.hiK} kcal/kg/day</div>}
+        </div>
+      )}
+
+      <div style={C.lbl}>Feed advancement</div>
+      <div style={{fontSize:11,color:"#8090b0",lineHeight:1.65,marginBottom:12}}>
+        {perKg>0
+          ? `Starting from the ${fmt(perKg,0)} mL/kg/day entered above.`
+          : "No current volume entered, so each ladder starts at its first increment."}
+        {" "}Both delivery routes are shown so you can compare — Q{freq}H volumes and the
+        equivalent continuous rate over {fmt((ch&&ch>0)?ch:24,0)} hours.
+      </div>
+
+      <Ladder step={10} basePerKg={perKg} w={w} goalLoPerKg={goalLoPerKg} freq={freq} contHrs={ch} kcalMl={kcalMl}/>
+      <Ladder step={20} basePerKg={perKg} w={w} goalLoPerKg={goalLoPerKg} freq={freq} contHrs={ch} kcalMl={kcalMl}/>
+
+      <div style={{background:"rgba(255,200,50,0.06)",border:"1px solid rgba(255,200,50,0.22)",borderRadius:12,padding:"12px 13px",marginBottom:10}}>
+        <div style={{fontSize:11,color:"#c8b070",lineHeight:1.75}}>
+          Per-feed volumes are rounded to the nearest millilitre. These figures are estimates of
+          appropriate feeding volumes only — teams should check individual nutritional status and
+          registered dietitian recommendations when setting final goal feeds and fluids.
+        </div>
+      </div>
+
+      <Src>
+        Feed strength converted at {ML_PER_OZ} mL/oz. Volume goals are institutional values
+        supplied by the app owner; the 1–3 year goal uses Holliday-Segar daily volumes.
+        Protein delivery is deliberately not calculated — feed strength alone does not determine
+        protein content.
+      </Src>
+    </div>
+  );
+}
+
+// ========================= MAINTENANCE IV FLUID =============================
+function ToolMIVF({ctx,showMath}){
+  const w = ctx.weight;
+  if(w===null) return <NeedCtx need="a weight"/>;
+  if(w < 3){
+    return (
+      <div style={{background:"rgba(255,80,80,0.08)",border:"1px solid rgba(255,80,80,0.3)",borderRadius:14,padding:"18px 16px"}}>
+        <div style={{fontSize:26,marginBottom:8}}>⚠️</div>
+        <div style={{fontSize:14,fontWeight:800,color:"#ff5050",marginBottom:7}}>Not applicable under 3 kg</div>
+        <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.75}}>
+          Holliday-Segar does not apply to neonates. At {fmt(w,2)} kg it would return
+          {" "}{fmt(hsRate(w),1)} mL/hr, which is not an appropriate maintenance rate for a
+          newborn. Use day-of-life based fluid dosing instead.
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Res label="Maintenance rate" value={fmt(hsRate(w),1)} unit="mL/hr"
+        math={w<=10?`${fmt(w,2)} kg × 4 = ${fmt(hsRate(w),1)}`
+          : w<=20?`40 + (${fmt(w,2)} − 10) × 2 = ${fmt(hsRate(w),1)}`
+          : `60 + (${fmt(w,2)} − 20) × 1 = ${fmt(hsRate(w),1)}`}
+        showMath={showMath} color="#a064ff"/>
+      <Res label="Maintenance volume" value={fmt(hsDaily(w),0)} unit="mL/day"
+        math={w<=10?`${fmt(w,2)} kg × 100 = ${fmt(hsDaily(w),0)}`
+          : w<=20?`1000 + (${fmt(w,2)} − 10) × 50 = ${fmt(hsDaily(w),0)}`
+          : `1500 + (${fmt(w,2)} − 20) × 20 = ${fmt(hsDaily(w),0)}`}
+        showMath={showMath} color="#a064ff"/>
+      <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:13,padding:"11px 13px",fontSize:11,color:"#8090b0",lineHeight:1.7}}>
+        4-2-1 rule: 4 mL/kg/hr for the first 10 kg, 2 mL/kg/hr for the next 10 kg,
+        1 mL/kg/hr for every kilogram beyond 20.
+      </div>
+      <Src>Holliday MA, Segar WE. The maintenance need for water in parenteral fluid therapy.
+        Pediatrics 1957;19(5):823-32. Refusal below 3 kg per app owner.</Src>
+    </div>
+  );
+}
+
+// ======================= BLOOD VOLUME & BLOOD LOSS ==========================
+function ToolBV({ctx,showMath}){
+  const [override,setOverride] = useState(null);
+  const [ebl,setEbl] = useState("");
+  const w = ctx.weight, days = ctx.days;
+  if(w===null) return <NeedCtx need="a weight"/>;
+
+  const auto = autoBand(days, ctx.preterm);
+  const bandId = override || auto;
+  const band = BV_BANDS.find(b=>b.id===bandId);
+  const eblV = num(ebl);
+
+  return (
+    <div>
+      <div style={C.lbl}>Age category</div>
+      <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:8}}>
+        {BV_BANDS.map(b=>(
+          <button key={b.id} style={C.chip(b.id===bandId,"#ff5050")} onClick={()=>setOverride(b.id)}>{b.label}</button>
+        ))}
+      </div>
+      <div style={{fontSize:11,color:"#607090",marginBottom:14,lineHeight:1.6}}>
+        {auto
+          ? <span>Selected automatically from age {ageLabel(days)}{ctx.preterm?" (preterm)":""}{override&&override!==auto?" — you have overridden this":""}. Tap to change.</span>
+          : <span>No age entered, so nothing was selected automatically. Pick a category above.</span>}
+      </div>
+
+      {band && (
+        <div>
+          <Res label="Estimated blood volume" value={`${fmt(w*band.lo,0)}–${fmt(w*band.hi,0)}`} unit="mL"
+            math={`${fmt(w,2)} kg × ${band.lo}–${band.hi} mL/kg = ${fmt(w*band.lo,0)}–${fmt(w*band.hi,0)} mL`}
+            showMath={showMath} color="#ff5050"/>
+          <div style={{fontSize:11,color:"#607090",marginTop:-4,marginBottom:14}}>{band.label}: {band.lo}–{band.hi} mL/kg</div>
+
+          <div style={C.lbl}>Blood loss</div>
+          <NumIn label="Estimated blood loss" value={ebl} onChange={setEbl} unit="mL"/>
+          {eblV!==null && band && (
+            <Res label="Proportion of circulating volume"
+              value={`${fmt(eblV/(w*band.hi)*100,1)}–${fmt(eblV/(w*band.lo)*100,1)}`} unit="%"
+              math={`${fmt(eblV,0)} mL ÷ ${fmt(w*band.hi,0)}–${fmt(w*band.lo,0)} mL = ${fmt(eblV/(w*band.hi)*100,1)}–${fmt(eblV/(w*band.lo)*100,1)}%`}
+              showMath={showMath} color="#ff5050"/>
+          )}
+        </div>
+      )}
+      <Src>
+        Blood volume bands are institutional values supplied by the app owner, not a published
+        standard. Because each band is a range, both the volume and the percentage are reported
+        as ranges. No transfusion threshold is applied — that judgement is not made here.
+      </Src>
+    </div>
+  );
+}
+
+// ====================== LOCAL ANESTHETIC MAXIMUM ============================
+function ToolLA({ctx,showMath}){
+  const [agentIdx,setAgentIdx] = useState(0);
+  const [epi,setEpi] = useState(false);
+  const [given,setGiven] = useState("");
+  const w = ctx.weight;
+  if(w===null) return <NeedCtx need="a weight"/>;
+
+  const a = LA_AGENTS[agentIdx];
+  const maxMgKg = epi ? a.epi : a.plain;
+  const maxMg = maxMgKg*w;
+  const maxMl = maxMg/a.mgml;
+  const gv = num(given);
+  const givenMg = gv===null ? null : gv*a.mgml;
+  const pct = givenMg===null ? null : givenMg/maxMg*100;
+  const over = pct!==null && pct > 100;
+
+  return (
+    <div>
+      <div style={C.lbl}>Preparation</div>
+      <div style={{marginBottom:12}}>
+        {LA_AGENTS.map((x,i)=>(
+          <div key={x.name} onClick={()=>setAgentIdx(i)}
+            style={{display:"flex",justifyContent:"space-between",alignItems:"center",
+              background:i===agentIdx?"rgba(255,200,50,0.12)":"rgba(255,255,255,0.04)",
+              border:"1px solid "+(i===agentIdx?"rgba(255,200,50,0.45)":"rgba(255,255,255,0.08)"),
+              borderRadius:11,padding:"9px 12px",marginBottom:6,cursor:"pointer"}}>
+            <span style={{fontSize:12.5,fontWeight:i===agentIdx?700:500,color:i===agentIdx?"#ffc832":"#e8f0fe"}}>{x.name}</span>
+            <span style={{fontSize:11,color:"#607090"}}>{x.mgml} mg/mL</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"flex",gap:7,marginBottom:14}}>
+        {[[false,"Plain"],[true,"With epinephrine"]].map(([val,lb])=>(
+          <button key={String(val)} style={C.chip(epi===val,"#ffc832")} onClick={()=>setEpi(val)}>{lb}</button>
+        ))}
+      </div>
+
+      <Res label="Maximum dose" value={fmt(maxMg,1)} unit="mg"
+        math={`${maxMgKg} mg/kg × ${fmt(w,2)} kg = ${fmt(maxMg,1)} mg`}
+        showMath={showMath} color="#ffc832"/>
+      <Res label="Maximum volume" value={fmt(maxMl,2)} unit="mL"
+        math={`${maxMgKg} mg/kg × ${fmt(w,2)} kg ÷ ${a.mgml} mg/mL = ${fmt(maxMl,2)} mL (${fmt(maxMgKg/a.mgml,2)} mL/kg)`}
+        showMath={showMath} color="#ffc832"/>
+
+      <div style={{...C.lbl,marginTop:14}}>Volume already given (optional)</div>
+      <NumIn label={"Volume of "+a.name+" given"} value={given} onChange={setGiven} unit="mL"/>
+      {gv!==null && (
+        <Res label="Proportion of maximum used" value={fmt(pct,0)} unit="%"
+          math={`${fmt(gv,2)} mL × ${a.mgml} mg/mL = ${fmt(givenMg,1)} mg; ÷ ${fmt(maxMg,1)} mg = ${fmt(pct,0)}%`}
+          showMath={showMath} alert={over}
+          alertText={over?`Above the maximum for ${a.name}${epi?" with epinephrine":" plain"} at this weight.`:null}/>
+      )}
+      {gv!==null && !over && (
+        <div style={{fontSize:12,color:"#a0b0d0",marginTop:-2,marginBottom:8}}>Remaining: {fmt(maxMl-gv,2)} mL ({fmt(maxMg-givenMg,1)} mg)</div>
+      )}
+
+      <Src>
+        Maximum doses are institutional values supplied by the app owner, applied at all ages.
+        Volume in mL is computed from mg/kg ÷ mg/mL rather than stored separately, so the two
+        cannot disagree. Each preparation is assessed on its own — this tool does not combine
+        agents, so it will not tell you the limit for a mixture.
+      </Src>
+    </div>
+  );
+}
+
+// ======================= CLINICAL SCORES ====================================
+const PAS_ITEMS = [
+  {k:"cough", label:"Cough / percussion / hopping tenderness in the RLQ", pts:2},
+  {k:"anorexia", label:"Anorexia", pts:1},
+  {k:"pyrexia", label:"Pyrexia", pts:1},
+  {k:"nausea", label:"Nausea or emesis", pts:1},
+  {k:"rif", label:"Tenderness over the right iliac fossa", pts:2},
+  {k:"wbc", label:"Leukocytosis", pts:1},
+  {k:"pmn", label:"Polymorphonuclear neutrophilia", pts:1},
+  {k:"migration", label:"Migration of pain", pts:1},
+];
+
+const ALVARADO_ITEMS = [
+  {k:"migration", label:"Migration of pain to the RLQ", pts:1},
+  {k:"anorexia", label:"Anorexia", pts:1},
+  {k:"nausea", label:"Nausea or vomiting", pts:1},
+  {k:"tenderness", label:"Tenderness in the right lower quadrant",pts:2},
+  {k:"rebound", label:"Rebound pain", pts:1},
+  {k:"temp", label:"Elevated temperature", pts:1},
+  {k:"leuko", label:"Leukocytosis", pts:2},
+  {k:"shift", label:"Shift of white cell count to the left",pts:1},
+];
+
+const SIPA_BANDS = [
+  {lo:4, hi:6, cut:1.22},
+  {lo:7, hi:12, cut:1.00},
+  {lo:13, hi:16, cut:0.90},
+];
+
+function CheckRow({label,pts,on,toggle,color}){
+  return (
+    <div onClick={toggle}
+      style={{display:"flex",alignItems:"center",gap:11,cursor:"pointer",
+        background:on?color+"14":"rgba(255,255,255,0.035)",
+        border:"1px solid "+(on?color+"55":"rgba(255,255,255,0.08)"),
+        borderRadius:11,padding:"10px 12px",marginBottom:7}}>
+      <div style={{width:20,height:20,borderRadius:6,flexShrink:0,
+        border:"1px solid "+(on?color:"rgba(255,255,255,0.25)"),
+        background:on?color:"transparent",display:"flex",alignItems:"center",
+        justifyContent:"center",fontSize:12,color:"#000",fontWeight:800}}>{on?"✓":""}</div>
+      <span style={{flex:1,fontSize:12.5,lineHeight:1.45,color:on?"#e8f0fe":"#a0b0d0"}}>{label}</span>
+      <span style={{fontSize:11,fontWeight:800,color:on?color:"#506070",flexShrink:0}}>{pts}</span>
+    </div>
+  );
+}
+
+function ScoreTool({items,max,color,title,cite,note,bands}){
+  const [on,setOn] = useState({});
+  const total = items.reduce((s,it)=>s + (on[it.k]?it.pts:0), 0);
+  const picked = items.filter(it=>on[it.k]);
+  const band = bands ? bands.find(b=> total>=b.lo && total<=b.hi) : null;
+  return (
+    <div>
+      <div style={{background:(band?band.color:color)+"14",border:"1px solid "+(band?band.color:color)+"44",
+        borderRadius:14,padding:"14px 16px",marginBottom:14}}>
+        <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between"}}>
+          <span style={{fontSize:12,fontWeight:800,color:band?band.color:color,letterSpacing:1,textTransform:"uppercase"}}>{title}</span>
+          <span style={{fontSize:30,fontWeight:800,color:band?band.color:color,lineHeight:1}}>
+            {total}<span style={{fontSize:14,color:"#8090b0",fontWeight:700}}> / {max}</span>
+          </span>
+        </div>
+        {band && <div style={{fontSize:15,fontWeight:700,color:band.color,marginTop:8}}>{band.label}</div>}
+      </div>
+      {items.map(it=>(
+        <CheckRow key={it.k} label={it.label} pts={it.pts} color={color}
+          on={!!on[it.k]} toggle={()=>setOn(p=>({...p,[it.k]:!p[it.k]}))}/>
+      ))}
+      {picked.length>0 && (
+        <button onClick={()=>setOn({})}
+          style={{width:"100%",background:"rgba(255,80,80,0.12)",border:"1px solid rgba(255,80,80,0.3)",
+            borderRadius:11,padding:"9px",fontSize:12,fontWeight:700,color:"#ff9090",
+            cursor:"pointer",fontFamily:"inherit",marginTop:4,marginBottom:8}}>
+          Clear
+        </button>
+      )}
+      {bands && (
+        <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginTop:6,marginBottom:6}}>
+          {bands.map((b,i)=>{
+            const active = band && b.lo===band.lo;
+            return (
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"8px 12px",
+                background:active?b.color+"1f":"transparent",
+                borderBottom:i<bands.length-1?"1px solid rgba(255,255,255,0.06)":"none"}}>
+                <span style={{fontSize:11.5,color:active?b.color:"#8090b0",fontWeight:active?800:600}}>
+                  {b.lo===b.hi ? b.lo : b.lo+"–"+b.hi}
+                </span>
+                <span style={{fontSize:11.5,color:active?b.color:"#a0b0d0",fontWeight:active?700:500}}>{b.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {note && <div style={{fontSize:11,color:"#c8b070",lineHeight:1.7,background:"rgba(255,200,50,0.06)",
+        border:"1px solid rgba(255,200,50,0.22)",borderRadius:12,padding:"12px 13px",marginTop:8}}>{note}</div>}
+      <Src>{cite}</Src>
+    </div>
+  );
+}
+
+const PAS_BANDS = [
+  {lo:0, hi:3, label:"Low concern", color:"#00e696"},
+  {lo:4, hi:6, label:"Equivocal", color:"#ffc832"},
+  {lo:7, hi:10, label:"High concern", color:"#ff5050"},
+];
+const ALV_BANDS = [
+  {lo:0, hi:4, label:"Appendicitis unlikely", color:"#00e696"},
+  {lo:5, hi:6, label:"Appendicitis possible", color:"#ffc832"},
+  {lo:7, hi:9, label:"Appendicitis likely", color:"#ff9632"},
+  {lo:10, hi:10, label:"Appendicitis very likely", color:"#ff5050"},
+];
+
+function ToolPAS(){
+  return <ScoreTool items={PAS_ITEMS} max={10} color="#4db8ff" bands={PAS_BANDS} title="Pediatric Appendicitis Score"
+    cite={<span>Samuel M. Pediatric appendicitis score. J Pediatr Surg 2002;37(6):877-81. PMID 12037754.
+    Items and weights taken from the published description. Numeric thresholds for pyrexia,
+    leukocytosis and neutrophilia are defined in the full text and are not asserted here — apply
+    your own laboratory cut-offs when ticking those boxes.</span>}/>;
+}
+
+function ToolAlvarado(){
+  return <ScoreTool items={ALVARADO_ITEMS} max={10} color="#00e696" bands={ALV_BANDS} title="Alvarado Score"
+    note="Point values pending confirmation: the source abstract names the eight factors and ranks them, but does not print their individual weights. The conventional MANTRELS weighting is used here."
+    cite={<span>Alvarado A. A practical score for the early diagnosis of acute appendicitis.
+    Ann Emerg Med 1986;15(5):557-64. PMID 3963537.</span>}/>;
+}
+
+function ToolSIPA({ctx,showMath}){
+  const [hr,setHr] = useState("");
+  const [sbp,setSbp] = useState("");
+  const days = ctx.days;
+  const yrs = days===null ? null : days/DAYS_PER_YEAR;
+  const band = yrs===null ? null : SIPA_BANDS.find(b=> yrs >= b.lo && yrs < b.hi+1);
+
+  const h = num(hr), s = num(sbp);
+  const si = (h===null || s===null || s<=0) ? null : h/s;
+  const elevated = si!==null && band && si > band.cut;
+
+  return (
+    <div>
+      {yrs===null && <NeedCtx need="an age"/>}
+      {yrs!==null && !band && (
+        <div style={{background:"rgba(255,200,50,0.08)",border:"1px solid rgba(255,200,50,0.3)",
+          borderRadius:14,padding:"16px",marginBottom:12}}>
+          <div style={{fontSize:13,fontWeight:800,color:"#ffc832",marginBottom:6}}>Not defined at this age</div>
+          <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.75}}>
+            SIPA was derived in children aged 4–16 years. At {ageLabel(days)} there is no
+            published cut-off, so no result is shown rather than extrapolating one.
+          </div>
+        </div>
+      )}
+
+      <NumIn label="Heart rate" value={hr} onChange={setHr} unit="bpm"/>
+      <NumIn label="Systolic blood pressure" value={sbp} onChange={setSbp} unit="mmHg"/>
+
+      {si!==null && (
+        <Res label="Shock index" value={fmt(si,2)} unit="HR ÷ SBP"
+          math={`${fmt(h,0)} ÷ ${fmt(s,0)} = ${fmt(si,3)}`} showMath={showMath}
+          color={band?(elevated?"#ff5050":"#00e696"):"#8090b0"}
+          alert={!!elevated}
+          alertText={elevated?`Above the SIPA cut-off of ${band.cut.toFixed(2)} for ages ${band.lo}–${band.hi}.`:null}/>
+      )}
+      {si!==null && band && !elevated && (
+        <div style={{fontSize:12,color:"#00e696",marginTop:-2,marginBottom:10,lineHeight:1.6}}>
+          At or below the cut-off of {band.cut.toFixed(2)} for ages {band.lo}–{band.hi}.
+        </div>
+      )}
+
+      <div style={{...C.lbl,marginTop:12}}>Published cut-offs</div>
+      <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:8}}>
+        {SIPA_BANDS.map(b=>{
+          const active = band && b.lo===band.lo;
+          return (
+            <div key={b.lo} style={{display:"flex",justifyContent:"space-between",padding:"9px 12px",
+              background:active?"rgba(255,80,80,0.12)":"transparent",
+              borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+              <span style={{fontSize:12,color:active?"#ff5050":"#a0b0d0",fontWeight:active?700:500}}>
+                Age {b.lo}–{b.hi}{active?" ← this patient":""}
+              </span>
+              <span style={{fontSize:12,fontWeight:700,color:active?"#ff5050":"#e8f0fe"}}>&gt; {b.cut.toFixed(2)}</span>
+            </div>
+          );
+        })}
+      </div>
+      <Src>
+        Acker SN, Ross JT, Partrick DA, Tong S, Bensard DD. Pediatric specific shock index
+        accurately identifies severely injured children. J Pediatr Surg 2015;50(2):331-4.
+        PMID 25638631. Cut-offs quoted directly from the published abstract. Derived in blunt
+        trauma patients aged 4–16 with ISS &gt; 15; elevated SIPA identifies severe injury but is
+        not by itself a decision rule.
+      </Src>
+    </div>
+  );
+}
+
+// ============================== pARC ========================================
+const PARC = {
+  intercept: -8.7,
+  male: 1.28,
+  age5_79: 0.38,
+  male5_79: -1.05,
+  age8_139: -0.72,
+  dur24_48: 0.47,
+  dur48_96: 0.10,
+  walking: 1.05,
+  migration: 0.46,
+  maxRLQ: 1.14,
+  guarding: 0.67,
+  ancSqrt: 1.77,
+  ancConst: 6.62,
+  ancCap: 14,
+};
+
+function AGE_SEX_TERM(yrs, male){
+  if(yrs===null) return null;
+  if(yrs < 8) return {v: PARC.age5_79 + (male?PARC.male5_79:0),
+    why: male ? "Age 5–7.9 y (0.38) + Male 5–7.9 y (−1.05)" : "Age 5–7.9 y (0.38)"};
+  const oldestStarts = male ? 14 : 12;
+  if(yrs < oldestStarts) return {v: PARC.age8_139, why:`Age 8–${male?"13.9":"11.9"} y (−0.72)`};
+  return {v:0, why:`Reference band (${male?"male 14–18":"female 12–18"} y)`};
+}
+
+function ancFrom(ancRaw, wbcRaw){
+  const a = num(ancRaw), wb = num(wbcRaw);
+  if(a!==null && a>=0) return {anc:a, src:"entered directly"};
+  if(wb!==null && wb>0) return {anc:Math.pow(-0.8783 + 1.1008*Math.sqrt(wb), 2),
+    src:`imputed from WBC ${fmt(wb,1)} using (−0.8783 + 1.1008 × √WBC)²`};
+  return {anc:7, src:"neither entered — derivation cohort mean of 7 × 10³/µL used"};
+}
+function ancTerm(anc){
+  return anc >= PARC.ancCap
+    ? {v:PARC.ancConst, why:`ANC ≥ 14 → constant 6.62`}
+    : {v:PARC.ancSqrt*Math.sqrt(anc), why:`1.77 × √${fmt(anc,2)} = ${fmt(PARC.ancSqrt*Math.sqrt(anc),3)}`};
+}
+
+function ToolPARC({ctx,showMath}){
+  const [male,setMale] = useState(true);
+  const [dur,setDur] = useState("lt24");
+  const [f,setF] = useState({walking:false,migration:false,maxRLQ:false,guarding:false});
+  const [anc,setAnc] = useState("");
+  const [wbc,setWbc] = useState("");
+
+  const days = ctx.days;
+  const yrs = days===null ? null : days/DAYS_PER_YEAR;
+
+
+  if(days===null) return <NeedCtx need="an age"/>;
+  if(yrs < 5 || yrs > 18){
+    return (
+      <div>
+        <div style={{background:"rgba(255,200,50,0.08)",border:"1px solid rgba(255,200,50,0.3)",
+          borderRadius:14,padding:"16px"}}>
+          <div style={{fontSize:13,fontWeight:800,color:"#ffc832",marginBottom:6}}>Outside the model's age range</div>
+          <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.75}}>
+            pARC's published coefficients span 5 to 18 years. At {ageLabel(days)} the model has no
+            defined age term, so no probability is produced rather than extrapolating one.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const ageT = AGE_SEX_TERM(yrs, male);
+  const durT = dur==="lt24" ? {v:0, why:"Under 24 h (reference)"}
+    : dur==="24_48" ? {v:PARC.dur24_48, why:"24–47 h (0.47)"}
+    : {v:PARC.dur48_96, why:"48 to 96 h (0.10)"};
+  const {anc:ancVal, src:ancSrc} = ancFrom(anc,wbc);
+  const aT = ancTerm(ancVal);
+
+  const terms = [
+    {k:"Intercept", v:PARC.intercept, why:"−8.7"},
+    {k:"Male sex", v:male?PARC.male:0, why: male?"1.28":"female — no term"},
+    {k:"Age / sex band", v:ageT.v, why:ageT.why},
+    {k:"Duration of pain", v:durT.v, why:durT.why},
+    {k:"Pain with walking", v:f.walking?PARC.walking:0, why:f.walking?"1.05":"absent"},
+    {k:"Migration to RLQ", v:f.migration?PARC.migration:0, why:f.migration?"0.46":"absent"},
+    {k:"Maximal tenderness RLQ", v:f.maxRLQ?PARC.maxRLQ:0, why:f.maxRLQ?"1.14":"absent"},
+    {k:"Abdominal guarding", v:f.guarding?PARC.guarding:0, why:f.guarding?"0.67":"absent"},
+    {k:"ANC", v:aT.v, why:aT.why},
+  ];
+  const logit = terms.reduce((s,t)=>s+t.v,0);
+  const p = 1/(1+Math.exp(-logit));
+  const pct = p*100;
+
+  const CB = ({k,label}) => (
+    <CheckRow label={label} pts="" color="#4db8ff" on={f[k]}
+      toggle={()=>setF(prev=>({...prev,[k]:!prev[k]}))}/>
+  );
+
+  return (
+    <div>
+      <div style={{background:"rgba(77,184,255,0.12)",border:"1px solid rgba(77,184,255,0.44)",
+        borderRadius:14,padding:"15px 16px",marginBottom:14,textAlign:"center"}}>
+        <div style={{fontSize:11,fontWeight:800,color:"#4db8ff",letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>
+          Predicted probability of appendicitis
+        </div>
+        <div style={{fontSize:38,fontWeight:800,color:"#4db8ff",lineHeight:1}}>{fmt(pct,1)}<span style={{fontSize:20}}>%</span></div>
+      </div>
+
+      <div style={C.lbl}>Sex</div>
+      <div style={{display:"flex",gap:7,marginBottom:12}}>
+        {[[true,"Male"],[false,"Female"]].map(([v,l])=>(
+          <button key={String(v)} style={C.chip(male===v,"#4db8ff")} onClick={()=>setMale(v)}>{l}</button>
+        ))}
+      </div>
+
+      <div style={C.lbl}>Duration of pain</div>
+      <div style={{display:"flex",gap:7,marginBottom:14,flexWrap:"wrap"}}>
+        {[["lt24","Under 24 h"],["24_48","24–47 h"],["48_96","48–96 h"]].map(([v,l])=>(
+          <button key={v} style={C.chip(dur===v,"#4db8ff")} onClick={()=>setDur(v)}>{l}</button>
+        ))}
+      </div>
+
+      <div style={C.lbl}>Findings</div>
+      <CB k="walking" label="Pain with walking"/>
+      <CB k="migration" label="History of migration of pain to the RLQ"/>
+      <CB k="maxRLQ" label="Maximal tenderness in the RLQ"/>
+      <CB k="guarding" label="Abdominal guarding"/>
+
+      <div style={{...C.lbl,marginTop:14}}>Absolute neutrophil count</div>
+      <NumIn label="ANC" value={anc} onChange={setAnc} unit="×10³/µL" placeholder="e.g. 10.4"/>
+      <NumIn label="WBC — used only if ANC is blank" value={wbc} onChange={setWbc} unit="×10³/µL" placeholder="e.g. 14.2"/>
+      <div style={{fontSize:11,color:"#8090b0",lineHeight:1.65,marginTop:-4,marginBottom:14}}>
+        ANC {ancSrc}. Value used: <strong style={{color:"#4db8ff"}}>{fmt(ancVal,2)} ×10³/µL</strong>.
+      </div>
+
+      {(male!==true || dur!=="lt24" || f.walking || f.migration || f.maxRLQ || f.guarding || anc!=="" || wbc!=="") && (
+        <button onClick={()=>{setMale(true);setDur("lt24");setF({walking:false,migration:false,maxRLQ:false,guarding:false});setAnc("");setWbc("");}}
+          style={{width:"100%",background:"rgba(255,80,80,0.12)",border:"1px solid rgba(255,80,80,0.3)",
+            borderRadius:11,padding:"9px",fontSize:12,fontWeight:700,color:"#ff9090",
+            cursor:"pointer",fontFamily:"inherit",marginBottom:14}}>
+          Clear
+        </button>
+      )}
+
+      {showMath && (
+        <div>
+          <div style={C.lbl}>Model terms</div>
+          <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:10}}>
+            {terms.map((t,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",gap:10,padding:"8px 11px",
+                borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+                <div style={{minWidth:0}}>
+                  <div style={{fontSize:11.5,color:"#e8f0fe"}}>{t.k}</div>
+                  <div style={{fontSize:10,color:"#607090",lineHeight:1.5}}>{t.why}</div>
+                </div>
+                <span style={{fontSize:12,fontWeight:700,flexShrink:0,
+                  color:t.v>0?"#00e696":(t.v<0?"#ff9090":"#607090")}}>
+                  {t.v>0?"+":""}{fmt(t.v,3)}
+                </span>
+              </div>
+            ))}
+            <div style={{display:"flex",justifyContent:"space-between",padding:"9px 11px",background:"rgba(77,184,255,0.10)"}}>
+              <span style={{fontSize:12,fontWeight:800,color:"#4db8ff"}}>Logit</span>
+              <span style={{fontSize:12,fontWeight:800,color:"#4db8ff"}}>{fmt(logit,3)}</span>
+            </div>
+          </div>
+          <div style={{fontSize:10.5,color:"#607090",fontFamily:"ui-monospace,Menlo,monospace",marginBottom:10}}>
+            p = 1 / (1 + e^−{fmt(logit,3)}) = {fmt(p,4)} = {fmt(pct,1)}%
+          </div>
+        </div>
+      )}
+
+      <div style={{background:"rgba(0,230,150,0.06)",border:"1px solid rgba(0,230,150,0.22)",
+        borderRadius:12,padding:"12px 13px",marginBottom:6}}>
+        <div style={{fontSize:11,color:"#8fb8a0",lineHeight:1.75}}>
+          Age bands follow the paper's methods text: girls 5–7.9, 8–11.9 and 12–18 years;
+          boys 5–7.9, 8–13.9 and 14–18 years. Not for use under 5 years of age.
+        </div>
+      </div>
+
+      <Src>
+        Kharbanda AB, Vazquez-Benitez G, Ballard DW, et al. Development and Validation of a Novel
+        Pediatric Appendicitis Risk Calculator (pARC). Pediatrics 2018;141(4):e20172699.
+        PMID 29535251. Coefficients from Table 3. pARC estimates probability on a continuous
+        scale; it does not itself define an imaging or operative threshold.
+      </Src>
+    </div>
+  );
+}
+
+// ==================== REFERENCE TABLES (app owner supplied) =================
+const PALS_ROWS = [
+  {label:"Neonate 0–28 days", hr:"100–205", rr:"30–60", map:"45–60", lo:0, hi:29},
+  {label:"Infant 1–12 months", hr:"100–190", rr:"30–53", map:"50–62", lo:29, hi:365.25},
+  {label:"Toddler 1–2 years", hr:"98–140", rr:"22–37", map:"49–62", lo:365.25, hi:3*365.25},
+  {label:"Preschool 3–5 years", hr:"80–120", rr:"20–28", map:"58–69", lo:3*365.25, hi:6*365.25},
+  {label:"School age 6–11 years", hr:"75–118", rr:"18–25", map:"66–79", lo:6*365.25, hi:12*365.25},
+  {label:"Adolescent 12–15 years", hr:"60–100", rr:"12–20", map:"70–85", lo:12*365.25, hi:16*365.25},
+];
+function palsIdx(days){
+  if(days===null) return -1;
+  return PALS_ROWS.findIndex(r=> days>=r.lo && days<r.hi);
+}
+function hypoSBP(days){
+  if(days===null) return null;
+  const y = days/DAYS_PER_YEAR;
+  if(days <= 28) return {v:60, rule:"under 1 month"};
+  if(y < 1) return {v:70, rule:"1 month to 1 year"};
+  if(y < 10){ const a=Math.floor(y); return {v:70+2*a, rule:`70 + (2 × ${a} years)`}; }
+  return {v:90, rule:"10 years and over"};
+}
+
+const MILLER = [
+  {label:"Premature under 1 kg", val:"00"},
+  {label:"Premature 1–2 kg", val:"0"},
+  {label:"Term neonate", val:"0"},
+  {label:"Infant 1–6 months", val:"0–1"},
+  {label:"Infant 6–12 months", val:"1"},
+  {label:"Toddler 1–3 years", val:"1"},
+  {label:"Child 3–6 years", val:"1–2"},
+  {label:"Child over 6 years", val:"2"},
+  {label:"Adolescent", val:"2–3"},
+];
+function millerIdx(days,w,preterm){
+  if(preterm && w!==null && w<1) return 0;
+  if(preterm && w!==null && w<2) return 1;
+  if(days===null) return -1;
+  const mo=days/DAYS_PER_MONTH, y=days/DAYS_PER_YEAR;
+  if(days<=28) return 2;
+  if(mo<6) return 3;
+  if(mo<12) return 4;
+  if(y<3) return 5;
+  if(y<6) return 6;
+  if(y<12) return 7;
+  return 8;
+}
+
+const MAC = [
+  {label:"Neonate", val:"Usually not preferred; Mac 0 if used"},
+  {label:"Infant under 1 year", val:"1"},
+  {label:"Toddler 1–3 years", val:"1–2"},
+  {label:"Child 3–8 years", val:"2"},
+  {label:"Child over 8 years", val:"2–3"},
+  {label:"Adolescent", val:"3–4"},
+];
+function macIdx(days){
+  if(days===null) return -1;
+  const y=days/DAYS_PER_YEAR;
+  if(days<=28) return 0;
+  if(y<1) return 1;
+  if(y<3) return 2;
+  if(y<8) return 3;
+  if(y<12) return 4;
+  return 5;
+}
+
+const NGOG = [
+  {label:"Extremely premature under 1 kg", val:"5 Fr"},
+  {label:"1–2 kg", val:"6 Fr"},
+  {label:"2–5 kg", val:"6–8 Fr"},
+  {label:"Neonate over 5 kg", val:"8–10 Fr"},
+  {label:"Infant", val:"8–10 Fr"},
+  {label:"Toddler", val:"10–12 Fr"},
+  {label:"Child", val:"12–14 Fr"},
+  {label:"Adolescent", val:"14–16 Fr"},
+];
+function ngIdx(days,w){
+  if(w!==null && w<1) return 0;
+  if(w!==null && w<2) return 1;
+  if(days!==null && days<=28) return (w!==null && w<5) ? 2 : 3;
+  if(days===null) return (w!==null && w<5) ? 2 : -1;
+  const y=days/DAYS_PER_YEAR;
+  if(y<1) return 4;
+  if(y<3) return 5;
+  if(y<12) return 6;
+  return 7;
+}
+
+const CHEST = [
+  {label:"Extremely premature under 1 kg", val:"8 Fr pigtail"},
+  {label:"1–3 kg", val:"8–10 Fr"},
+  {label:"Neonate", val:"10–12 Fr"},
+  {label:"Infant under 1 year", val:"12–16 Fr"},
+  {label:"Toddler", val:"16–20 Fr"},
+  {label:"Child", val:"20–24 Fr"},
+  {label:"Adolescent", val:"24–28 Fr"},
+];
+function chestIdx(days,w){
+  if(w!==null && w<1) return 0;
+  if(w!==null && w<3) return 1;
+  if(days!==null && days<=28) return 2;
+  if(days===null) return -1;
+  const y=days/DAYS_PER_YEAR;
+  if(y<1) return 3;
+  if(y<3) return 4;
+  if(y<12) return 5;
+  return 6;
+}
+
+function SizeTable({title, rows, matchIdx, color}){
+  return (
+    <div style={{marginBottom:16}}>
+      <div style={{fontSize:12,fontWeight:800,color:color,marginBottom:7}}>{title}</div>
+      <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden"}}>
+        {rows.map((r,i)=>{
+          const on = i===matchIdx;
+          return (
+            <div key={i} style={{display:"flex",justifyContent:"space-between",gap:10,padding:"9px 12px",
+              background:on?color+"1f":"transparent",
+              borderBottom:i<rows.length-1?"1px solid rgba(255,255,255,0.06)":"none"}}>
+              <span style={{fontSize:11.5,color:on?color:"#a0b0d0",fontWeight:on?700:500,lineHeight:1.45}}>
+                {r.label}{on?" ←":""}
+              </span>
+              <span style={{fontSize:11.5,fontWeight:700,color:on?color:"#e8f0fe",textAlign:"right",
+                flexShrink:0,maxWidth:"52%",lineHeight:1.45}}>{r.val}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ============================ VITAL SIGNS ===================================
+function ToolVitals({ctx}){
+  const days = ctx.days;
+  const idx = palsIdx(days);
+  const row = idx>=0 ? PALS_ROWS[idx] : null;
+  const hypo = hypoSBP(days);
+  const cell = {fontSize:11,padding:"8px 5px",textAlign:"center"};
+  const head = {...cell,fontSize:9,fontWeight:800,color:"#506070",letterSpacing:0.4,textTransform:"uppercase"};
+
+
+  return (
+    <div>
+      {days===null && <NeedCtx need="an age"/>}
+
+      {row && (
+        <div style={{background:"rgba(255,80,80,0.09)",border:"1px solid rgba(255,80,80,0.3)",
+          borderRadius:14,padding:"14px 15px",marginBottom:14}}>
+          <div style={{fontSize:11,fontWeight:800,color:"#ff5050",letterSpacing:1,textTransform:"uppercase",marginBottom:8}}>
+            This patient · {row.label}
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9}}>
+            {[["Heart rate",row.hr+" bpm"],["Resp rate",row.rr+" /min"],
+              ["MAP",row.map+" mmHg"],["Hypotension",hypo?`SBP < ${hypo.v} mmHg`:"—"]].map(([k,v])=>(
+              <div key={k}>
+                <div style={{fontSize:10,color:"#8090b0",marginBottom:2}}>{k}</div>
+                <div style={{fontSize:14,fontWeight:700,color:"#e8f0fe"}}>{v}</div>
+              </div>
+            ))}
+          </div>
+          {hypo && <div style={{fontSize:10,color:"#8090b0",marginTop:9,lineHeight:1.6}}>Hypotension threshold from the PALS rule for {hypo.rule}.</div>}
+        </div>
+      )}
+      {days!==null && !row && (
+        <div style={{background:"rgba(255,200,50,0.08)",border:"1px solid rgba(255,200,50,0.3)",borderRadius:14,padding:"15px",marginBottom:14}}>
+          <div style={{fontSize:12.5,fontWeight:700,color:"#ffc832",marginBottom:5}}>Outside the tabulated range</div>
+          <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.7}}>
+            The PALS bands below run to 15 years. At {ageLabel(days)} no row is highlighted.
+          </div>
+        </div>
+      )}
+
+      <div style={C.lbl}>PALS reference ranges</div>
+      <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:10}}>
+        <div style={{display:"grid",gridTemplateColumns:"1.5fr 1fr 0.85fr 0.95fr",background:"rgba(255,255,255,0.05)"}}>
+          <div style={{...head,textAlign:"left",paddingLeft:10}}>Age</div>
+          <div style={head}>HR</div>
+          <div style={head}>RR</div>
+          <div style={head}>MAP</div>
+        </div>
+        {PALS_ROWS.map((r,i)=>{
+          const on=i===idx;
+          return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"1.5fr 1fr 0.85fr 0.95fr",
+              background:on?"rgba(255,80,80,0.14)":"transparent",borderTop:"1px solid rgba(255,255,255,0.06)"}}>
+              <div style={{...cell,textAlign:"left",paddingLeft:10,color:on?"#ff5050":"#a0b0d0",fontWeight:on?700:500}}>{r.label}</div>
+              <div style={{...cell,color:"#e8f0fe"}}>{r.hr}</div>
+              <div style={{...cell,color:"#e8f0fe"}}>{r.rr}</div>
+              <div style={{...cell,color:"#e8f0fe"}}>{r.map}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{background:"rgba(77,184,255,0.07)",border:"1px solid rgba(77,184,255,0.25)",borderRadius:12,padding:"12px 13px",marginBottom:10}}>
+        <div style={{fontSize:11.5,color:"#a0b0d0",lineHeight:1.75}}>
+          For neonates, a quick estimate of normal MAP is the <strong style={{color:"#4db8ff"}}>gestational age in weeks</strong>.
+          {ctx.preterm && ctx.ga!==null && <span> At {fmt(ctx.ga,0)} weeks gestation that is roughly <strong style={{color:"#4db8ff"}}>{fmt(ctx.ga,0)} mmHg</strong>.</span>}
+        </div>
+      </div>
+
+      <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:12,padding:"12px 13px"}}>
+        <div style={{fontSize:11,color:"#8090b0",lineHeight:1.75}}>
+          Hypotension is defined as systolic BP below 60 mmHg under 1 month, below 70 mmHg from
+          1 month to 1 year, below 70 + (2 × age in years) from 1 to 10 years, and below 90 mmHg
+          at 10 years and over.
+        </div>
+      </div>
+
+      <Src>
+        PALS reference ranges and MAP values supplied by the app owner. Age bands are applied
+        contiguously so that no age falls between two rows. Heart rate figures are awake values.
+      </Src>
+    </div>
+  );
+}
+
+// ===================== ENDOTRACHEAL TUBE (app owner supplied) ==============
+const ETT_SIZES = [2.0,2.5,3.0,3.5,4.0,4.5,5.0,5.5,6.0,6.5,7.0,7.5,8.0];
+function roundETT(v){
+  let best=[], bestD=Infinity;
+  ETT_SIZES.forEach(s=>{
+    const d=Math.abs(s-v);
+    if(d < bestD-1e-9){ bestD=d; best=[s]; }
+    else if(Math.abs(d-bestD)<1e-9){ best.push(s); }
+  });
+  return best;
+}
+
+const ETT_NEO_UNCUFFED = [
+  {label:"Under 1 kg", val:"2.5 mm", lo:0, hi:1},
+  {label:"1–2 kg", val:"3.0 mm", lo:1, hi:2},
+  {label:"2–3 kg", val:"3.0–3.5 mm", lo:2, hi:3},
+  {label:"Over 3 kg", val:"3.5 mm", lo:3, hi:Infinity},
+];
+const ETT_NEO_CUFFED = [
+  {label:"Under 1 kg", val:"Usually avoid cuffed unless necessary", lo:0, hi:1},
+  {label:"1–2 kg", val:"2.5–3.0 mm microcuff", lo:1, hi:2},
+  {label:"2–3 kg", val:"3.0 mm microcuff", lo:2, hi:3},
+  {label:"Over 3 kg", val:"3.0–3.5 mm microcuff", lo:3, hi:Infinity},
+];
+const ETT_BY_WEIGHT = [
+  {label:"3–5 kg", val:"3.5–4.0", lo:3, hi:5},
+  {label:"5–10 kg", val:"4.0–4.5", lo:5, hi:10},
+  {label:"10–20 kg", val:"4.5–5.5", lo:10, hi:20},
+  {label:"20–30 kg", val:"5.5–6.0", lo:20, hi:30},
+  {label:"30–50 kg", val:"6.0–7.0", lo:30, hi:50},
+  {label:"Over 50 kg", val:"7.0–8.0", lo:50, hi:Infinity},
+];
+function wIdx(rows,w){ return w===null ? -1 : rows.findIndex(r=> w>=r.lo && w<r.hi); }
+
+function ETTSection({ctx,showMath}){
+  const [cuffed,setCuffed] = useState(false);
+  const [override,setOverride] = useState(null);
+  const {weight:w, days, preterm, cga} = ctx;
+
+  const autoNeo = days!==null && (days<=28 || (preterm && cga!==null && cga<=44));
+  const path = override || (autoNeo ? "neo" : "peds");
+
+  const neoRows = cuffed ? ETT_NEO_CUFFED : ETT_NEO_UNCUFFED;
+  const neoIdx = wIdx(neoRows, w);
+  const neoDepth = w===null ? null : 6 + w;
+
+  const yrs = days===null ? null : days/DAYS_PER_YEAR;
+  const raw = yrs===null ? null : (yrs/4) + (cuffed ? 3.5 : 4);
+  const rounded = raw===null ? null : roundETT(raw);
+
+  return (
+    <div style={{marginBottom:18}}>
+      <div style={{fontSize:12,fontWeight:800,color:"#a064ff",marginBottom:9}}>Endotracheal tube</div>
+
+      <div style={{display:"flex",gap:7,marginBottom:9,flexWrap:"wrap"}}>
+        {[[false,"Uncuffed"],[true,"Cuffed"]].map(([v,l])=>(
+          <button key={String(v)} style={C.chip(cuffed===v,"#a064ff")} onClick={()=>setCuffed(v)}>{l}</button>
+        ))}
+      </div>
+      <div style={{display:"flex",gap:7,marginBottom:8,flexWrap:"wrap"}}>
+        {[["neo","Neonatal (weight)"],["peds","Infant / child (age)"]].map(([v,l])=>(
+          <button key={v} style={C.chip(path===v,"#4db8ff")} onClick={()=>setOverride(v)}>{l}</button>
+        ))}
+      </div>
+      <div style={{fontSize:11,color:"#607090",lineHeight:1.6,marginBottom:12}}>
+        {days===null
+          ? "No age entered — pick the appropriate route above."
+          : (override && ((override==="neo")!==autoNeo)
+            ? `You have overridden the automatic choice (age ${ageLabel(days)}${preterm&&cga?`, CGA ${fmt(cga,1)} wk`:""} would select the ${autoNeo?"neonatal":"infant / child"} route).`
+            : `Selected automatically from age ${ageLabel(days)}${preterm&&cga?` and CGA ${fmt(cga,1)} weeks`:""}.`)}
+      </div>
+
+      {path==="neo" ? (
+        <div>
+          {w===null ? <NeedCtx need="a weight"/> : (
+            <div>
+              <Res label={cuffed?"Cuffed tube":"Uncuffed tube"}
+                value={neoIdx>=0 ? neoRows[neoIdx].val : "—"} unit=""
+                math={neoIdx>=0?`weight ${fmt(w,2)} kg → ${neoRows[neoIdx].label}`:null}
+                showMath={showMath} color="#a064ff"/>
+              <Res label="Depth at lip" value={fmt(neoDepth,1)} unit="cm"
+                math={`6 + ${fmt(w,2)} kg = ${fmt(neoDepth,1)} cm`} showMath={showMath} color="#a064ff"/>
+              <SizeTable title={cuffed?"Neonatal cuffed sizing":"Neonatal uncuffed sizing"}
+                rows={neoRows} matchIdx={neoIdx} color="#a064ff"/>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          {yrs===null ? <NeedCtx need="an age"/> : (
+            <div>
+              <Res label={cuffed?"Calculated (cuffed)":"Calculated (uncuffed)"} value={fmt(raw,2)} unit="mm ID"
+                math={`${fmt(yrs,2)} y ÷ 4 + ${cuffed?"3.5":"4"} = ${fmt(raw,3)} mm`}
+                showMath={showMath} color="#a064ff"/>
+              <Res label="Nearest available size"
+                value={rounded.map(x=>x.toFixed(1)).join(" or ")} unit="mm ID"
+                math={rounded.length>1?`${fmt(raw,2)} sits exactly between these two sizes`:`rounded from ${fmt(raw,2)} mm`}
+                showMath={showMath} color="#00e696"/>
+              <Res label="Depth at lip"
+                value={rounded.map(x=>fmt(3*x,1)).join(" or ")} unit="cm"
+                math={rounded.map(x=>`3 × ${x.toFixed(1)} = ${fmt(3*x,1)}`).join(" · ")}
+                showMath={showMath} color="#a064ff"/>
+            </div>
+          )}
+        </div>
+      )}
+
+      <SizeTable title="Weight cross-check — use if age is uncertain or size is atypical"
+        rows={ETT_BY_WEIGHT} matchIdx={wIdx(ETT_BY_WEIGHT,w)} color="#ffc832"/>
+
+      <div style={{background:"rgba(160,100,255,0.06)",border:"1px solid rgba(160,100,255,0.22)",
+        borderRadius:12,padding:"12px 13px",marginBottom:4}}>
+        <div style={{fontSize:11.5,color:"#a0b0d0",lineHeight:1.75}}>
+          Uncuffed uses the Cole formula, age ÷ 4 + 4; cuffed uses age ÷ 4 + 3.5. Depth is
+          3 × tube ID for infants and children, and 6 + weight in kg for neonates. All are
+          starting estimates — confirm placement clinically and radiographically.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ======================= AIRWAY & TUBE SIZES ================================
+function ToolSizes({ctx}){
+  const {days, weight:w, preterm} = ctx;
+  if(days===null && w===null) return <NeedCtx need="a weight or an age"/>;
+  return (
+    <div>
+      <div style={{fontSize:11.5,color:"#8090b0",lineHeight:1.7,marginBottom:14}}>
+        The row matching this patient is highlighted. The full table stays visible so you can see
+        the neighbouring sizes rather than only the match.
+      </div>
+
+      <ETTSection ctx={ctx} showMath={true}/>
+
+      <SizeTable title="Laryngoscope — Miller" rows={MILLER} color="#4db8ff"
+        matchIdx={millerIdx(days,w,preterm)}/>
+      <SizeTable title="Laryngoscope — Macintosh" rows={MAC} color="#4db8ff"
+        matchIdx={macIdx(days)}/>
+
+      <SizeTable title="Nasogastric / orogastric tube" rows={NGOG} color="#00e696"
+        matchIdx={ngIdx(days,w)}/>
+      <div style={{background:"rgba(0,230,150,0.06)",border:"1px solid rgba(0,230,150,0.22)",borderRadius:12,padding:"12px 13px",marginTop:-6,marginBottom:16}}>
+        <div style={{fontSize:11.5,color:"#a0b0d0",lineHeight:1.75}}>
+          For decompressive NG/OG tubes use the largest size tolerable by the patient for adequate
+          decompression. Assess the tube routinely for clogging or migration if output changes
+          abruptly in volume or character.
+        </div>
+      </div>
+
+      <SizeTable title="Chest tube" rows={CHEST} color="#ff5050"
+        matchIdx={chestIdx(days,w)}/>
+
+      <Src>
+        All sizes supplied by the app owner. Where a table mixes weight-based and age-based rows,
+        weight takes precedence for the smallest patients and age is used thereafter. These are
+        starting points, not substitutes for assessing the individual airway or chest.
+      </Src>
+    </div>
+  );
+}
+
+// ============================ BURN RESUSCITATION ============================
+const LB_AGES = ["0–1 y","1–4 y","5–9 y","10–14 y","15 y","Adult"];
+const LB_REGIONS = [
+  {n:"Head", p:[19,17,13,11,9,7]},
+  {n:"Neck", p:[2,2,2,2,2,2]},
+  {n:"Anterior trunk", p:[13,13,13,13,13,13]},
+  {n:"Posterior trunk", p:[13,13,13,13,13,13]},
+  {n:"Right buttock", p:[2.5,2.5,2.5,2.5,2.5,2.5]},
+  {n:"Left buttock", p:[2.5,2.5,2.5,2.5,2.5,2.5]},
+  {n:"Genitalia", p:[1,1,1,1,1,1]},
+  {n:"Right upper arm", p:[4,4,4,4,4,4]},
+  {n:"Left upper arm", p:[4,4,4,4,4,4]},
+  {n:"Right lower arm", p:[3,3,3,3,3,3]},
+  {n:"Left lower arm", p:[3,3,3,3,3,3]},
+  {n:"Right hand", p:[2.5,2.5,2.5,2.5,2.5,2.5]},
+  {n:"Left hand", p:[2.5,2.5,2.5,2.5,2.5,2.5]},
+  {n:"Right thigh", p:[5.5,6.5,8,8.5,9,9.5]},
+  {n:"Left thigh", p:[5.5,6.5,8,8.5,9,9.5]},
+  {n:"Right leg", p:[5,5,5.5,6,6.5,7]},
+  {n:"Left leg", p:[5,5,5.5,6,6.5,7]},
+  {n:"Right foot", p:[3.5,3.5,3.5,3.5,3.5,3.5]},
+  {n:"Left foot", p:[3.5,3.5,3.5,3.5,3.5,3.5]},
+];
+function lbBand(days){
+  if(days===null) return 5;
+  const y=days/DAYS_PER_YEAR;
+  if(y<1) return 0; if(y<5) return 1; if(y<10) return 2;
+  if(y<15) return 3; if(y<16) return 4; return 5;
+}
+function burnPhase(total, elapsed, given){
+  const half = total/2;
+  if(elapsed===null) return null;
+  if(elapsed < 8){
+    const rem = Math.max(0, half - (given===null?0:given));
+    const left = 8 - elapsed;
+    return {label:"First half — due by 8 h from injury", target:half, rem, left,
+      rate: left>0 ? rem/left : null, assumed: given===null};
+  }
+  if(elapsed < 24){
+    const alreadyAssumed = given===null ? half : given;
+    const rem = Math.max(0, total - alreadyAssumed);
+    const left = 24 - elapsed;
+    return {label:"Second half — due by 24 h from injury", target:total, rem, left,
+      rate: left>0 ? rem/left : null, assumed: given===null};
+  }
+  return {label:"More than 24 hours from injury", past:true};
+}
+
+function ToolBurn({ctx,showMath}){
+  const [useManual,setUseManual] = useState(false);
+  const [manual,setManual] = useState("");
+  const [frac,setFrac] = useState({});
+  const [elapsed,setElapsed] = useState("");
+  const [preArrival,setPreArrival] = useState("");
+  const [given,setGiven] = useState("");
+  const {weight:w, days} = ctx;
+  if(w===null) return <NeedCtx need="a weight"/>;
+
+  const band = lbBand(days);
+  const lbTotal = LB_REGIONS.reduce((s,r,i)=> s + r.p[band]*((frac[i]||0)/100), 0);
+  const tbsa = useManual ? (num(manual)||0) : lbTotal;
+
+  const total = 3*w*tbsa;
+  const pre = num(preArrival), since = num(given);
+  const totalGiven = (pre===null && since===null) ? null : (pre||0) + (since||0);
+  const ph = burnPhase(total, num(elapsed), totalGiven);
+  const mivf = w>=3 ? hsRate(w) : null;
+  const mFluid = days!==null && days<=28 ? "D5 ½NS" : "D5 NS";
+
+  const chip=(i,v)=>(
+    <button key={v} onClick={()=>setFrac(p=>({...p,[i]:v}))}
+      style={{...C.chip((frac[i]||0)===v,"#ff9632"),padding:"3px 8px",fontSize:10}}>{v}</button>
+  );
+
+  return (
+    <div>
+      <div style={{background:"rgba(255,150,50,0.12)",border:"1px solid rgba(255,150,50,0.44)",
+        borderRadius:14,padding:"14px 16px",marginBottom:14,textAlign:"center"}}>
+        <div style={{fontSize:11,fontWeight:800,color:"#ff9632",letterSpacing:1,textTransform:"uppercase",marginBottom:5}}>Total body surface area burned</div>
+        <div style={{fontSize:34,fontWeight:800,color:"#ff9632",lineHeight:1}}>{fmt(tbsa,1)}<span style={{fontSize:18}}>%</span></div>
+      </div>
+
+      <div style={{display:"flex",gap:7,marginBottom:12}}>
+        {[[false,"Lund-Browder"],[true,"Enter %TBSA directly"]].map(([v,l])=>(
+          <button key={String(v)} style={C.chip(useManual===v,"#ff9632")} onClick={()=>setUseManual(v)}>{l}</button>
+        ))}
+      </div>
+
+      {useManual ? (
+        <NumIn label="Total body surface area burned" value={manual} onChange={setManual} unit="%"/>
+      ) : (
+        <div>
+          <div style={{fontSize:11,color:"#8090b0",lineHeight:1.65,marginBottom:10}}>
+            Age band <strong style={{color:"#ff9632"}}>{LB_AGES[band]}</strong>
+            {days===null ? " (no age entered — adult column shown)" : ` from age ${ageLabel(days)}`}.
+            Pick the portion of each region involved.
+          </div>
+          <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:10}}>
+            {LB_REGIONS.map((r,i)=>{
+              const contrib = r.p[band]*((frac[i]||0)/100);
+              return (
+                <div key={i} style={{padding:"7px 10px",borderBottom:i<LB_REGIONS.length-1?"1px solid rgba(255,255,255,0.06)":"none",
+                  background:contrib>0?"rgba(255,150,50,0.08)":"transparent"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+                    <span style={{fontSize:11.5,color:contrib>0?"#ff9632":"#a0b0d0",fontWeight:contrib>0?700:500}}>{r.n}</span>
+                    <span style={{fontSize:10.5,color:"#607090"}}>
+                      {r.p[band]}%{contrib>0?` → ${fmt(contrib,2)}%`:""}
+                    </span>
+                  </div>
+                  <div style={{display:"flex",gap:5}}>{[0,25,50,75,100].map(v=>chip(i,v))}</div>
+                </div>
+              );
+            })}
+          </div>
+          {lbTotal>0 && (
+            <button onClick={()=>setFrac({})}
+              style={{width:"100%",background:"rgba(255,80,80,0.12)",border:"1px solid rgba(255,80,80,0.3)",
+                borderRadius:11,padding:"9px",fontSize:12,fontWeight:700,color:"#ff9090",
+                cursor:"pointer",fontFamily:"inherit",marginBottom:12}}>Clear all regions</button>
+          )}
+        </div>
+      )}
+
+      <div style={C.lbl}>Resuscitation</div>
+      <NumIn label="Hours since injury" value={elapsed} onChange={setElapsed} unit="hours" placeholder="e.g. 3"/>
+      <NumIn label="Fluids received before arrival" value={preArrival} onChange={setPreArrival} unit="mL" placeholder="EMS, referring hospital"/>
+      <NumIn label="Fluids given since arrival" value={given} onChange={setGiven} unit="mL"/>
+      {totalGiven!==null && (
+        <div style={{fontSize:11.5,color:"#a0b0d0",marginTop:-4,marginBottom:12,lineHeight:1.6}}>
+          Counting <strong style={{color:"#ff9632"}}>{fmt(totalGiven,0)} mL</strong> already received
+          {pre!==null && since!==null ? ` (${fmt(pre,0)} before arrival + ${fmt(since,0)} since)` : ""}.
+        </div>
+      )}
+
+      {tbsa>0 && (
+        <div>
+          <Res label="Modified Parkland, 24 h total" value={fmt(total,0)} unit="mL"
+            math={`3 × ${fmt(w,2)} kg × ${fmt(tbsa,1)}% = ${fmt(total,0)} mL`} showMath={showMath} color="#ff9632"/>
+          <Res label="First 8 h from injury" value={fmt(total/2,0)} unit="mL"
+            math={`half of ${fmt(total,0)} mL`} showMath={showMath} color="#ff9632"/>
+          <Res label="Next 16 h" value={fmt(total/2,0)} unit="mL"
+            math={`remaining half, to 24 h from injury`} showMath={showMath} color="#ff9632"/>
+
+          {ph && !ph.past && (
+            <div style={{background:"rgba(255,150,50,0.09)",border:"1px solid rgba(255,150,50,0.32)",
+              borderRadius:13,padding:"13px 14px",marginBottom:10}}>
+              <div style={{fontSize:11,fontWeight:800,color:"#ff9632",letterSpacing:0.5,textTransform:"uppercase",marginBottom:7}}>{ph.label}</div>
+              <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.8}}>
+                {fmt(ph.rem,0)} mL still to run over {fmt(ph.left,1)} h
+                {ph.assumed && <span style={{color:"#c8b070"}}> (no volume entered, so this assumes {ph.label.startsWith("First") ? "nothing has run yet" : "the first half was delivered on schedule"} — enter what has been given to refine)</span>}
+              </div>
+              <div style={{fontSize:24,fontWeight:800,color:"#ff9632",marginTop:7}}>
+                {fmt(ph.rate,0)} <span style={{fontSize:13,color:"#8090b0"}}>mL/hr lactated Ringer's</span>
+              </div>
+            </div>
+          )}
+          {ph && ph.past && (
+            <div style={{background:"rgba(255,200,50,0.08)",border:"1px solid rgba(255,200,50,0.3)",borderRadius:13,padding:"13px 14px",marginBottom:10}}>
+              <div style={{fontSize:12,color:"#c8b070",lineHeight:1.75}}>
+                More than 24 hours from injury — the Parkland window has closed. Continue on ongoing
+                losses and clinical endpoints rather than this formula.
+              </div>
+            </div>
+          )}
+
+          <div style={C.lbl}>Maintenance, in addition</div>
+          {mivf===null ? (
+            <div style={{background:"rgba(255,80,80,0.09)",border:"1px solid rgba(255,80,80,0.32)",borderRadius:13,padding:"13px 14px",marginBottom:10}}>
+              <div style={{fontSize:12.5,fontWeight:800,color:"#ff5050",marginBottom:5}}>Under 3 kg — maintenance not calculated</div>
+              <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.75}}>
+                Holliday-Segar does not apply below 3 kg. The Parkland volume above still stands, but
+                the maintenance component needs day-of-life based dosing instead.
+              </div>
+            </div>
+          ) : (
+            <div>
+              <Res label={"Maintenance ("+mFluid+")"} value={fmt(mivf,1)} unit="mL/hr"
+                math={`Holliday-Segar for ${fmt(w,2)} kg; ${mFluid} because the patient is ${days!==null&&days<=28?"28 days or younger":"over 28 days"}`}
+                showMath={showMath} color="#a064ff"/>
+              {ph && !ph.past && ph.rate!==null && (
+                <Res label="Combined running rate" value={fmt(ph.rate+mivf,0)} unit="mL/hr"
+                  math={`${fmt(ph.rate,0)} mL/hr LR + ${fmt(mivf,1)} mL/hr ${mFluid}`}
+                  showMath={showMath} color="#00e696"/>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      <Src>
+        Modified Parkland at 3 mL/kg/%TBSA with maintenance added, per the app owner. Half the
+        Parkland volume is due within 8 hours of INJURY and the remainder by 24 hours; the rate
+        shown accounts for time already elapsed. Lactated Ringer's for resuscitation; D5 ½NS at
+        28 days or under and D5 NS thereafter. Lund-Browder percentages are age-adjusted and every
+        age column sums to 100 — confirm against your burn service's chart. Formula output is a
+        starting point; titrate to urine output and clinical endpoints.
+      </Src>
+    </div>
+  );
+}
+
+// ========================= SHORT BOWEL ANATOMY ==============================
+const SB_FETAL = [ {x:20, lo:125, hi:125}, {x:30, lo:200, hi:200}, {x:40, lo:250, hi:275} ];
+const SB_POST = [ {x:0, lo:250, hi:275}, {x:1, lo:380, hi:380}, {x:5, lo:450, hi:450},
+  {x:10, lo:500, hi:500}, {x:20, lo:575, hi:600} ];
+function sbInterp(anchors, x){
+  const first=anchors[0], last=anchors[anchors.length-1];
+  if(x<=first.x) return {lo:first.lo, hi:first.hi, clamped:"below"};
+  if(x>=last.x) return {lo:last.lo, hi:last.hi, clamped:"above"};
+  for(let i=0;i<anchors.length-1;i++){
+    const a=anchors[i], b=anchors[i+1];
+    if(x>=a.x && x<=b.x){
+      const t=(x-a.x)/(b.x-a.x);
+      return {lo:a.lo+t*(b.lo-a.lo), hi:a.hi+t*(b.hi-a.hi), between:[a.x,b.x]};
+    }
+  }
+}
+
+function ToolShortBowel({ctx,showMath}){
+  const [len,setLen] = useState("");
+  const [icv,setIcv] = useState(null);
+  const [colon,setColon] = useState(null);
+  const {days, preterm, ga, cga} = ctx;
+
+  const useFetal = preterm && cga!==null && cga < 40;
+  const correctedYears = days===null ? null
+    : (preterm && ga!==null ? (days - (40-ga)*7)/DAYS_PER_YEAR : days/DAYS_PER_YEAR);
+  const x = useFetal ? cga : correctedYears;
+  const exp = x===null ? null : sbInterp(useFetal?SB_FETAL:SB_POST, x);
+
+  const L = num(len);
+  const pctLo = (L===null||!exp) ? null : L/exp.hi*100;
+  const pctHi = (L===null||!exp) ? null : L/exp.lo*100;
+
+
+  const Tri = ({label,val,set}) => (
+    <div style={{marginBottom:10}}>
+      <div style={{fontSize:11,fontWeight:700,color:"#8090b0",marginBottom:5}}>{label}</div>
+      <div style={{display:"flex",gap:7}}>
+        {[[true,"Present"],[false,"Absent"],[null,"Not recorded"]].map(([v,l])=>(
+          <button key={String(v)} style={C.chip(val===v,"#a064ff")} onClick={()=>set(v)}>{l}</button>
+        ))}
+      </div>
+    </div>
+  );
+
+  if(days===null) return <NeedCtx need="an age"/>;
+
+  return (
+    <div>
+      <NumIn label="Remaining small bowel length" value={len} onChange={setLen} unit="cm" placeholder="e.g. 60"/>
+
+      {exp && (
+        <div>
+          <Res label="Expected length for age"
+            value={exp.lo===exp.hi ? fmt(exp.lo,0) : `${fmt(exp.lo,0)}–${fmt(exp.hi,0)}`} unit="cm"
+            math={useFetal
+              ? `interpolated on the fetal curve at CGA ${fmt(cga,1)} weeks`
+              : `interpolated at ${fmt(correctedYears,2)} years${preterm?" corrected age":""}` +
+                (exp.between?` (between the ${exp.between[0]} and ${exp.between[1]} year anchors)`:"") +
+                (exp.clamped?` (clamped at the ${exp.clamped==="above"?"adult":"birth"} anchor)`:"")}
+            showMath={showMath} color="#4db8ff"/>
+          {L!==null && (
+            <Res label="Remaining as a proportion of expected"
+              value={fmt(pctLo,1)===fmt(pctHi,1) ? fmt(pctLo,1) : `${fmt(pctLo,1)}–${fmt(pctHi,1)}`} unit="%"
+              math={`${fmt(L,0)} cm ÷ ${exp.lo===exp.hi ? fmt(exp.lo,0) : fmt(exp.hi,0)+"–"+fmt(exp.lo,0)} cm`}
+              showMath={showMath} color="#a064ff"/>
+          )}
+        </div>
+      )}
+
+      <div style={{...C.lbl,marginTop:14}}>Anatomy</div>
+      <Tri label="Ileocecal valve" val={icv} set={setIcv}/>
+      <Tri label="Colon in continuity" val={colon} set={setColon}/>
+      {(icv!==null || colon!==null) && (
+        <div style={{background:"rgba(160,100,255,0.07)",border:"1px solid rgba(160,100,255,0.25)",
+          borderRadius:12,padding:"12px 13px",marginBottom:10}}>
+          <div style={{fontSize:12,color:"#a0b0d0",lineHeight:1.8}}>
+            {icv!==null && <div>Ileocecal valve: <strong style={{color:"#a064ff"}}>{icv?"present":"absent"}</strong></div>}
+            {colon!==null && <div>Colon in continuity: <strong style={{color:"#a064ff"}}>{colon?"yes":"no"}</strong></div>}
+          </div>
+        </div>
+      )}
+
+      <div style={{...C.lbl,marginTop:6}}>Reference lengths</div>
+      <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:10}}>
+        {[["20 weeks gestation","125 cm"],["30 weeks gestation","200 cm"],["Term birth","250–275 cm"],
+          ["1 year","380 cm"],["5 years","450 cm"],["10 years","500 cm"],["20 years and over","575–600 cm"]].map(([k,v],i,a)=>(
+          <div key={k} style={{display:"flex",justifyContent:"space-between",padding:"8px 12px",
+            borderBottom:i<a.length-1?"1px solid rgba(255,255,255,0.06)":"none"}}>
+            <span style={{fontSize:11.5,color:"#a0b0d0"}}>{k}</span>
+            <span style={{fontSize:11.5,color:"#e8f0fe",fontWeight:600}}>{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <Src>
+        Expected lengths supplied by the app owner; values between the anchors above are linearly
+        interpolated, and the term and adult ranges produce a range for both the expected length
+        and the percentage. Infants born preterm are read on the fetal curve below 40 weeks CGA and
+        at corrected age thereafter. Ileocecal valve and colon continuity are recorded for context
+        only — no prognostic weighting is applied to the percentage.
+      </Src>
+    </div>
+  );
+}
+
+// ================================ PELD ======================================
+const PELD_C = {bili:4.80, inr:18.57, alb:-6.87, infant:4.36, growth:6.67};
+
+function ToolPELD({ctx,showMath}){
+  const [bili,setBili] = useState("");
+  const [inr,setInr] = useState("");
+  const [alb,setAlb] = useState("");
+  const [growth,setGrowth] = useState(false);
+  const days = ctx.days;
+  if(days===null) return <NeedCtx need="an age"/>;
+  const infant = days < DAYS_PER_YEAR;
+
+  const b=num(bili), i=num(inr), a=num(alb);
+  const ready = b!==null&&b>0 && i!==null&&i>0 && a!==null&&a>0;
+  const raised = ready ? [b<1&&"bilirubin", i<1&&"INR", a<1&&"albumin"].filter(Boolean) : [];
+
+  const score = () => {
+    const B = Math.max(1,b), I = Math.max(1,i), A = Math.max(1,a);
+    const t = [
+      {k:"Bilirubin", v:PELD_C.bili*Math.log(B), why:`4.80 × ln(${fmt(B,2)}) = ${fmt(PELD_C.bili*Math.log(B),3)}`},
+      {k:"INR", v:PELD_C.inr*Math.log(I), why:`18.57 × ln(${fmt(I,2)}) = ${fmt(PELD_C.inr*Math.log(I),3)}`},
+      {k:"Albumin", v:PELD_C.alb*Math.log(A), why:`−6.87 × ln(${fmt(A,2)}) = ${fmt(PELD_C.alb*Math.log(A),3)}`},
+      {k:"Age under 1 y", v:infant?PELD_C.infant:0, why:infant?"4.36":`age ${ageLabel(days)} — no term`},
+      {k:"Growth failure", v:growth?PELD_C.growth:0, why:growth?"6.67":"not present"},
+    ];
+    return {terms:t, total:t.reduce((s,x)=>s+x.v,0)};
+  };
+  const shown = ready ? score() : null;
+
+  return (
+    <div>
+      {shown && (
+        <div style={{background:"rgba(0,230,150,0.12)",border:"1px solid rgba(0,230,150,0.44)",
+          borderRadius:14,padding:"15px 16px",marginBottom:14,textAlign:"center"}}>
+          <div style={{fontSize:11,fontWeight:800,color:"#00e696",letterSpacing:1,textTransform:"uppercase",marginBottom:6}}>PELD score</div>
+          <div style={{fontSize:38,fontWeight:800,color:"#00e696",lineHeight:1}}>{Math.round(shown.total)}</div>
+          <div style={{fontSize:12,color:"#8090b0",marginTop:5}}>calculated {fmt(shown.total,2)}, rounded to the nearest whole number</div>
+        </div>
+      )}
+
+      <NumIn label="Total bilirubin" value={bili} onChange={setBili} unit="mg/dL" placeholder="e.g. 5.0"/>
+      <NumIn label="INR" value={inr} onChange={setInr} unit="" placeholder="e.g. 1.5"/>
+      <NumIn label="Albumin" value={alb} onChange={setAlb} unit="g/dL" placeholder="e.g. 2.8"/>
+
+      <div style={{marginBottom:12}}>
+        <div style={{fontSize:11,fontWeight:700,color:"#8090b0",marginBottom:5}}>Growth failure</div>
+        <div style={{display:"flex",gap:7}}>
+          {[[true,"Present"],[false,"Absent"]].map(([v,l])=>(
+            <button key={String(v)} style={C.chip(growth===v,"#00e696")} onClick={()=>setGrowth(v)}>{l}</button>
+          ))}
+        </div>
+        <div style={{fontSize:11,color:"#607090",marginTop:6,lineHeight:1.6}}>
+          Height or weight more than 2 standard deviations below the mean.
+        </div>
+      </div>
+
+      <div style={{background:"rgba(77,184,255,0.07)",border:"1px solid rgba(77,184,255,0.25)",
+        borderRadius:12,padding:"11px 13px",marginBottom:12}}>
+        <div style={{fontSize:11.5,color:"#a0b0d0",lineHeight:1.7}}>
+          Age term applied automatically: <strong style={{color:"#4db8ff"}}>{infant?"under 1 year — 4.36 added":"1 year or older — no age term"}</strong> from the age entered above.
+        </div>
+      </div>
+
+      {raised.length>0 && (
+        <div style={{background:"rgba(255,200,50,0.08)",border:"1px solid rgba(255,200,50,0.32)",
+          borderRadius:12,padding:"12px 13px",marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:700,color:"#ffc832",marginBottom:5}}>
+            Raised to 1.0 before calculating: {raised.join(", ")}
+          </div>
+          <div style={{fontSize:11.5,color:"#a0b0d0",lineHeight:1.75}}>
+            OPTN convention treats any laboratory value below 1.0 as 1.0, so the score below uses
+            1.0 rather than the figure entered.
+          </div>
+        </div>
+      )}
+
+      {showMath && shown && (
+        <div>
+          <div style={C.lbl}>Score terms</div>
+          <div style={{border:"1px solid rgba(255,255,255,0.09)",borderRadius:12,overflow:"hidden",marginBottom:10}}>
+            {shown.terms.map((t,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",gap:10,padding:"8px 11px",
+                borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+                <div style={{minWidth:0}}>
+                  <div style={{fontSize:11.5,color:"#e8f0fe"}}>{t.k}</div>
+                  <div style={{fontSize:10,color:"#607090",lineHeight:1.5,fontFamily:"ui-monospace,Menlo,monospace"}}>{t.why}</div>
+                </div>
+                <span style={{fontSize:12,fontWeight:700,flexShrink:0,
+                  color:t.v>0?"#00e696":(t.v<0?"#ff9090":"#607090")}}>
+                  {t.v>0?"+":""}{fmt(t.v,3)}
+                </span>
+              </div>
+            ))}
+            <div style={{display:"flex",justifyContent:"space-between",padding:"9px 11px",background:"rgba(0,230,150,0.10)"}}>
+              <span style={{fontSize:12,fontWeight:800,color:"#00e696"}}>PELD</span>
+              <span style={{fontSize:12,fontWeight:800,color:"#00e696"}}>{fmt(shown.total,3)}</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",
+        borderRadius:12,padding:"12px 13px",marginBottom:6}}>
+        <div style={{fontSize:11,color:"#8090b0",lineHeight:1.75}}>
+          A negative score is still expected when the laboratory values are near normal. Flooring
+          the laboratory values at 1.0 bounds the bilirubin and INR terms at zero, but the albumin
+          term is negative by construction and grows more negative as albumin rises. The score is
+          reported as calculated rather than clamped to zero.
+        </div>
+      </div>
+
+      <Src>
+        Coefficients supplied by the app owner, already scaled by 10 so the expression yields the
+        score directly. Bilirubin in mg/dL, albumin in g/dL, INR unitless. Laboratory values below
+        1.0 are raised to 1.0 before the logarithm is taken, per OPTN convention. Growth failure is
+        height or weight more than 2 standard deviations below the mean. This calculates a score
+        only — it does not reproduce OPTN allocation logic, exception points or status rules.
+      </Src>
+    </div>
+  );
+}
+
+// ============================== TOOLS SHELL =================================
 function Tools({onHome,settings,pageRef}){
   const [open,setOpen] = useState(null);
   const [weight,setWeight] = useState("");
@@ -326,7 +2047,7 @@ function Tools({onHome,settings,pageRef}){
   const [preterm,setPreterm] = useState(false);
   const [ga,setGa] = useState("");
   const [showMath,setShowMath] = useState(true);
-  const [ctxOpen,setCtxOpen] = useState(true);
+  const [ctxOpen,setCtxOpen] = useState(false);
   const [resetSeq,setResetSeq] = useState(0);
 
   useEffect(() => {
@@ -343,6 +2064,7 @@ function Tools({onHome,settings,pageRef}){
 
   const visibleTools = TOOL_LIST.filter(t=>settings.tools[t.id]);
   const tool = TOOL_LIST.find(t=>t.id===open);
+  const patient = {weight, setWeight, ageVal, ageUnit, setAgeVal, setAgeUnit, preterm, setPreterm, ga, setGa, cga: ctx.cga};
   const body = !tool ? null
     : tool.id==="io" ? <ToolIO ctx={ctx} showMath={showMath}/>
     : tool.id==="feeds" ? <ToolFeeds ctx={ctx} showMath={showMath}/>
@@ -368,19 +2090,24 @@ function Tools({onHome,settings,pageRef}){
         {tool ? "← All Tools" : "← Home"}
       </button>
 
-      <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🧮 Clinical Tools</div>
+      <div style={{display:"flex",alignItems:"center",gap:11,marginBottom:2}}>
+        {tool && <div style={{width:38,height:38,borderRadius:11,background:tool.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:19,flexShrink:0}}>{renderToolIcon(tool.icon,tool.cl)}</div>}
+        <div style={{fontSize:tool?20:24,fontWeight:800,lineHeight:1.15,color:tool?tool.cl:"#e8f0fe"}}>{tool ? tool.name : "🧮 Clinical Tools"}</div>
+      </div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>
-        {tool ? tool.name : "Enter the patient once — every tool uses it"}
+        {tool ? tool.sub : "Enter the patient once — every tool uses it"}
       </div>
 
+      {!tool && (
       <div style={{background:"rgba(77,184,255,0.07)",border:"1px solid rgba(77,184,255,0.28)",borderRadius:14,padding:"13px 14px",marginBottom:14}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}} onClick={()=>setCtxOpen(!ctxOpen)}>
           <div>
-            <div style={{fontSize:12,fontWeight:800,color:"#4db8ff",letterSpacing:1,textTransform:"uppercase"}}>Patient</div>
+            <div style={{fontSize:12,fontWeight:800,color:"#4db8ff",letterSpacing:1,textTransform:"uppercase"}}>Patient Data</div>
             {!ctxOpen && (
               <div style={{fontSize:12,color:"#a0b0d0",marginTop:3}}>
-                {ctx.weight!==null?fmt(ctx.weight,2)+" kg":"no weight"} · {days!==null?ageLabel(days):"no age"}
-                {preterm&&ctx.cga?` · CGA ${fmt(ctx.cga,1)} wk`:""}
+                {ctx.weight===null && days===null
+                  ? "Tap to enter weight & age"
+                  : <span>{ctx.weight!==null?fmt(ctx.weight,2)+" kg":"no weight"} · {days!==null?ageLabel(days):"no age"}{preterm&&ctx.cga?` · CGA ${fmt(ctx.cga,1)} wk`:""}</span>}
               </div>
             )}
           </div>
@@ -391,14 +2118,12 @@ function Tools({onHome,settings,pageRef}){
           <div style={{marginTop:12}}>
             <NumIn label="Weight" value={weight} onChange={setWeight} unit="kg" placeholder="e.g. 12.4"/>
             <div style={{fontSize:11,fontWeight:700,color:"#8090b0",marginBottom:4}}>Age</div>
-            <div style={{display:"flex",gap:8,alignItems:"center",marginBottom:10}}>
-              <input type="number" inputMode="decimal" value={ageVal} placeholder="e.g. 3"
-                onChange={e=>setAgeVal(e.target.value)} style={{...C.inp,marginBottom:0,flex:1,fontSize:16}}/>
-              <div style={{display:"flex",gap:5}}>
-                {["days","months","years"].map(u=>(
-                  <button key={u} style={{...C.chip(u===ageUnit,"#4db8ff"),padding:"5px 9px"}} onClick={()=>setAgeUnit(u)}>{u}</button>
-                ))}
-              </div>
+            <input type="number" inputMode="decimal" value={ageVal} placeholder="e.g. 3"
+              onChange={e=>setAgeVal(e.target.value)} style={{...C.inp,marginBottom:8,width:"100%",fontSize:16}}/>
+            <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
+              {["days","weeks","months","years"].map(u=>(
+                <button key={u} style={{...C.chip(u===ageUnit,"#4db8ff"),padding:"5px 11px"}} onClick={()=>setAgeUnit(u)}>{u}</button>
+              ))}
             </div>
 
             <div style={{display:"flex",alignItems:"center",gap:9,marginBottom:preterm?10:4,cursor:"pointer"}} onClick={()=>setPreterm(!preterm)}>
@@ -419,11 +2144,14 @@ function Tools({onHome,settings,pageRef}){
               </button>
             </div>
             <div style={{fontSize:10,color:"#506070",marginTop:9,lineHeight:1.6}}>
-              No patient information is saved. It is held only while this screen is open and is erased by Clear or by going back to Home.
+              No patient information is saved. It is held only while this screen is open and is
+              erased by Clear or by going back to Home.
             </div>
           </div>
         )}
       </div>
+      )}
+      {tool && TOOL_NEEDS[tool.id] && <PatientInputs need={TOOL_NEEDS[tool.id]} patient={patient} color={tool.cl}/>}
 
       {!tool ? (
         <div>
@@ -436,7 +2164,7 @@ function Tools({onHome,settings,pageRef}){
                 {inGroup.map(t=>(
                   <div key={t.id} onClick={()=>setOpen(t.id)}
                     style={{...C.card,display:"flex",alignItems:"center",gap:13,background:t.cl+"0d",border:"1px solid "+t.cl+"33"}}>
-                    <div style={{width:44,height:44,borderRadius:12,background:t.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{t.icon}</div>
+                    <div style={{width:44,height:44,borderRadius:12,background:t.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{renderToolIcon(t.icon,t.cl)}</div>
                     <div style={{flex:1,minWidth:0}}>
                       <div style={{fontSize:13.5,fontWeight:700,color:t.cl,marginBottom:2}}>{t.name}</div>
                       <div style={{fontSize:11,color:"#8090b0",lineHeight:1.45}}>{t.sub}</div>
@@ -454,13 +2182,14 @@ function Tools({onHome,settings,pageRef}){
           )}
           <div style={{background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:13,padding:"13px 14px",marginTop:14}}>
             <div style={{fontSize:11,color:"#8090b0",lineHeight:1.75}}>
-              These tools are calculation aids. Each one shows its formula and its source so it can be checked. They do not replace clinical judgement.
+              These tools are calculation aids. Each one shows its formula and its source so it
+              can be checked. They do not replace clinical judgement, and several use values
+              specific to one institution rather than a published standard — those are labelled.
             </div>
           </div>
         </div>
       ) : (
         <div>
-          <div style={{width:44,height:44,borderRadius:12,background:tool.cl+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,marginBottom:12}}>{tool.icon}</div>
           <div key={resetSeq}>{body}</div>
         </div>
       )}
@@ -521,15 +2250,17 @@ function Nat({onHome}) {
   );
 }
 
-function Videos({onHome}) {
+function Videos({onHome, settings}) {
+  const vsrc = (settings && settings.videoSources) || {};
+  const sources = VIDEO_SOURCES.filter(s => vsrc[s.name] !== false);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>▶️ Surgery Videos</div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>APSA Expert — curated video libraries</div>
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginBottom:12}}>VIDEO SOURCES</div>
-      {VIDEO_SOURCES.map((src,i) => (
+      {sources.length > 0 && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginBottom:12}}>VIDEO SOURCES</div>}
+      {sources.map((src,i) => (
         <a key={i} href={src.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"flex-start",gap:12,textDecoration:"none",color:"inherit"}}>
           <div style={{width:44,height:44,borderRadius:10,background:"rgba(255,255,255,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{src.icon}</div>
           <div style={{flex:1}}>
@@ -556,13 +2287,15 @@ function Videos({onHome}) {
   );
 }
 
-function Podcasts({onHome}) {
+function Podcasts({onHome, settings}) {
+  const pt = (settings && settings.podcasts) || {};
+  const pods = PODS.filter(p => pt[p.title] !== false);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🎙️ Podcasts</div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery education series</div>
-      {PODS.map((p,i) => (
+      {pods.map((p,i) => (
         <div key={i} style={{...C.card,borderTop:"2px solid "+p.color}}>
           <div style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:8}}>
             <div style={{fontSize:24}}>{p.icon}</div>
@@ -655,13 +2388,15 @@ function Research({onHome}) {
   );
 }
 
-function SocialMedia({onHome}) {
+function SocialMedia({onHome, settings}) {
+  const st = (settings && settings.socials) || {};
+  const socials = SOCIAL.filter(s => st[s.org+" "+s.platform] !== false);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>📱 Social Media</div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations online</div>
-      {SOCIAL.map((s,i)=>(
+      {socials.map((s,i)=>(
         <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit"}}>
           <div style={{width:44,height:44,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{s.icon}</div>
           <div style={{flex:1,minWidth:0}}>
@@ -676,13 +2411,15 @@ function SocialMedia({onHome}) {
   );
 }
 
-function Societies({onHome}) {
+function Societies({onHome, settings}) {
+  const stg = (settings && settings.societies) || {};
+  const socs = SOCIETIES.filter(s => stg[s.name] !== false);
   return (
     <div>
       <button style={C.back()} onClick={onHome}>← Home</button>
       <div style={{fontSize:24,fontWeight:800,marginBottom:2}}>🏛️ Societies</div>
       <div style={{fontSize:13,color:"#607090",marginBottom:14}}>Pediatric surgery organizations worldwide</div>
-      {SOCIETIES.map((s,i)=>(
+      {socs.map((s,i)=>(
         <a key={i} href={s.url} target="_blank" rel="noreferrer" style={{...C.card,display:"flex",alignItems:"center",gap:13,textDecoration:"none",color:"inherit",background:s.color+"0d",border:"1px solid "+s.color+"33"}}>
           <div style={{width:46,height:46,borderRadius:12,background:s.color+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:s.color,flexShrink:0}}>{s.name}</div>
           <div style={{flex:1,minWidth:0}}>
@@ -740,9 +2477,9 @@ function Home({onNav,settings}) {
         </div>
       </div>
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginBottom:12}}>QUICK ACCESS</div>
+      {(settings.home.apsaWebsite || settings.home.apsaNat || settings.home.clinicalTools || settings.home.forFamilies || settings.home.societies || settings.home.socialMedia || settings.home.virtualPediSurgeon) && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginBottom:12}}>QUICK ACCESS</div>}
 
-      <div style={card2col}>
+      <div style={{...card2col, gridTemplateColumns:(settings.home.apsaWebsite && settings.home.apsaNat)?"1fr 1fr":"1fr"}}>
         {settings.home.apsaWebsite && (
           <a href="https://www.apsapedsurg.org" target="_blank" rel="noreferrer" style={{...cardStyle("77,184,255"),textDecoration:"none",color:"inherit",display:"flex",alignItems:"flex-start",gap:10}}>
             <div style={{fontSize:20,flexShrink:0}}>🏛️</div>
@@ -760,16 +2497,18 @@ function Home({onNav,settings}) {
       {settings.home.clinicalTools && (
         <button onClick={()=>onNav("tools")} style={{...cardStyle("0,230,150"),...cardFull,width:"100%",display:"flex",alignItems:"flex-start",gap:10}}>
           <div style={{fontSize:20,flexShrink:0}}>🧮</div>
-          <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>Clinical Tools</div><div style={{fontSize:10,color:"#a0b0d0"}}>Fluids, I.O, feeds, blood volume, local anesthetic</div></div>
+          <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>Clinical Tools</div><div style={{fontSize:10,color:"#a0b0d0"}}>Vital signs, Fluids & Nutrition, Appendicitis Scores, Airway, PELD & more</div></div>
         </button>
       )}
 
+      {settings.home.forFamilies && (
       <a href="https://www.pedsurglibrary.com/apsa/view/PedSurg%20Resource/1884007/all/Patient_and_Parent_Education" target="_blank" rel="noreferrer" style={{...cardStyle("0,230,150"),...cardFull,width:"100%",display:"flex",alignItems:"flex-start",gap:10,textDecoration:"none",color:"inherit"}}>
         <div style={{fontSize:20,flexShrink:0}}>👨‍👩‍👧‍👦</div>
         <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#00e696"}}>For Families</div><div style={{fontSize:10,color:"#a0b0d0"}}>Patient & parent education resources</div></div>
       </a>
+      )}
 
-      <div style={card2col}>
+      <div style={{...card2col, gridTemplateColumns:(settings.home.societies && settings.home.socialMedia)?"1fr 1fr":"1fr"}}>
         {settings.home.societies && (
           <button onClick={()=>onNav("societies")} style={{...cardStyle("77,184,255"),display:"flex",alignItems:"flex-start",gap:10}}>
             <div style={{fontSize:20,flexShrink:0}}>🏛️</div>
@@ -791,8 +2530,8 @@ function Home({onNav,settings}) {
         </button>
       )}
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>MEDIA</div>
-      <div style={card2col}>
+      {(settings.home.surgeryVideos || settings.home.podcasts) && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>MEDIA</div>}
+      <div style={{...card2col, gridTemplateColumns:(settings.home.surgeryVideos && settings.home.podcasts)?"1fr 1fr":"1fr"}}>
         {settings.home.surgeryVideos && (
           <button onClick={()=>onNav("videos")} style={{...cardStyle("200,80,100"),display:"flex",alignItems:"flex-start",gap:10}}>
             <div style={{fontSize:20,flexShrink:0}}>▶️</div>
@@ -807,12 +2546,14 @@ function Home({onNav,settings}) {
         )}
       </div>
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>RESEARCH</div>
-      <div style={card2col}>
-        <button onClick={()=>{}} style={{...cardStyle("150,120,200"),display:"flex",alignItems:"flex-start",gap:10}}>
+      {(settings.home.openEvidence || settings.home.research) && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>RESEARCH</div>}
+      <div style={{...card2col, gridTemplateColumns:(settings.home.openEvidence && settings.home.research)?"1fr 1fr":"1fr"}}>
+        {settings.home.openEvidence && (
+        <a href="https://www.openevidence.com" target="_blank" rel="noopener noreferrer" style={{...cardStyle("150,120,200"),display:"flex",alignItems:"flex-start",gap:10,textDecoration:"none",color:"inherit"}}>
           <div style={{fontSize:20,flexShrink:0}}>💡</div>
           <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#6ba3d4"}}>OpenEvidence</div><div style={{fontSize:10,color:"#a0b0d0"}}>AI-powered medical evidence</div></div>
-        </button>
+        </a>
+        )}
         {settings.home.research && (
           <button onClick={()=>onNav("research")} style={{...cardStyle("150,130,90"),display:"flex",alignItems:"flex-start",gap:10}}>
             <div style={{fontSize:20,flexShrink:0}}>🔬</div>
@@ -821,24 +2562,31 @@ function Home({onNav,settings}) {
         )}
       </div>
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>LEARN</div>
-      <div style={card2col}>
+      {(settings.home.expertCme || settings.home.score) && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>LEARN</div>}
+      <div style={{...card2col, gridTemplateColumns:(settings.home.expertCme && settings.home.score)?"1fr 1fr":"1fr"}}>
+        {settings.home.expertCme && (
         <a href="https://www.pedsurglibrary.com/apsa/cme/ExPERT" target="_blank" rel="noopener noreferrer" style={{...cardStyle("77,184,255"),display:"flex",alignItems:"flex-start",gap:10,textDecoration:"none",color:"inherit"}}>
           <div style={{fontSize:20,flexShrink:0}}>👨‍⚕️</div>
           <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#4db8ff"}}>ExPERT CME</div><div style={{fontSize:10,color:"#a0b0d0"}}>Continuing medical education</div></div>
         </a>
+        )}
+        {settings.home.score && (
         <a href="https://www.surgicalcore.org/" target="_blank" rel="noopener noreferrer" style={{...cardStyle("77,184,255"),display:"flex",alignItems:"flex-start",gap:10,textDecoration:"none",color:"inherit"}}>
           <div style={{fontSize:20,flexShrink:0}}>📚</div>
           <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#4db8ff"}}>SCORE</div><div style={{fontSize:10,color:"#a0b0d0"}}>Surgical education</div></div>
         </a>
+        )}
       </div>
 
-      <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>WHAT'S NEW</div>
+      {(settings.home.whatsNew || settings.home.liveFeeds) && <div style={{fontSize:11,fontWeight:800,color:"#607090",letterSpacing:1,marginTop:18,marginBottom:12}}>WHAT'S NEW</div>}
+      {settings.home.whatsNew && (
       <button onClick={()=>setShowComingSoon(true)} style={{...cardStyle("120,100,200"),...cardFull,width:"100%",display:"flex",alignItems:"flex-start",gap:10}}>
         <div style={{width:36,height:36,borderRadius:8,background:"rgba(120,100,200,0.3)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📰</div>
         <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#8b6dd4"}}>Pedi Surgery in the News</div><div style={{fontSize:10,color:"#a0b0d0"}}>Tap to learn more</div></div>
       </button>
+      )}
 
+      {settings.home.liveFeeds && (<div>
       <a href="https://www.jpedsurg.org" target="_blank" rel="noopener noreferrer" style={{width:"100%",display:"flex",alignItems:"center",gap:12,padding:"12px 14px",marginBottom:10,borderRadius:13,background:"rgba(100,140,200,0.08)",border:"1px solid rgba(100,140,200,0.4)",cursor:"pointer",textDecoration:"none",color:"inherit",transition:"0.2s"}}>
         <div style={{fontSize:18,color:"#6ba3d4",flexShrink:0}}>●</div>
         <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#6ba3d4"}}>JPS — Latest Articles</div><div style={{fontSize:11,color:"#a0b0d0"}}>Journal of Pediatric Surgery</div></div>
@@ -851,6 +2599,7 @@ function Home({onNav,settings}) {
         <div style={{fontSize:18,color:"#ff6b6b",flexShrink:0}}>●</div>
         <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:13,fontWeight:700,color:"#ff6b6b"}}>PedSurgTV — Latest Videos</div><div style={{fontSize:11,color:"#a0b0d0"}}>Newest uploads</div></div>
       </a>
+      </div>)}
 
       <div style={{height:80}}></div>
 
@@ -869,34 +2618,51 @@ function Home({onNav,settings}) {
 }
 
 function Settings({onHome,settings,onSettingsChange}) {
-  const [expandedSections, setExpandedSections] = useState({home: true, nav: false, tools: false, nat: false, videos: false, podcasts: false});
-  
+  const [expandedSections, setExpandedSections] = useState({home:false, tools:false, societies:false, socials:false, videos:false, podcasts:false});
+
   const updateHome = (key,val) => {
-    onSettingsChange({...settings, home:{...settings.home,[key]:val}});
+    onSettingsChange(prev => ({...prev, home:{...prev.home,[key]:val}}));
   };
   const updateTool = (id,val) => {
-    onSettingsChange({...settings, clinicalTools:{...settings.clinicalTools,[id]:val}});
+    onSettingsChange(prev => ({...prev, tools:{...prev.tools,[id]:val}}));
   };
-  const updateNat = (key,val) => {
-    const natToggles = settings.natTopics || {};
-    onSettingsChange({...settings, natTopics:{...natToggles,[key]:val}});
+  const updateSociety = (key,val) => {
+    onSettingsChange(prev => {
+      const base = (prev.societies && Object.keys(prev.societies).length)
+        ? prev.societies : Object.fromEntries(SOCIETIES.map(s => [s.name, true]));
+      return {...prev, societies:{...base,[key]:val}};
+    });
+  };
+  const updateSocial = (key,val) => {
+    onSettingsChange(prev => {
+      const base = (prev.socials && Object.keys(prev.socials).length)
+        ? prev.socials : Object.fromEntries(SOCIAL.map(s => [s.org+" "+s.platform, true]));
+      return {...prev, socials:{...base,[key]:val}};
+    });
   };
   const updateVideoSrc = (key,val) => {
-    const videoToggles = settings.videoSources || {};
-    onSettingsChange({...settings, videoSources:{...videoToggles,[key]:val}});
+    onSettingsChange(prev => {
+      const base = (prev.videoSources && Object.keys(prev.videoSources).length)
+        ? prev.videoSources : Object.fromEntries(VIDEO_SOURCES.map(v => [v.name, true]));
+      return {...prev, videoSources:{...base,[key]:val}};
+    });
   };
   const updatePodcast = (key,val) => {
-    const podToggles = settings.podcasts || {};
-    onSettingsChange({...settings, podcasts:{...podToggles,[key]:val}});
+    onSettingsChange(prev => {
+      const base = (prev.podcasts && Object.keys(prev.podcasts).length)
+        ? prev.podcasts : Object.fromEntries(PODS.map(p => [p.title, true]));
+      return {...prev, podcasts:{...base,[key]:val}};
+    });
   };
 
   const toggleSection = (section) => {
     setExpandedSections({...expandedSections, [section]: !expandedSections[section]});
   };
 
-  const natTopics = settings.natTopics || Object.fromEntries(NAT.map(n => [n.title, true]));
-  const videoSrcs = settings.videoSources || Object.fromEntries(VIDEO_SOURCES.map(v => [v.name, true]));
-  const podToggles = settings.podcasts || Object.fromEntries(PODS.map(p => [p.title, true]));
+  const societyToggles = {...Object.fromEntries(SOCIETIES.map(s => [s.name, true])), ...(settings.societies||{})};
+  const socialToggles = {...Object.fromEntries(SOCIAL.map(s => [s.org+" "+s.platform, true])), ...(settings.socials||{})};
+  const videoSrcs = {...Object.fromEntries(VIDEO_SOURCES.map(v => [v.name, true])), ...(settings.videoSources||{})};
+  const podToggles = {...Object.fromEntries(PODS.map(p => [p.title, true])), ...(settings.podcasts||{})};
 
   const Toggle = ({on, onClick}) => (
     <div onClick={onClick} style={{width:44,height:26,borderRadius:13,background:on?"#00e696":"rgba(255,255,255,0.1)",cursor:"pointer",position:"relative",transition:"background 0.2s",border:"none",padding:0,display:"flex",alignItems:"center",flexShrink:0}}>
@@ -904,28 +2670,24 @@ function Settings({onHome,settings,onSettingsChange}) {
     </div>
   );
 
+  const HOME_ORDER = ["apsaWebsite","apsaNat","clinicalTools","forFamilies","societies","socialMedia","virtualPediSurgeon","surgeryVideos","podcasts","openEvidence","research","expertCme","score","whatsNew","liveFeeds"];
+  const orderedTools = TOOL_GROUPS.flatMap(g => TOOL_LIST.filter(t => t.grp === g));
+
   const formatLabel = (key) => {
     const labels = {
-      apsaWebsite: "APSA Website",
-      apsaNat: "APSA NaT",
-      forFamilies: "For Families",
-      societies: "Societies",
-      socialMedia: "Social Media",
-      virtualPediSurgeon: "Virtual Pedi Surgeon",
-      surgeryVideos: "Surgery Videos",
-      podcasts: "Podcasts",
-      openEvidence: "OpenEvidence",
-      research: "PubMed & Journals",
-      expertCme: "ExPERT CME",
-      whatsNew: "What's New",
-      liveFeeds: "Live Feeds",
-      clinicalTools: "Clinical Tools"
+      apsaWebsite: "APSA Website", apsaNat: "APSA NaT", forFamilies: "For Families",
+      societies: "Societies", socialMedia: "Social Media", virtualPediSurgeon: "Virtual Pedi Surgeon",
+      surgeryVideos: "Surgery Videos", podcasts: "Podcasts", openEvidence: "OpenEvidence",
+      research: "PubMed & Journals", expertCme: "ExPERT CME", whatsNew: "What's New",
+      liveFeeds: "Live Feeds", clinicalTools: "Clinical Tools", score: "SCORE"
     };
     return labels[key] || key.replace(/([A-Z])/g, ' $1').trim();
   };
 
   const sectionStyle = (bgColor) => ({background:bgColor,border:"1px solid rgba(255,255,255,0.15)",borderRadius:12,padding:"13px 14px",marginBottom:10,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between"});
   const expandedStyle = {background:"rgba(77,184,255,0.1)",borderTop:"2px solid rgba(77,184,255,0.5)"};
+  const subOpenStyle = (border) => ({background:"rgba(255,255,255,0.02)",border:"1px solid "+border,borderRadius:12,padding:12,marginBottom:10});
+  const rowStyle = {display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"};
 
   return (
     <div>
@@ -938,20 +2700,20 @@ function Settings({onHome,settings,onSettingsChange}) {
         <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
           <span style={{fontSize:16}}>🏠</span>
           <div style={{textAlign:"left"}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>Home screen</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 14 buttons</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>Home Screen</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>Show or hide each button</div>
           </div>
         </div>
         <div style={{fontSize:14,color:"#4db8ff"}}>{expandedSections.home ? "▲" : "▼"}</div>
       </div>
       {expandedSections.home && (
-        <div style={{background:"rgba(77,184,255,0.04)",border:"1px solid rgba(77,184,255,0.2)",borderRadius:12,padding:12,marginBottom:10}}>
+        <div style={subOpenStyle("rgba(77,184,255,0.2)")}>
           <div style={{display:"flex",gap:8,marginBottom:10}}>
-            <button onClick={()=>Object.keys(settings.home).forEach(k=>updateHome(k,true))} style={{...C.chip(true,"#4db8ff"),flex:1}}>Show all</button>
-            <button onClick={()=>Object.keys(settings.home).forEach(k=>updateHome(k,false))} style={{...C.chip(false,"#4db8ff"),flex:1}}>Hide all</button>
+            <button onClick={()=>onSettingsChange(prev=>({...prev, home:Object.fromEntries(Object.keys(prev.home).map(k=>[k,true]))}))} style={{...C.chip(true,"#4db8ff"),flex:1}}>Show all</button>
+            <button onClick={()=>onSettingsChange(prev=>({...prev, home:Object.fromEntries(Object.keys(prev.home).map(k=>[k,false]))}))} style={{...C.chip(false,"#4db8ff"),flex:1}}>Hide all</button>
           </div>
-          {Object.keys(settings.home).map(k=>(
-            <div key={k} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"}}>
+          {HOME_ORDER.filter(k=>k in settings.home).map(k=>(
+            <div key={k} style={rowStyle}>
               <span style={{fontSize:12,color:settings.home[k]?"#e8f0fe":"#a0b0d0"}}>{formatLabel(k)}</span>
               <Toggle on={settings.home[k]} onClick={()=>updateHome(k,!settings.home[k])} />
             </div>
@@ -959,77 +2721,90 @@ function Settings({onHome,settings,onSettingsChange}) {
         </div>
       )}
 
-      {/* NAVIGATION TABS */}
-      <div style={{...sectionStyle("rgba(150,100,200,0.08)"), ...(expandedSections.nav ? expandedStyle : {})}} onClick={()=>toggleSection("nav")}>
-        <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
-          <span style={{fontSize:16}}>📑</span>
-          <div style={{textAlign:"left"}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#a064ff"}}>Navigation tabs</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 7 shown</div>
-          </div>
-        </div>
-        <div style={{fontSize:14,color:"#a064ff"}}>{expandedSections.nav ? "▲" : "▼"}</div>
-      </div>
-
       {/* CLINICAL TOOLS */}
       <div style={{...sectionStyle("rgba(0,230,150,0.08)"), ...(expandedSections.tools ? expandedStyle : {})}} onClick={()=>toggleSection("tools")}>
         <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
           <span style={{fontSize:16}}>🧮</span>
           <div style={{textAlign:"left"}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#00e696"}}>Clinical tools</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 14 shown</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#00e696"}}>Clinical Tools</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>All {TOOL_LIST.length} shown</div>
           </div>
         </div>
         <div style={{fontSize:14,color:"#00e696"}}>{expandedSections.tools ? "▲" : "▼"}</div>
       </div>
       {expandedSections.tools && (
-        <div style={{background:"rgba(0,230,150,0.04)",border:"1px solid rgba(0,230,150,0.2)",borderRadius:12,padding:12,marginBottom:10}}>
-          {TOOL_LIST.map(t=>(
-            <div key={t.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"}}>
-              <span style={{fontSize:12,color:"#00e696"}}>{t.name}</span>
-              <Toggle on={settings.clinicalTools[t.name]} onClick={()=>updateTool(t.name,!settings.clinicalTools[t.name])} />
+        <div style={subOpenStyle("rgba(0,230,150,0.2)")}>
+          {orderedTools.map(t=>(
+            <div key={t.id} style={rowStyle}>
+              <span style={{fontSize:12,color:settings.tools[t.id]?"#e8f0fe":"#a0b0d0"}}>{t.name}</span>
+              <Toggle on={settings.tools[t.id]} onClick={()=>updateTool(t.id,!settings.tools[t.id])} />
             </div>
           ))}
         </div>
       )}
 
-      {/* NAT CATEGORIES */}
-      <div style={{...sectionStyle("rgba(77,184,255,0.08)"), ...(expandedSections.nat ? expandedStyle : {})}} onClick={()=>toggleSection("nat")}>
+      {/* SOCIETIES */}
+      <div style={{...sectionStyle("rgba(77,184,255,0.08)"), ...(expandedSections.societies ? expandedStyle : {})}} onClick={()=>toggleSection("societies")}>
         <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
-          <span style={{fontSize:16}}>📖</span>
+          <span style={{fontSize:16}}>🌐</span>
           <div style={{textAlign:"left"}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>NaT categories</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 18 shown</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>Societies</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>All {SOCIETIES.length} shown</div>
           </div>
         </div>
-        <div style={{fontSize:14,color:"#4db8ff"}}>{expandedSections.nat ? "▲" : "▼"}</div>
+        <div style={{fontSize:14,color:"#4db8ff"}}>{expandedSections.societies ? "▲" : "▼"}</div>
       </div>
-      {expandedSections.nat && (
-        <div style={{background:"rgba(77,184,255,0.04)",border:"1px solid rgba(77,184,255,0.2)",borderRadius:12,padding:12,marginBottom:10}}>
-          {NAT.map(n=>(
-            <div key={n.title} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"}}>
-              <span style={{fontSize:12,color:natTopics[n.title]?"#e8f0fe":"#a0b0d0"}}>{n.title}</span>
-              <Toggle on={natTopics[n.title]} onClick={()=>updateNat(n.title,!natTopics[n.title])} />
+      {expandedSections.societies && (
+        <div style={subOpenStyle("rgba(77,184,255,0.2)")}>
+          {SOCIETIES.map(s=>(
+            <div key={s.name} style={rowStyle}>
+              <span style={{fontSize:12,color:societyToggles[s.name]?"#e8f0fe":"#a0b0d0"}}>{s.name}</span>
+              <Toggle on={societyToggles[s.name]} onClick={()=>updateSociety(s.name,!societyToggles[s.name])} />
             </div>
           ))}
         </div>
       )}
 
-      {/* VIDEO SOURCES */}
-      <div style={{...sectionStyle("rgba(77,184,255,0.08)"), ...(expandedSections.videos ? expandedStyle : {})}} onClick={()=>toggleSection("videos")}>
+      {/* SOCIAL MEDIA */}
+      <div style={{...sectionStyle("rgba(77,184,255,0.08)"), ...(expandedSections.socials ? expandedStyle : {})}} onClick={()=>toggleSection("socials")}>
+        <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
+          <span style={{fontSize:16}}>📱</span>
+          <div style={{textAlign:"left"}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>Social Media</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>All {SOCIAL.length} shown</div>
+          </div>
+        </div>
+        <div style={{fontSize:14,color:"#4db8ff"}}>{expandedSections.socials ? "▲" : "▼"}</div>
+      </div>
+      {expandedSections.socials && (
+        <div style={subOpenStyle("rgba(77,184,255,0.2)")}>
+          {SOCIAL.map(s=>{
+            const key = s.org+" "+s.platform;
+            return (
+              <div key={key} style={rowStyle}>
+                <span style={{fontSize:12,color:socialToggles[key]?"#e8f0fe":"#a0b0d0"}}>{s.org} · {s.platform}</span>
+                <Toggle on={socialToggles[key]} onClick={()=>updateSocial(key,!socialToggles[key])} />
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* SURGERY VIDEOS */}
+      <div style={{...sectionStyle("rgba(255,107,107,0.08)"), ...(expandedSections.videos ? expandedStyle : {})}} onClick={()=>toggleSection("videos")}>
         <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
           <span style={{fontSize:16}}>▶️</span>
           <div style={{textAlign:"left"}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#4db8ff"}}>Video sources</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 9 shown</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#ff6b6b"}}>Surgery Videos</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>All {VIDEO_SOURCES.length} shown</div>
           </div>
         </div>
-        <div style={{fontSize:14,color:"#4db8ff"}}>{expandedSections.videos ? "▲" : "▼"}</div>
+        <div style={{fontSize:14,color:"#ff6b6b"}}>{expandedSections.videos ? "▲" : "▼"}</div>
       </div>
       {expandedSections.videos && (
-        <div style={{background:"rgba(77,184,255,0.04)",border:"1px solid rgba(77,184,255,0.2)",borderRadius:12,padding:12,marginBottom:10}}>
+        <div style={subOpenStyle("rgba(255,107,107,0.2)")}>
           {VIDEO_SOURCES.map(v=>(
-            <div key={v.name} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"}}>
+            <div key={v.name} style={rowStyle}>
               <span style={{fontSize:12,color:videoSrcs[v.name]?"#e8f0fe":"#a0b0d0"}}>{v.name}</span>
               <Toggle on={videoSrcs[v.name]} onClick={()=>updateVideoSrc(v.name,!videoSrcs[v.name])} />
             </div>
@@ -1043,15 +2818,15 @@ function Settings({onHome,settings,onSettingsChange}) {
           <span style={{fontSize:16}}>🎙️</span>
           <div style={{textAlign:"left"}}>
             <div style={{fontSize:12,fontWeight:700,color:"#a064ff"}}>Podcasts</div>
-            <div style={{fontSize:10,color:"#a0b0d0"}}>All 6 shown</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>All {PODS.length} shown</div>
           </div>
         </div>
         <div style={{fontSize:14,color:"#a064ff"}}>{expandedSections.podcasts ? "▲" : "▼"}</div>
       </div>
       {expandedSections.podcasts && (
-        <div style={{background:"rgba(160,100,255,0.04)",border:"1px solid rgba(160,100,255,0.2)",borderRadius:12,padding:12,marginBottom:10}}>
+        <div style={subOpenStyle("rgba(160,100,255,0.2)")}>
           {PODS.map(p=>(
-            <div key={p.title} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:9,marginBottom:12,cursor:"pointer"}}>
+            <div key={p.title} style={rowStyle}>
               <span style={{fontSize:12,color:podToggles[p.title]?"#e8f0fe":"#a0b0d0"}}>{p.title}</span>
               <Toggle on={podToggles[p.title]} onClick={()=>updatePodcast(p.title,!podToggles[p.title])} />
             </div>
@@ -1068,8 +2843,17 @@ function App() {
   const [page, setPage] = useState("home");
   const pageRef = useRef(null);
   const [settings, setSettings] = useState(() => {
+    const base = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
     const saved = localStorage.getItem("pedsurgpro_settings");
-    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    if(!saved) return base;
+    try {
+      const s = JSON.parse(saved);
+      const merged = {...base, ...s,
+        home:{...base.home, ...(s.home||{})},
+        tools:{...base.tools, ...(s.tools||{})}};
+      if(s.v !== base.v){ merged.home = {...base.home}; merged.v = base.v; }
+      return merged;
+    } catch(e) { return base; }
   });
 
   useEffect(() => {
@@ -1085,11 +2869,11 @@ function App() {
       <div style={C.page} ref={pageRef}>
         {page === "home" && <Home onNav={setPage} settings={settings} />}
         {page === "nat" && <Nat onHome={() => setPage("home")} />}
-        {page === "videos" && <Videos onHome={() => setPage("home")} />}
-        {page === "podcasts" && <Podcasts onHome={() => setPage("home")} />}
+        {page === "videos" && <Videos onHome={() => setPage("home")} settings={settings} />}
+        {page === "podcasts" && <Podcasts onHome={() => setPage("home")} settings={settings} />}
         {page === "research" && <Research onHome={() => setPage("home")} />}
-        {page === "social" && <SocialMedia onHome={() => setPage("home")} />}
-        {page === "societies" && <Societies onHome={() => setPage("home")} />}
+        {page === "social" && <SocialMedia onHome={() => setPage("home")} settings={settings} />}
+        {page === "societies" && <Societies onHome={() => setPage("home")} settings={settings} />}
         {page === "tools" && <Tools onHome={() => setPage("home")} settings={settings} pageRef={pageRef} />}
         {page === "ai" && <AI onHome={() => setPage("home")} />}
         {page === "settings" && <Settings onHome={() => setPage("home")} settings={settings} onSettingsChange={setSettings} />}
