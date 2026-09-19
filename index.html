@@ -129,6 +129,7 @@ const ARTS = [
 
 const DEFAULT_SETTINGS = {
   v: 1,
+  navBar: true,
   home: {
     apsaWebsite: true, apsaNat: true, forFamilies: true,
     societies: true, socialMedia: true, virtualPediSurgeon: true,
@@ -2834,6 +2835,18 @@ function Settings({onHome,settings,onSettingsChange}) {
         </div>
       )}
 
+      {/* BOTTOM MENU BAR */}
+      <div style={{...sectionStyle("rgba(160,100,255,0.08)"), cursor:"default"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
+          <span style={{fontSize:16}}>📍</span>
+          <div style={{textAlign:"left"}}>
+            <div style={{fontSize:12,fontWeight:700,color:"#a064ff"}}>Bottom Menu Bar</div>
+            <div style={{fontSize:10,color:"#a0b0d0"}}>Show the navigation bar at the bottom of every screen</div>
+          </div>
+        </div>
+        <Toggle on={settings.navBar !== false} onClick={()=>onSettingsChange(prev=>({...prev, navBar: prev.navBar === false}))} />
+      </div>
+
       <div style={{height:80}}></div>
     </div>
   );
@@ -2879,16 +2892,16 @@ function App() {
         {page === "settings" && <Settings onHome={() => setPage("home")} settings={settings} onSettingsChange={setSettings} />}
       </div>
 
-      <div style={C.nav}>
+      {settings.navBar !== false && (
+      <div style={{...C.nav, gridTemplateColumns:"repeat(6,1fr)"}}>
         <button style={C.nb(page === "home")} onClick={() => setPage("home")}>🏠<div style={{fontSize:9}}>Home</div></button>
+        <a href="https://www.apsapedsurg.org" target="_blank" rel="noreferrer" style={{...C.nb(false),textDecoration:"none"}}>🏛️<div style={{fontSize:9}}>APSA</div></a>
         <button style={C.nb(page === "nat")} onClick={() => setPage("nat")}>📖<div style={{fontSize:9}}>NaT</div></button>
+        <button style={C.nb(page === "tools")} onClick={() => setPage("tools")}>🧮<div style={{fontSize:9}}>Tools</div></button>
         <button style={C.nb(page === "videos")} onClick={() => setPage("videos")}>▶️<div style={{fontSize:9}}>Videos</div></button>
-        <button style={C.nb(page === "podcasts")} onClick={() => setPage("podcasts")}>🎙️<div style={{fontSize:9}}>Podcasts</div></button>
         <button style={C.nb(page === "research")} onClick={() => setPage("research")}>🔬<div style={{fontSize:9}}>Research</div></button>
-        <button style={C.nb(page === "societies")} onClick={() => setPage("societies")}>🏛️<div style={{fontSize:9}}>Societies</div></button>
-        <button style={C.nb(page === "social")} onClick={() => setPage("social")}>📱<div style={{fontSize:9}}>Social</div></button>
-        <button style={C.nb(page === "ai")} onClick={() => setPage("ai")}>✦<div style={{fontSize:9}}>Virt Surg</div></button>
       </div>
+      )}
     </div>
   );
 }
